@@ -281,7 +281,9 @@ export async function submitVerdict(
           currentStreak: streak.current,
           longestStreak: streak.longest,
           lastActiveDate: today,
-          totalPassed,
+          // 相対インクリメント: 別レッスンの同時初合格で「読み値+1」の後勝ち書き込みが
+          // 片方の +1 を踏み潰す lost update を避ける(streak は絶対値収束するため対象外)
+          ...(firstPass ? { totalPassed: sql`${schema.userStats.totalPassed} + 1` } : {}),
         },
       }),
   ]);
