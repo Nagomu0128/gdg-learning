@@ -1,4 +1,4 @@
-# RUNBOOK — CodeSteps 運用手順書
+# RUNBOOK — GDG Learning 運用手順書
 
 対象: インフラ(Terraform)/ CI・CD(GitHub Actions)/ E2E(Playwright)の運用。
 仕様の背景は `docs/DesignDoc.md` §11、契約は `docs/specs/CONTRACTS.md` を参照。
@@ -76,8 +76,8 @@ infra/terraform/
 │   ├─ kv/    # cloudflare_workers_kv_namespace
 │   └─ dns/   # 骨格のみ(ドメイン確定後に実装)
 └─ envs/
-    ├─ dev/   # codesteps-dev / codesteps-rate-limit-dev
-    └─ prod/  # codesteps-prod / codesteps-rate-limit-prod
+    ├─ dev/   # gdg-learning-dev / gdg-learning-rate-limit-dev
+    └─ prod/  # gdg-learning-prod / gdg-learning-rate-limit-prod
 ```
 
 管理主体(DesignDoc §11.1「1リソース1オーナー」): D1 / KV / DNS = Terraform、
@@ -135,7 +135,7 @@ Step Summary に「手動セットアップ待ち」が出る)。
 1. **Secrets**(Settings → Secrets and variables → Actions):
    - `CLOUDFLARE_API_TOKEN` — 権限: Workers Scripts:Edit / D1:Edit / Workers KV Storage:Edit
    - `CLOUDFLARE_ACCOUNT_ID`
-2. **Variables**: `PROD_URL`(例 `https://codesteps.<subdomain>.workers.dev`。スモークテスト先)
+2. **Variables**: `PROD_URL`(例 `https://gdg-learning.gdsc-osaka.workers.dev`。スモークテスト先)
 3. **Environments**:
    - `production` — deploy.yml が使用。必要なら Required reviewers で承認制に
    - `infra-prod` — infra.yml の apply が使用。**Required reviewers を必ず設定**

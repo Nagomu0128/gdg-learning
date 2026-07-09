@@ -12,7 +12,7 @@
 #   zone_id = var.zone_id
 #   name    = "app" # app.example.com
 #   type    = "CNAME"
-#   content = "codesteps.<subdomain>.workers.dev"
+#   content = "gdg-learning.gdsc-osaka.workers.dev"
 #   proxied = true
 #   ttl     = 1 # proxied レコードは 1(auto)固定
 # }

@@ -4,6 +4,6 @@ variable "account_id" {
 }
 
 variable "name" {
-  description = "D1 データベース名(命名規約: codesteps-{env})"
+  description = "D1 データベース名(命名規約: gdg-learning-{env})"
   type        = string
 }

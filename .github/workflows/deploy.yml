@@ -1,7 +1,7 @@
 # main デプロイパイプライン(DesignDoc §11.3)
 # PR と同じ検証 → D1 マイグレーション適用(prod)→ wrangler deploy → スモークテスト。
 # 必要 secrets: CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID(未設定でも red にならず「手動セットアップ待ち」で終了)。
-# 任意 vars: PROD_URL(スモークテスト先。例 https://codesteps.<subdomain>.workers.dev)。
+# 任意 vars: PROD_URL(スモークテスト先。例 https://gdg-learning.gdsc-osaka.workers.dev)。
 name: Deploy
 
 on:
@@ -111,20 +111,21 @@ jobs:
         run: pnpm build
 
       # §11.4 expand and contract: 後方互換な拡張を先に適用してからデプロイする
+      # wrangler.jsonc のトップレベル環境が本番(gdg-learning-prod の実 ID)— --env は使わない
       - name: Apply D1 migrations (production)
         if: steps.secrets.outputs.available == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        # wrangler.jsonc に env.production(prod の D1/KV id)を定義しておくこと(docs/RUNBOOK.md)
-        run: pnpm --filter @codesteps/app exec wrangler d1 migrations apply DB --env production --remote
+        run: pnpm --filter @codesteps/app exec wrangler d1 migrations apply DB --remote
 
       - name: Deploy Worker
         if: steps.secrets.outputs.available == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: pnpm --filter @codesteps/app exec wrangler deploy --env production
+        # @cloudflare/vite-plugin が解決済み設定を build/server/wrangler.json に出力する — それを使う
+        run: pnpm --filter @codesteps/app exec wrangler deploy -c build/server/wrangler.json
 
       - name: Smoke test
         if: steps.secrets.outputs.available == 'true'

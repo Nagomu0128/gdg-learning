@@ -4,6 +4,6 @@ variable "account_id" {
 }
 
 variable "title" {
-  description = "KV namespace 名(命名規約: codesteps-rate-limit-{env})"
+  description = "KV namespace 名(命名規約: gdg-learning-rate-limit-{env})"
   type        = string
 }
