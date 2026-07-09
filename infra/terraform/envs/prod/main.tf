@@ -1,4 +1,4 @@
-# CodeSteps prod 環境(DesignDoc §11.2)。
+# GDG Learning prod 環境(DesignDoc §11.2)。
 # 適用手順は docs/RUNBOOK.md「Terraform」参照。apply 後、outputs の ID を app/wrangler.jsonc へ手動転記する。
 terraform {
   required_version = ">= 1.6.0"
@@ -18,7 +18,7 @@ terraform {
   #
   # (A) Cloudflare R2(S3 互換)バックエンド:
   # backend "s3" {
-  #   bucket = "codesteps-tfstate"
+  #   bucket = "gdg-learning-tfstate"
   #   key    = "prod/terraform.tfstate"
   #   region = "auto"
   #   endpoints = {
@@ -37,7 +37,7 @@ terraform {
   # cloud {
   #   organization = "<org>"
   #   workspaces {
-  #     name = "codesteps-prod"
+  #     name = "gdg-learning-prod"
   #   }
   # }
 }
@@ -54,13 +54,13 @@ locals {
 module "d1" {
   source     = "../../modules/d1"
   account_id = var.cloudflare_account_id
-  name       = "codesteps-${local.env}"
+  name       = "gdg-learning-${local.env}"
 }
 
 module "rate_limit_kv" {
   source     = "../../modules/kv"
   account_id = var.cloudflare_account_id
-  title      = "codesteps-rate-limit-${local.env}"
+  title      = "gdg-learning-rate-limit-${local.env}"
 }
 
 # DNS(カスタムドメイン)はドメイン未定のため未使用(modules/dns の骨格コメント参照)。

@@ -1,11 +1,14 @@
 /**
  * Worker 設定の SSOT(DesignDoc §11.1、CONTRACTS §4.2)。所有者: C。
  * バインディング名(DB / RATE_LIMIT_KV / ASSETS)は契約のため変更禁止。
- * database_id / kv id はプレースホルダ(Terraform 作成後に実 ID へ差し替え)。
+ * database_id / kv id は本番実リソース(2026-07-10 に GDSC Osaka アカウント(09381b15…)へ wrangler で作成。
+ * ローカル dev は --local のため ID 不参照)。
+ * 注: §11.1 では D1/KV のオーナーは Terraform。wrangler OAuth で先行作成したため、
+ * Terraform 移行時は `terraform import cloudflare_d1_database.this <account_id>/<database_id>` 等で取り込むこと(docs/RUNBOOK.md)。
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "codesteps",
+  "name": "gdg-learning",
   "main": "./workers/app.ts",
   "compatibility_date": "2026-07-09",
   "compatibility_flags": ["nodejs_compat"],
@@ -16,23 +19,26 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "codesteps-dev",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_name": "gdg-learning-prod",
+      "database_id": "08346d05-3e62-43fa-bb53-70f1bbaafc96",
       "migrations_dir": "drizzle"
     }
   ],
   "kv_namespaces": [
     {
       "binding": "RATE_LIMIT_KV",
-      "id": "0000000000000000000000000000000000"
+      "id": "fa933b6d7ffd48fd917dbe829d902aac"
     }
   ],
-  "analytics_engine_datasets": [
-    {
-      "binding": "ANALYTICS",
-      "dataset": "learning_events"
-    }
-  ],
+  // Analytics Engine はアカウント側の有効化が必要(https://dash.cloudflare.com/<account>/workers/analytics-engine)。
+  // 有効化するまでバインディングを外す(コードは env.ANALYTICS を optional-chain で参照するため無効でも動作する — §10.3)。
+  // 有効化後は以下のコメントを解除して再デプロイ:
+  // "analytics_engine_datasets": [
+  //   {
+  //     "binding": "ANALYTICS",
+  //     "dataset": "learning_events"
+  //   }
+  // ],
   "triggers": {
     "crons": ["0 18 * * *"]
   },
