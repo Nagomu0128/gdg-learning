@@ -1,0 +1,15 @@
+# flex-direction で向きを変える
+
+Flexbox のならぶ向きは `flex-direction` で決まります。
+
+```css
+.container {
+  display: flex;
+  flex-direction: column;
+}
+```
+
+- `row`: 横にならべる(最初からこの状態)
+- `column`: たてにならべる
+
+<Callout type="info">向きが変わると、前のレッスンで学んだ `justify-content` は「ならぶ向きにそった方向」に効くようになります。`column` のときはたて方向です。</Callout>

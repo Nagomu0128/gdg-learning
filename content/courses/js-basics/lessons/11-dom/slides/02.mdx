@@ -1,0 +1,14 @@
+# DOM と script タグ
+
+ブラウザは HTML を読み込むと、JavaScript から操作できる部品の集まりに変換します。これを DOM(ドム)と呼びます。DOM を通して、ページの文字や見た目を JavaScript から変えられます。
+
+JavaScript ファイルは、HTML の `<script>` タグで読み込みます。
+
+```html
+<body>
+  <p id="greeting">まだ書き換えられていません</p>
+  <script src="script.js"></script>
+</body>
+```
+
+<Callout type="info">`<script>` タグは body の最後に置きます。HTML が先に読み込まれてから JavaScript が動くので、要素を安全に操作できます。</Callout>

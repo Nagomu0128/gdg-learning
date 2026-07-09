@@ -1,0 +1,37 @@
+/**
+ * Worker 設定の SSOT(DesignDoc §11.1、CONTRACTS §4.2)。所有者: C。
+ * バインディング名(DB / RATE_LIMIT_KV / ASSETS)は契約のため変更禁止。
+ * database_id / kv id はプレースホルダ(Terraform 作成後に実 ID へ差し替え)。
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "codesteps",
+  "main": "./workers/app.ts",
+  "compatibility_date": "2026-07-09",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./build/client",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "codesteps-dev",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "RATE_LIMIT_KV",
+      "id": "0000000000000000000000000000000000"
+    }
+  ],
+  "triggers": {
+    "crons": ["0 18 * * *"]
+  },
+  "observability": {
+    "enabled": true
+  },
+  "upload_source_maps": true
+}

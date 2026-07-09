@@ -1,0 +1,17 @@
+# align-items と row-gap
+
+`align-items` は、ならぶ向きと**直角の方向**のそろえ方を決めます。たてならび(`column`)なら、横方向のそろえ方です。
+
+```css
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 16px;
+}
+```
+
+- `align-items: center`: 直角方向の中央にそろえる
+- `row-gap: 16px`: たてにならんだ項目のあいだを 16px 空ける
+
+<Callout type="info">margin ですきまを作るより、コンテナに `row-gap` を1回書くほうが簡単で、そろいもきれいです。</Callout>

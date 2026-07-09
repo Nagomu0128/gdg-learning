@@ -27,10 +27,10 @@
 | 2 | html-02-headings | 02-headings | 見出しと段落 | h1/h2/p。element h1・h2・p(count 2)、text h1 equals「自己紹介」 | 写経 |
 | 3 | html-03-links | 03-links | リンクをはろう | a href。element a、attribute a href equals "https://example.com"、text a | 穴埋め |
 | 4 | html-04-images | 04-images | 画像をのせよう | img src/alt。assets/cat.svg 同梱。element img、attribute img src equals "cat.svg"、attribute img alt exists | 穴埋め |
-| 5 | html-05-lists | 05-lists | リストでならべる | ul/li・ol。element `ul`、element `ul > li` count 3、element `ol > li` count>=2 | 穴埋め |
+| 5 | html-05-lists | 05-lists | リストでならべる | ul/li・ol。element `ul`、element `ul > li` count 3、element `ol > li` count 2(count は厳密一致 — メッセージで「2個」と明示) | 穴埋め |
 | 6 | html-06-table | 06-table | 表をつくる | table/tr/th/td。element table、`tr` count 3、`th` count 2、`td` count 4 | 穴埋め |
 | 7 | html-07-form | 07-form | フォームの部品 | form/input/button。element form、`form input` + attribute input placeholder exists、element `form button`、text button | 穴埋め |
-| 8 | html-08-semantic | 08-semantic | ページに意味のある区切りを | header/nav/main/footer。element 各1 + `nav a` count>=2 | 穴埋め |
+| 8 | html-08-semantic | 08-semantic | ページに意味のある区切りを | header/nav/main/footer。element 各1 + `nav a` count 2(厳密一致 — メッセージで「2個」と明示) | 穴埋め |
 | 9 | html-09-id-class | 09-id-class | idとclass | attribute: `h1` id equals "main-title"、element `.item` count 3、attribute `p.intro` class(existsでなくselectorで判定) | 穴埋め |
 | 10 | html-10-profile | 10-profile | 総合: プロフィールページ | h1 + img(alt付) + ul>li 3 + a href。既習の組合せ。初期コードは骨格のみ | 自力 |
 
@@ -39,7 +39,7 @@
 | # | slug | dir | title | ねらい / checks 骨子 | 型 |
 |---|---|---|---|---|---|
 | 1 | css-01-color | 01-color | CSSで色をつける | セレクタ構文。style h1 color = red。source: `h1` セレクタ使用 | 写経 |
-| 2 | css-02-text | 02-text | 文字の大きさとそろえ | style h1 font-size 32px、style p text-align center | 写経 |
+| 2 | css-02-text | 02-text | 文字の大きさとそろえ | style h1 font-size 40px(32px は h1 の UA 既定値 2em と同値で空検証になるため回避)、style p text-align center | 写経 |
 | 3 | css-03-selectors | 03-selectors | クラスとIDのセレクタ | style .highlight background-color yellow、style #title color blue | 穴埋め |
 | 4 | css-04-box | 04-box | ボックスモデル | style .box padding-top 16px(等4方向のうち2つ)、border-bottom-width 2px / border-bottom-style solid | 穴埋め |
 | 5 | css-05-size | 05-size | 大きさと背景 | style .card width 300px、height 120px?、background-color #f0f0f0 系 | 穴埋め |

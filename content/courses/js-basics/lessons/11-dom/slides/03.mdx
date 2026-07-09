@@ -1,0 +1,15 @@
+# 要素を取得して書き換える
+
+**取得**: `document.getElementById("id名")` で、その id を持つ要素を取得できます。取得した要素は変数に入れて使います。
+
+```js
+const greeting = document.getElementById("greeting");
+```
+
+**書き換え**: 要素の `textContent` に文字列を代入すると、表示される文字が変わります。
+
+```js
+greeting.textContent = "こんにちは!";
+```
+
+「取得して、変数に入れて、書き換える」。これが DOM 操作の基本の型です。

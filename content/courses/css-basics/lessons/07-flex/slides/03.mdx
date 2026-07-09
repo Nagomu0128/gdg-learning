@@ -1,0 +1,18 @@
+# justify-content ですきまを調整
+
+横にならべたあと、横方向のすきまの空け方は `justify-content` で決めます。
+
+```css
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+```
+
+よく使う値は3つです。
+
+- `flex-start`: 左に寄せる(最初からこの状態)
+- `center`: 中央に寄せる
+- `space-between`: 両はしまで広げ、あいだを均等に空ける
+
+<Callout type="info">`justify-content` は `display: flex;` とセットで使います。flex にした要素だけに効きます。</Callout>

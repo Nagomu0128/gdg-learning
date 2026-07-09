@@ -1,0 +1,20 @@
+# display の書き方
+
+ならび方を変えたい要素に、`display` プロパティで値を指定します。
+
+```css
+li {
+  display: inline-block;
+}
+```
+
+- `inline-block`: 横にならびつつ、padding などの大きさも指定できる「いいとこ取り」の値です
+- `none`: 要素を画面からかくします
+
+```css
+.hidden {
+  display: none;
+}
+```
+
+<Callout type="warn">`display: none` にした要素は、あった場所のスペースごと消えます。見えなくなるだけではありません。</Callout>

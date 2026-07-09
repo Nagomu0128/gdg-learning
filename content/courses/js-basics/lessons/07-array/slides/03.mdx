@@ -1,0 +1,18 @@
+# 長さを調べる・関数に渡す
+
+配列の要素の数(長さ)は `配列名.length` で取り出せます。
+
+```js
+const fruits = ["りんご", "みかん", "ぶどう"];
+console.log(fruits.length); // 3
+```
+
+配列は、関数の引数としても渡せます。どんな配列を受け取っても最初の要素を返す関数は、次のように書けます。
+
+```js
+function firstItem(items) {
+  return items[0];
+}
+
+console.log(firstItem(["a", "b"])); // a
+```

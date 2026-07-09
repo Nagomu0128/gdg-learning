@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.base.json",
+  "include": [
+    "vite.config.ts",
+    "vitest.config.ts",
+    "mdx.config.ts",
+    "react-router.config.ts",
+    "scripts/**/*"
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "types": ["node"]
+  }
+}

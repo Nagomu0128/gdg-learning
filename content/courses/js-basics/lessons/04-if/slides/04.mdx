@@ -1,0 +1,15 @@
+# 関数から true / false を返す
+
+関数の中で `return` を使うと、結果を「答え」として返せます(関数のつくり方はレッスン6でくわしく学びます)。
+
+```js
+function canEnter(age) {
+  if (age >= 18) {
+    return true;
+  } else {
+    return false;
+  }
+}
+```
+
+`canEnter(20)` のように呼び出すと、20 は 18 以上なので `true` が返ります。`canEnter(15)` なら `false` が返ります。

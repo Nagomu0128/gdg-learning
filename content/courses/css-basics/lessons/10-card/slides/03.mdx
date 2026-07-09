@@ -1,0 +1,15 @@
+# タグを横にならべる
+
+次に、趣味のタグ(`.tags`)です。リストの項目を横にならべるのは、Flexbox の出番です。
+
+```css
+.tags {
+  display: flex;
+  column-gap: 8px;
+}
+```
+
+- `display: flex`: 親に指定すると、中の `li` が横にならびます
+- `column-gap: 8px`: 横にならんだ項目のあいだを 8px 空けます
+
+<Callout type="info">たてのすきまが `row-gap`、横のすきまが `column-gap` です。前のレッスンの `row-gap` と対になっています。</Callout>

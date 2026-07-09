@@ -1,0 +1,20 @@
+# カードの箱を整える
+
+まずはカード本体(`.card`)です。「決まった幅 + 背景色 + 内側の余白」の3点セットで、カードらしい見た目になります。
+
+```css
+.card {
+  width: 320px;
+  background-color: #e0f2fe;
+  padding-top: 24px;
+  padding-right: 24px;
+  padding-bottom: 24px;
+  padding-left: 24px;
+}
+```
+
+- `width`: カードの幅を決めます
+- `background-color`: 背景色。`#e0f2fe` のような hex 表記も色名も使えます
+- `padding-top` など: ふちと中身のあいだの余白です
+
+<Callout type="info">余白がないと、文字が背景のふちにぴったり張りついて窮屈に見えます。カードには内側の余白が大切です。</Callout>

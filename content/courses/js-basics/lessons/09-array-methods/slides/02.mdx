@@ -1,0 +1,15 @@
+# map メソッド
+
+`map` は「すべての要素に同じ処理をして、新しい配列を返す」メソッドです。
+
+```js
+const numbers = [1, 2, 3];
+
+const doubled = numbers.map((n) => n * 2);
+
+console.log(doubled); // [2, 4, 6]
+```
+
+`numbers` の要素が 1 つずつ `n` に入り、`n * 2` の結果を集めた新しい配列ができます。
+
+<Callout type="info">元の配列 `numbers` は変わりません。`map` は新しい配列をつくって返します。</Callout>

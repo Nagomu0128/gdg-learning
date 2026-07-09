@@ -5,6 +5,22 @@
   "engines": {
     "node": ">=22"
   },
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "@parcel/watcher",
+      "@tailwindcss/oxide",
+      "better-sqlite3",
+      "esbuild",
+      "playwright",
+      "playwright-chromium",
+      "sharp",
+      "workerd"
+    ]
+  },
   "scripts": {
     "dev": "pnpm --filter @codesteps/app run dev",
     "build": "pnpm --filter @codesteps/app run build",

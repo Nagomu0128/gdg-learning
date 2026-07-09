@@ -1,0 +1,18 @@
+# クリックで文字を変える
+
+前のレッスンの DOM 操作と組み合わせると、「クリックしたら文字が変わる」がつくれます。
+
+```js
+const button = document.getElementById("push");
+
+button.addEventListener("click", () => {
+  const message = document.getElementById("message");
+  message.textContent = "新しい文字";
+});
+```
+
+処理の流れは次のとおりです。
+
+1. ボタンの要素を取得する
+2. `addEventListener` で click イベントに処理を登録する
+3. 処理の中で、書き換えたい要素を取得して `textContent` に代入する

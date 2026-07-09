@@ -1,0 +1,20 @@
+# 値を取り出す
+
+プロパティの値は `オブジェクト名.プロパティ名` で取り出せます。ドット(.)でつなぐので「ドット記法」と呼びます。
+
+```js
+const user = { name: "タロウ", age: 12 };
+
+console.log(user.name); // タロウ
+console.log(user.age); // 12
+```
+
+オブジェクトも、関数の引数として渡せます。
+
+```js
+function getName(person) {
+  return person.name;
+}
+
+console.log(getName(user)); // タロウ
+```

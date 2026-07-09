@@ -1,0 +1,15 @@
+# イベントと addEventListener
+
+クリックやキー入力など、ページの上で起きるできごとを「イベント」と呼びます。
+
+`addEventListener` を使うと「このイベントが起きたら、この処理をする」と要素に登録できます。
+
+```js
+const button = document.getElementById("push");
+
+button.addEventListener("click", () => {
+  console.log("クリックされた!");
+});
+```
+
+<Callout type="info">1 つ目の引数がイベントの種類(`"click"`)、2 つ目が実行する処理(アロー関数)です。登録した処理は、クリックされるたびに実行されます。</Callout>

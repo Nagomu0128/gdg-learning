@@ -1,0 +1,23 @@
+# Flexbox は「親」に指定する
+
+Flexbox(フレックスボックス)は、箱のならべ方を決めるしくみです。
+
+ポイントは、ならべたい要素そのものではなく、**それらを包む親要素**に指定することです。
+
+```html
+<div class="container">
+  <div class="item">A</div>
+  <div class="item">B</div>
+  <div class="item">C</div>
+</div>
+```
+
+```css
+.container {
+  display: flex;
+}
+```
+
+親(`.container`)に `display: flex;` と書くだけで、中の子要素が横一列にならびます。
+
+<Callout type="info">親をコンテナ、中の子要素をアイテムと呼びます。ならべ方の指示はコンテナに書きます。</Callout>

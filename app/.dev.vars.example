@@ -1,0 +1,5 @@
+BETTER_AUTH_SECRET=dev-secret-change-me-0123456789
+BETTER_AUTH_URL=http://localhost:5173
+GOOGLE_CLIENT_ID=mock-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=mock-secret
+DEV_LOGIN=1

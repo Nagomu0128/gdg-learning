@@ -69,7 +69,10 @@ const textCheckSchema = z
   })
   .superRefine((v, ctx) => {
     if (v.equals === undefined && v.contains === undefined && v.pattern === undefined) {
-      ctx.addIssue({ code: "custom", message: "text check には equals / contains / pattern のいずれかが必要です" });
+      ctx.addIssue({
+        code: "custom",
+        message: "text check には equals / contains / pattern のいずれかが必要です",
+      });
     }
     if (v.pattern !== undefined && !validRegex(v.pattern, v.flags)) {
       ctx.addIssue({ code: "custom", message: `不正な正規表現です: ${v.pattern}` });
@@ -185,7 +188,10 @@ export const lessonSchema = z
       }
       ids.add(check.id);
       if (check.type === "source" && !(check.file in lesson.files)) {
-        ctx.addIssue({ code: "custom", message: `source check の file が files にありません: ${check.file}` });
+        ctx.addIssue({
+          code: "custom",
+          message: `source check の file が files にありません: ${check.file}`,
+        });
       }
     }
     for (const key of Object.keys(lesson.solution)) {
