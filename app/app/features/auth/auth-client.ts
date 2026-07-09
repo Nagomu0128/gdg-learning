@@ -1,2 +1,4 @@
-// STUB(C が実装): better-auth/react の createAuthClient で置き換える。
-export const authClient = null as never;
+// Better Auth クライアント(CONTRACTS §4.3)。baseURL は既定で現在の origin。所有者: C。
+import { createAuthClient } from "better-auth/react";
+
+export const authClient = createAuthClient();

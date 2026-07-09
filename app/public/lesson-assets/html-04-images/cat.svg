@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="ねこのイラスト">
+  <title>ねこのイラスト</title>
+  <polygon points="55,70 68,22 96,58" fill="#f4a261" />
+  <polygon points="145,70 132,22 104,58" fill="#f4a261" />
+  <polygon points="63,62 70,36 86,56" fill="#e76f51" />
+  <polygon points="137,62 130,36 114,56" fill="#e76f51" />
+  <circle cx="100" cy="112" r="60" fill="#f4a261" />
+  <circle cx="78" cy="102" r="7" fill="#2b2d42" />
+  <circle cx="122" cy="102" r="7" fill="#2b2d42" />
+  <polygon points="100,118 93,110 107,110" fill="#e76f51" />
+  <path d="M100 118 Q100 130 88 132" stroke="#2b2d42" stroke-width="3" fill="none" stroke-linecap="round" />
+  <path d="M100 118 Q100 130 112 132" stroke="#2b2d42" stroke-width="3" fill="none" stroke-linecap="round" />
+  <path d="M30 100 L62 106" stroke="#2b2d42" stroke-width="2" stroke-linecap="round" />
+  <path d="M30 120 L62 116" stroke="#2b2d42" stroke-width="2" stroke-linecap="round" />
+  <path d="M170 100 L138 106" stroke="#2b2d42" stroke-width="2" stroke-linecap="round" />
+  <path d="M170 120 L138 116" stroke="#2b2d42" stroke-width="2" stroke-linecap="round" />
+</svg>

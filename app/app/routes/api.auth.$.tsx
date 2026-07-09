@@ -1,8 +1,11 @@
-// STUB(C が実装): Better Auth キャッチオール(auth.handler(request) へ委譲)。CONTRACTS §4.3。
-export function loader() {
-  return new Response("Not Found", { status: 404 });
+// Better Auth キャッチオール(auth.handler(request) へ委譲)。CONTRACTS §4.3 / DesignDoc §8.1。所有者: C。
+import { getAuth } from "~/features/auth/auth.server";
+import type { Route } from "./+types/api.auth.$";
+
+export async function loader({ request, context }: Route.LoaderArgs) {
+  return getAuth(context.cloudflare.env).handler(request);
 }
 
-export function action() {
-  return new Response("Not Found", { status: 404 });
+export async function action({ request, context }: Route.ActionArgs) {
+  return getAuth(context.cloudflare.env).handler(request);
 }

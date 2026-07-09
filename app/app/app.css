@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+/* トーン(CONTRACTS §10): 背景 slate-50 / 文字 slate-900 / primary indigo-600 / 成功 emerald-600 / 失敗 rose-600 */
+:root {
+  --cs-color-bg: #f8fafc; /* slate-50 */
+  --cs-color-fg: #0f172a; /* slate-900 */
+  --cs-color-primary: #4f46e5; /* indigo-600 */
+  --cs-color-success: #059669; /* emerald-600 */
+  --cs-color-danger: #e11d48; /* rose-600 */
+}

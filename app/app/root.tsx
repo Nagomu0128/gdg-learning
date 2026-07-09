@@ -1,10 +1,31 @@
 import type { ReactNode } from "react";
-import { isRouteErrorResponse, Link, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import {
+  isRouteErrorResponse,
+  Link,
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useRouteLoaderData,
+} from "react-router";
+import { getOptionalUser } from "~/features/auth/auth.server";
+import { LoginButton } from "~/features/auth/login-button";
 import { SITE_NAME } from "~/lib/site";
 import type { Route } from "./+types/root";
 import "./app.css";
 
+export async function loader({ request, context }: Route.LoaderArgs) {
+  const env = context.cloudflare.env;
+  const user = await getOptionalUser(request, env);
+  return { user, devLoginEnabled: env.DEV_LOGIN === "1" };
+}
+
 export function Layout({ children }: { children: ReactNode }) {
+  // ErrorBoundary 描画時は loader データが無いことがある
+  const data = useRouteLoaderData<typeof loader>("root");
+  const user = data?.user ?? null;
+
   return (
     <html lang="ja">
       <head>
@@ -14,16 +35,51 @@ export function Layout({ children }: { children: ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="min-h-screen bg-slate-50 text-slate-900">
+      <body className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
         <header className="border-slate-200 border-b bg-white">
-          <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
-            <Link to="/" className="font-bold text-indigo-600 text-lg">
-              {SITE_NAME}
-            </Link>
-            {/* STUB(C が実装): LoginButton(Google + DEV_LOGIN 時のみ開発ログイン) */}
+          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-3">
+            <div className="flex items-center gap-6">
+              <Link
+                to="/"
+                className="rounded font-bold text-indigo-600 text-lg focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
+              >
+                {SITE_NAME}
+              </Link>
+              <nav aria-label="メイン" className="flex items-center gap-4 text-slate-600 text-sm">
+                <Link
+                  to="/courses"
+                  className="rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
+                >
+                  コース一覧
+                </Link>
+                {user ? (
+                  <Link
+                    to="/me"
+                    className="rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
+                  >
+                    マイページ
+                  </Link>
+                ) : null}
+              </nav>
+            </div>
+            <LoginButton user={user} devLoginEnabled={data?.devLoginEnabled ?? false} />
           </div>
         </header>
-        {children}
+        <div className="flex-1">{children}</div>
+        <footer className="border-slate-200 border-t bg-white">
+          <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-6 py-4 text-slate-500 text-sm">
+            <p>© 2026 {SITE_NAME}</p>
+            <nav aria-label="フッター" className="flex items-center gap-4">
+              {/* MVP ではダミーページ不要(SPEC C §3) */}
+              <a href="#top" className="hover:text-slate-700">
+                利用規約
+              </a>
+              <a href="#top" className="hover:text-slate-700">
+                プライバシーポリシー
+              </a>
+            </nav>
+          </div>
+        </footer>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -51,6 +107,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     <main className="mx-auto max-w-3xl p-8">
       <h1 className="font-bold text-2xl text-slate-900">{message}</h1>
       <p className="mt-2 text-slate-600">{details}</p>
+      <p className="mt-6">
+        <Link to="/" className="font-medium text-indigo-600 hover:underline">
+          トップページへ戻る
+        </Link>
+      </p>
     </main>
   );
 }

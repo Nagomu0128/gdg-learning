@@ -27,6 +27,12 @@
       "id": "0000000000000000000000000000000000"
     }
   ],
+  "analytics_engine_datasets": [
+    {
+      "binding": "ANALYTICS",
+      "dataset": "learning_events"
+    }
+  ],
   "triggers": {
     "crons": ["0 18 * * *"]
   },

@@ -1,0 +1,130 @@
+# インフラパイプライン(DesignDoc §11.3: infra/** 変更時のみ)
+# PR: terraform fmt/validate(+ secrets があれば plan)/ main push: 手動承認付き apply。
+# 必要 secrets: CLOUDFLARE_API_TOKEN(D1:Edit + Workers KV Storage:Edit)/ CLOUDFLARE_ACCOUNT_ID。
+# 手動承認: リポジトリ Settings → Environments → `infra-prod` を作成し Required reviewers を設定する
+# (environment 指定により apply ジョブは承認されるまで待機する)。
+name: Infra
+
+on:
+  pull_request:
+    paths:
+      - "infra/**"
+      - ".github/workflows/infra.yml"
+  push:
+    branches: [main]
+    paths:
+      - "infra/**"
+      - ".github/workflows/infra.yml"
+
+concurrency:
+  group: infra-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  TF_IN_AUTOMATION: "true"
+
+jobs:
+  plan:
+    name: fmt / validate / plan (${{ matrix.env }})
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        env: [dev, prod]
+    defaults:
+      run:
+        working-directory: infra/terraform/envs/${{ matrix.env }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.14"
+
+      - name: terraform fmt -check
+        working-directory: infra/terraform
+        run: terraform fmt -check -recursive
+
+      - name: terraform init (no backend)
+        run: terraform init -backend=false -input=false
+
+      - name: terraform validate
+        run: terraform validate
+
+      - name: Check Cloudflare secrets
+        id: secrets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "secrets 未設定のため plan を skip(fmt / validate のみ実施)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: terraform plan
+        if: steps.secrets.outputs.available == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          terraform init -input=false
+          terraform plan -no-color -input=false | tee plan.txt
+          {
+            echo "## terraform plan (${{ matrix.env }})"
+            echo '```'
+            tail -n 50 plan.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  apply:
+    name: apply (${{ matrix.env }})
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # infra-prod environment の Required reviewers による手動承認を経て実行される(§11.3)
+    environment: infra-prod
+    strategy:
+      matrix:
+        env: [dev, prod]
+      max-parallel: 1
+    defaults:
+      run:
+        working-directory: infra/terraform/envs/${{ matrix.env }}
+    steps:
+      - name: Check Cloudflare secrets
+        id: secrets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        working-directory: .
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "secrets 未設定のため apply を skip(手動セットアップ待ち。手順: docs/RUNBOOK.md)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.secrets.outputs.available == 'true'
+
+      - uses: hashicorp/setup-terraform@v3
+        if: steps.secrets.outputs.available == 'true'
+        with:
+          terraform_version: "~1.14"
+
+      # ⚠ 既定は local backend のため CI 上の tfstate はジョブ終了で消える。
+      #   CI から apply を運用する前に、envs/*/main.tf のコメントに従い R2 / Terraform Cloud
+      #   などのリモートバックエンドへ移行すること(DesignDoc §11.5)。
+      - name: terraform apply
+        if: steps.secrets.outputs.available == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          terraform init -input=false
+          terraform apply -auto-approve -input=false -no-color
