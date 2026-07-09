@@ -1,0 +1,19 @@
+{
+  "name": "codesteps-monorepo",
+  "private": true,
+  "packageManager": "pnpm@10.29.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @codesteps/app run dev",
+    "build": "pnpm --filter @codesteps/app run build",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r --no-bail run test",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "codegen": "pnpm --filter @codesteps/app run codegen",
+    "validate:content": "pnpm --filter @codesteps/app run validate:content",
+    "e2e": "pnpm --filter @codesteps/e2e run test"
+  }
+}

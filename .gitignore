@@ -1,0 +1,41 @@
+node_modules/
+dist/
+build/
+coverage/
+
+# React Router / Vite
+.react-router/
+*.tsbuildinfo
+vite.config.ts.timestamp-*
+
+# codegen output (§3.3: コミットしない)
+app/app/generated/*
+!app/app/generated/.gitkeep
+
+# Cloudflare
+.wrangler/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+worker-configuration.d.ts
+
+# env / secrets
+.env
+.env.*
+
+# test artifacts
+playwright-report/
+test-results/
+blob-report/
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.example.tfvars
+.terraform.lock.hcl
+
+# OS / editor
+.DS_Store
+Thumbs.db
