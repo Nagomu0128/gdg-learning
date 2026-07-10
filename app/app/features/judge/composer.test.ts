@@ -63,15 +63,19 @@ describe("composeDocument", () => {
     expect(compose(domFiles, "judge", "/*bundle*/").html).toContain("var relay = false;");
   });
 
-  it("judge モードは判定バンドル + bootstrap を </body> の前に注入する", () => {
+  it("judge モードは判定バンドル + bootstrap を <head>(ユーザー本文より前)に注入する [フェイルセーフ]", () => {
+    // 本文より後ろに注入すると、壊れた終了タグ(`</a,` 等)が <script> 開始タグごと
+    // トークナイザに食われて判定が実行されず、タイムアウトに化ける(2026-07-10 実地報告)
     const { html } = compose(domFiles, "judge", "/*BUNDLE_MARKER*/");
     const bundle = html.indexOf("/*BUNDLE_MARKER*/");
     const bootstrap = html.indexOf("__JUDGE__.start(");
-    const bodyClose = html.toLowerCase().lastIndexOf("</body>");
+    const consoleHook = html.indexOf("var relay");
+    const bodyOpen = html.toLowerCase().indexOf("<body");
     const user = html.indexOf('console.log("hi");');
-    expect(user).toBeLessThan(bundle);
+    expect(consoleHook).toBeLessThan(bundle); // コンソールフックが先(CONTRACTS §3.3)
     expect(bundle).toBeLessThan(bootstrap);
-    expect(bootstrap).toBeLessThan(bodyClose);
+    expect(bootstrap).toBeLessThan(bodyOpen); // 本文より前 = ユーザーマークアップに食われない
+    expect(bootstrap).toBeLessThan(user);
     // files は JSON で埋め込まれ、< は < にエスケープされる
     expect(html).toContain('nonce: "test-nonce"');
     expect(html).toContain("\\u003c!doctype html>");

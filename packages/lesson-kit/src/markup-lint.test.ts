@@ -771,3 +771,55 @@ describe("診断メッセージの様式", () => {
     }
   });
 });
+
+describe("lintHtml: タグ名のゴミ文字・終了タグの余計な文字(2026-07-10 実地報告の強化)", () => {
+  it("文中の </a, を検出する(報告ケースの一般形: EOF でなくても壊れている)", () => {
+    const diags = lintHtml('<body><a href="https://x.com">x</a,>\n</body>');
+    expect(diags.length).toBeGreaterThan(0);
+    expect(diags[0]?.message).toContain("</a,");
+    expect(diags[0]?.message).toContain("とだけ書きましょう");
+  });
+
+  it("開始タグ名のゴミ文字 <a,> を検出する", () => {
+    const diags = lintHtml("<a,>x</a>");
+    expect(diags.length).toBeGreaterThan(0);
+    expect(diags[0]?.message).toContain("「,」");
+    expect(diags[0]?.message).toContain("<a>");
+  });
+
+  it("<h1!> のような開始タグ名も検出する", () => {
+    const diags = lintHtml("<h1!>x</h1>");
+    expect(diags[0]?.message).toContain("「!」");
+  });
+
+  it("終了タグの属性様ゴミ </p ,> を検出する", () => {
+    const diags = lintHtml("<p>x</p ,>");
+    expect(diags.length).toBe(1);
+    expect(diags[0]?.message).toContain("余計な文字");
+  });
+
+  it('終了タグに属性 </a href="x"> を書いたら検出する', () => {
+    const diags = lintHtml('<a href="https://x.com">x</a href="y">');
+    expect(diags.length).toBe(1);
+    expect(diags[0]?.message).toContain("</a>");
+  });
+
+  it("ゴミ名の終了タグでも対応づけは回復し、連鎖エラーを出さない", () => {
+    // </a,> が a を閉じたとみなされ、unclosed-element の連鎖が出ないこと
+    const diags = lintHtml("<body><a>x</a,>\n<p>y</p></body>");
+    expect(diags.length).toBe(1);
+  });
+
+  it("偽陽性なし: 名前の後の空白だけの終了タグ </a > は合法", () => {
+    expect(lintHtml("<a>x</a >")).toEqual([]);
+  });
+
+  it("偽陽性なし: 大文字タグ・カスタム要素(ハイフン)は合法", () => {
+    expect(lintHtml("<DIV>x</DIV>")).toEqual([]);
+    expect(lintHtml("<my-widget>x</my-widget>")).toEqual([]);
+  });
+
+  it("偽陽性なし: テキスト中の記号は従来どおり無視", () => {
+    expect(lintHtml("<p>a, b! c?</p>")).toEqual([]);
+  });
+});

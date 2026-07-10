@@ -136,12 +136,6 @@ function injectHeader(html: string, header: string): string {
   return header + html;
 }
 
-function injectFooter(html: string, footer: string): string {
-  const at = html.toLowerCase().lastIndexOf("</body>");
-  if (at === -1) return html + footer;
-  return html.slice(0, at) + footer + html.slice(at);
-}
-
 /**
  * 複数ファイルを 1 枚の srcdoc HTML に合成する(§6.1)。
  * - `<link rel="stylesheet" href="X">` → files 内 X の `<style>` インライン化
@@ -216,19 +210,21 @@ export function composeDocument(input: ComposeInput): ComposeOutput {
     return `<style>\n${css}\n</style>`;
   });
 
-  // 注入順序は CONTRACTS §3.3: ①CSP ②<base> ③コンソールフック(④以降は本文とフッタ)
-  const header =
+  // 注入順序は CONTRACTS §3.3: ①CSP ②<base> ③コンソールフック(判定時は続けて④バンドル ⑤bootstrap)。
+  // 判定バンドルは <head>(=ユーザー本文より前)へ注入する [フェイルセーフ/多層防御]:
+  // 本文側に注入すると、壊れた終了タグ(`</a,` 等)がブラウザのトークナイザに後続の
+  // <script> 開始タグごと食われて判定が実行されず、原因不明のタイムアウトに化ける。
+  // ランタイムは whenDocumentSettled() で load を待つため head 実行で問題ない。
+  let header =
     buildCspMeta(input.origin) +
     `<base href="${input.origin}/lesson-assets/${input.lessonSlug}/">` +
     `<script>\n${buildConsoleHook({ nonce: input.nonce, relay: mode === "preview", scope: "page" })}\n</script>`;
-  html = injectHeader(html, header);
-
   if (mode === "judge" && input.judgeBundle !== undefined) {
-    const bootstrap =
+    header +=
       `<script>\n${escapeInlineScript(input.judgeBundle)}\n</script>` +
       `<script>\nglobalThis.__JUDGE__.start({ nonce: ${escapeJsonForScript(input.nonce)}, files: ${escapeJsonForScript(files)} });\n</script>`;
-    html = injectFooter(html, bootstrap);
   }
+  html = injectHeader(html, header);
 
   return { html, jsSyntaxError };
 }

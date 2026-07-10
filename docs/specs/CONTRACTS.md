@@ -178,7 +178,7 @@ export const JUDGE_RESULT_KIND = "judge:result";       // { kind, nonce, verdict
 
 - バンドルは IIFE。実行すると `globalThis.__JUDGE__ = { start(cfg), startWorker(cfg) }` を定義する。
 - `cfg = { nonce: string, files: FileMap }`(files は source check 用)。
-- **DOM 系**: srcdoc の合成順序 = ①CSP meta ②`<base href="{origin}/lesson-assets/{slug}/">` ③コンソールフック(`globalThis.__CONSOLE__: ConsoleEntry[]` に捕捉、window.onerror も error として捕捉) ④ユーザー HTML/CSS(インライン化済) ⑤ループ保護済ユーザー JS ⑥判定バンドル ⑦`__JUDGE__.start({nonce, files})`。start は全 check を上から評価(§5.1: 失敗後も全件継続、各 check は try/catch)し、`parent.postMessage({ kind:"judge:result", nonce, verdict }, "*")` を **1回だけ**送る。
+- **DOM 系**: srcdoc の合成順序 = ①CSP meta ②`<base href="{origin}/lesson-assets/{slug}/">` ③コンソールフック(`globalThis.__CONSOLE__: ConsoleEntry[]` に捕捉、window.onerror も error として捕捉) ④判定バンドル ⑤`__JUDGE__.start({nonce, files})`(ランタイムが load を待ってから評価) ⑥ユーザー HTML/CSS(インライン化済) ⑦ループ保護済ユーザー JS。**④⑤は `<head>` = ユーザー本文より前に注入**(2026-07-10 変更 [フェイルセーフ]: 本文より後ろだと壊れた終了タグ `</a,` 等に `<script>` 開始タグごと食われ、判定未実行のタイムアウトに化ける)。start は全 check を上から評価(§5.1: 失敗後も全件継続、各 check は try/catch)し、`parent.postMessage({ kind:"judge:result", nonce, verdict }, "*")` を **1回だけ**送る。
 - **Worker 系**: blob = ①コンソールフック ②ループ保護済ユーザー JS ③判定バンドル ④`__JUDGE__.startWorker({nonce, files})`。`self.postMessage({ kind:"judge:result", nonce, verdict })`。fn check は `globalThis[name]` を参照(**教材規約: fn 対象は function 宣言**)。
 - verdict.display = 最初に失敗した check(authored順)。message = `check.message ?? defaultMessageFor(check)`。element/attribute/style の失敗時は該当ソース(HTML は .html ファイル、style は .css)へ `diagnoseMarkupZenkaku` をかけ、ヒットしたら差し替え(§5.4)。
 - `<script>` へ埋め込む文字列は `</script` → `<\/script` エスケープ。JSON 注入は `JSON.stringify(x).replace(/</g, "\\u003c")`。

@@ -135,6 +135,22 @@ function cleanTagName(raw: string): string {
   return m === null ? "" : m[0].toLowerCase();
 }
 
+/**
+ * タグ名トークンに含まれる不正な最初の文字(全角写像後)。合法なら null。
+ * `<a,>` `</a,>` のようなゴミ文字はブラウザ上「名前の一部」または「無視される属性」として
+ * 静かに回復されてしまうため、ガードレールとしては明示的にブロックする(ADR #18)。
+ */
+function firstInvalidNameChar(raw: string): string | null {
+  let mapped = "";
+  for (const ch of raw) {
+    mapped += zenkakuSuggestionFor(ch, true) ?? ch;
+  }
+  const m = /^[a-zA-Z][a-zA-Z0-9-]*/.exec(mapped);
+  const matched = m === null ? 0 : m[0].length;
+  if (matched >= mapped.length) return null;
+  return mapped[matched] ?? null;
+}
+
 type OpenElement = { name: string; line: number; pos: number };
 type PendingDiag = MarkupDiag & { pos: number };
 
@@ -229,6 +245,14 @@ export function lintHtml(source: string): MarkupDiag[] {
     // タグ名・属性名など「構文を構成すべき領域」の全角のみ拾う(属性値の中は拾わない — §5.4)
     let zenkaku: ZenkakuFinding | null = findZenkakuIn(rawName, true);
     let zenkakuPos = zenkaku === null ? -1 : nameStart + zenkaku.index;
+    // start-tag-garbage-name: `<a,>` 等。全角は zenkaku 側の診断を優先する
+    const invalidNameChar = zenkaku === null ? firstInvalidNameChar(rawName) : null;
+    if (invalidNameChar !== null) {
+      report(
+        lt,
+        `${lineAt(lt)}行目の <${rawName} のタグ名に「${invalidNameChar}」が入っています。<${cleanTagName(rawName) || "タグ名"}> のように書きましょう`,
+      );
+    }
     const noteZenkaku = (finding: ZenkakuFinding | null, basePos: number): void => {
       if (zenkaku === null && finding !== null) {
         zenkaku = finding;
@@ -339,12 +363,15 @@ export function lintHtml(source: string): MarkupDiag[] {
     }
     const rawName = source.slice(nameStart, j);
     const zenkaku = findZenkakuIn(rawName, true);
-    // `>` までの残り(終了タグ内の属性等は WHATWG 同様に無視する)
+    // `>` までの残りを記録する(WHATWG は終了タグ内の属性等を無視して回復するが、
+    // 初学者には常にミスなのでガードレールとしてはブロック対象 — ADR #18)
+    const extraStart = j;
     while (j < n) {
       const ch = source[j] as string;
       if (ch === ">" || ch === "<") break;
       j++;
     }
+    const extra = source.slice(extraStart, j);
     const name = cleanTagName(rawName);
 
     if (j >= n || source[j] === "<") {
@@ -363,6 +390,25 @@ export function lintHtml(source: string): MarkupDiag[] {
 
     if (zenkaku !== null) {
       reportZenkaku(nameStart + zenkaku.index, zenkaku);
+      silentClose(name);
+      return j;
+    }
+    // end-tag-garbage: `</a,>`(名前にゴミ文字)や `</p ,>`(名前の後に余計な文字)。
+    // ブラウザは静かに回復するが、初学者には常にミスなのでブロックする
+    const invalidNameChar = firstInvalidNameChar(rawName);
+    if (invalidNameChar !== null) {
+      report(
+        lt,
+        `${lineAt(lt)}行目の </${rawName}> に「${invalidNameChar}」が入っています。終了タグは </${name || "タグ名"}> とだけ書きましょう`,
+      );
+      silentClose(name);
+      return j;
+    }
+    if (extra.trim() !== "") {
+      report(
+        lt,
+        `${lineAt(lt)}行目の終了タグ </${name}> に余計な文字が入っています。終了タグは </${name}> とだけ書きましょう`,
+      );
       silentClose(name);
       return j;
     }
