@@ -6,7 +6,7 @@ import { cp, mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildJudgeBundle } from "./judge-bundle";
-import type { DiscoveredCourse, DiscoveredLesson } from "./validate";
+import type { CourseDefParsed, DiscoveredCourse, DiscoveredLesson } from "./validate";
 import { defaultContentRoot, discoverContent } from "./validate";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -73,6 +73,16 @@ type LessonMeta = {
   hintCount: number;
 };
 
+/** content-meta.json の courses[] 1 件分(読み手の契約は app 側 ContentCourseMeta) */
+type ContentMetaCourse = {
+  slug: string;
+  title: string;
+  description: string;
+  /** コースレベル(ADR #19)。course.ts で未指定なら "basic" を出力する */
+  level: NonNullable<CourseDefParsed["level"]>;
+  lessons: LessonMeta[];
+};
+
 function lessonMeta(course: DiscoveredCourse, lesson: DiscoveredLesson): LessonMeta {
   return {
     slug: lesson.slug,
@@ -113,12 +123,13 @@ function renderLessonModule(course: DiscoveredCourse, lesson: DiscoveredLesson, 
 }
 
 function renderContentMeta(courses: DiscoveredCourse[], version: string): string {
-  const meta = {
+  const meta: { contentVersion: string; courses: ContentMetaCourse[] } = {
     contentVersion: version,
     courses: courses.map((course) => ({
       slug: course.def.slug,
       title: course.def.title,
       description: course.def.description,
+      level: course.def.level ?? "basic",
       lessons: course.lessons.map((lesson) => lessonMeta(course, lesson)),
     })),
   };

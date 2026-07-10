@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { getOptionalUser } from "~/features/auth/auth.server";
 import { authClient } from "~/features/auth/auth-client";
 import { getCoursesOverview } from "~/features/progress/index.server";
+import { courseAccent, groupCoursesByLevel } from "~/features/progress/levels";
 import { SITE_NAME } from "~/lib/site";
 import type { Route } from "./+types/_index";
 
@@ -44,12 +45,6 @@ const STEPS = [
   },
 ] as const;
 
-const COURSE_ACCENT: Record<string, string> = {
-  "html-basics": GDG.red,
-  "css-basics": GDG.blue,
-  "js-basics": GDG.yellow,
-};
-
 function StartButton({
   loggedIn,
   tone,
@@ -87,6 +82,9 @@ function StartButton({
 export default function Index({ loaderData }: Route.ComponentProps) {
   const { user, courses, devLoginEnabled } = loaderData;
   const loggedIn = user !== null;
+  // 数値は content-meta 由来の動的値(ハードコード禁止 — CURRICULUM-2 プラットフォーム変更 4)
+  const totalLessons = courses.reduce((sum, course) => sum + course.lessonCount, 0);
+  const courseSections = groupCoursesByLevel(courses);
 
   return (
     <main>
@@ -124,7 +122,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
               ) : null}
             </div>
             <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-slate-500 text-sm">
-              {["環境構築は不要", "全32レッスン", "ブラウザだけでOK"].map((t, i) => (
+              {["環境構築は不要", `全${totalLessons}レッスン`, "ブラウザだけでOK"].map((t, i) => (
                 <li key={t} className="flex items-center gap-1.5">
                   <span
                     aria-hidden="true"
@@ -190,32 +188,44 @@ export default function Index({ loaderData }: Route.ComponentProps) {
         </ol>
       </section>
 
-      {/* コース紹介(静的。受講はログイン後 — ADR #17) */}
+      {/* コース紹介(静的。受講はログイン後 — ADR #17)。レベル別セクション表示(ADR #19) */}
       <section className="border-slate-200 border-y bg-white">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <div className="flex flex-wrap items-end justify-between gap-2">
             <div>
-              <h2 className="font-bold text-2xl text-slate-900 tracking-tight">3つの入門コース</h2>
+              <h2 className="font-bold text-2xl text-slate-900 tracking-tight">
+                基礎から応用まで、全{courses.length}コース
+              </h2>
               <p className="mt-1 text-slate-600 text-sm">
                 HTML → CSS → JavaScript の順で、ゼロから積み上げます。
               </p>
             </div>
             <p className="text-slate-400 text-xs">受講にはログインが必要です</p>
           </div>
-          <div className="mt-8 grid gap-6 sm:grid-cols-3">
-            {courses.map((course) => (
-              <div
-                key={course.slug}
-                data-testid={`lp-course-${course.slug}`}
-                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-                style={{ borderTopWidth: 3, borderTopColor: COURSE_ACCENT[course.slug] ?? GDG.blue }}
-              >
-                <h3 className="font-semibold text-lg text-slate-900">{course.title}</h3>
-                <p className="mt-2 text-slate-600 text-sm leading-relaxed">{course.description}</p>
-                <p className="mt-4 font-medium text-slate-400 text-xs">全 {course.lessonCount} レッスン</p>
+          {courseSections.map((section) => (
+            <div key={section.level} data-testid={`lp-level-${section.level}`} className="mt-10">
+              <h3 className="flex items-baseline gap-2 font-semibold text-base text-slate-900">
+                {section.label}
+                <span className="font-normal text-slate-400 text-xs">{section.courses.length}コース</span>
+              </h3>
+              <div className="mt-4 grid gap-6 sm:grid-cols-3">
+                {section.courses.map((course) => (
+                  <div
+                    key={course.slug}
+                    data-testid={`lp-course-${course.slug}`}
+                    className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+                    style={{ borderTopWidth: 3, borderTopColor: courseAccent(course.slug) }}
+                  >
+                    <h4 className="font-semibold text-lg text-slate-900">{course.title}</h4>
+                    <p className="mt-2 text-slate-600 text-sm leading-relaxed">{course.description}</p>
+                    <p className="mt-4 font-medium text-slate-400 text-xs">
+                      全 {course.lessonCount} レッスン
+                    </p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
 

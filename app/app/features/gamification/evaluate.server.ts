@@ -3,7 +3,8 @@ import { and, eq } from "drizzle-orm";
 import { getDb, schema } from "~/db";
 import { courseLessonCounts, courseSlugByLesson } from "~/features/progress/content-meta.server";
 import type { Env } from "~/lib/env";
-import { ACHIEVEMENTS, type AchievementCtx } from "./achievements";
+import type { AchievementCtx } from "./achievements";
+import { ACHIEVEMENTS } from "./achievements.server";
 
 export type NewBadge = { id: string; title: string; description: string; icon: string };
 

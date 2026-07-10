@@ -1,5 +1,6 @@
 // 進捗・ゲーミフィケーションの契約型(CONTRACTS §5)。型は契約なので完成品。
 import type { FileMap } from "@codesteps/lesson-kit";
+import type { CourseLevel } from "./levels";
 
 export type LessonStatus = "not_started" | "in_progress" | "passed";
 
@@ -7,6 +8,8 @@ export type CourseOverview = {
   slug: string;
   title: string;
   description: string;
+  /** コースレベル(ADR #19)。UI は groupCoursesByLevel でセクション表示する */
+  level: CourseLevel;
   lessonCount: number;
   passedCount: number;
   firstLessonSlug: string;

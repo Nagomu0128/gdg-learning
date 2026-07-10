@@ -3,6 +3,7 @@
 import { Link } from "react-router";
 import { requireUser } from "~/features/auth/auth.server";
 import { getMypage } from "~/features/progress/index.server";
+import { courseAccent, groupCoursesByLevel } from "~/features/progress/levels";
 import { CourseProgressBar } from "~/features/progress/progress-bar";
 import type { Route } from "./+types/me";
 
@@ -12,12 +13,6 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   const mypage = await getMypage(env, user.id);
   return { user, ...mypage };
 }
-
-const COURSE_ACCENT: Record<string, string> = {
-  "html-basics": "var(--gdg-red)",
-  "css-basics": "var(--gdg-blue)",
-  "js-basics": "var(--gdg-yellow)",
-};
 
 export default function MyPage({ loaderData }: Route.ComponentProps) {
   const { user, stats, badges, courses, solutions, resume } = loaderData;
@@ -103,28 +98,33 @@ export default function MyPage({ loaderData }: Route.ComponentProps) {
         </section>
       </section>
 
-      {/* コース別進捗 */}
+      {/* コース別進捗(レベル別セクション — ADR #19) */}
       <section className="mt-10">
         <h2 className="font-bold text-lg text-slate-900 tracking-tight">コース別の進捗</h2>
         {courses.length === 0 ? (
           <p className="mt-4 text-slate-500 text-sm">コースは準備中です。</p>
         ) : (
-          <div className="mt-4 grid gap-4 sm:grid-cols-3">
-            {courses.map((course) => (
-              <Link
-                key={course.slug}
-                to={`/courses/${course.slug}`}
-                data-testid={`mypage-course-${course.slug}`}
-                className="block rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
-                style={{ borderTopWidth: 3, borderTopColor: COURSE_ACCENT[course.slug] ?? "var(--gdg-blue)" }}
-              >
-                <p className="font-semibold text-slate-900">{course.title}</p>
-                <div className="mt-3">
-                  <CourseProgressBar passed={course.passedCount} total={course.lessonCount} />
-                </div>
-              </Link>
-            ))}
-          </div>
+          groupCoursesByLevel(courses).map((section) => (
+            <div key={section.level} data-testid={`mypage-level-${section.level}`} className="mt-4">
+              <h3 className="font-semibold text-slate-500 text-sm">{section.label}</h3>
+              <div className="mt-2 grid gap-4 sm:grid-cols-3">
+                {section.courses.map((course) => (
+                  <Link
+                    key={course.slug}
+                    to={`/courses/${course.slug}`}
+                    data-testid={`mypage-course-${course.slug}`}
+                    className="block rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
+                    style={{ borderTopWidth: 3, borderTopColor: courseAccent(course.slug) }}
+                  >
+                    <p className="font-semibold text-slate-900">{course.title}</p>
+                    <div className="mt-3">
+                      <CourseProgressBar passed={course.passedCount} total={course.lessonCount} />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))
         )}
       </section>
 

@@ -137,6 +137,7 @@ export function loadLesson(slug: string): Promise<LoadedLesson>; // import.meta.
 // app/app/generated/content-meta.json(サーバー側でも import する静的メタ)
 { "contentVersion": "<git短SHA|dev>",
   "courses": [{ "slug": "...", "title": "...", "description": "...",
+    "level": "basic" | "intermediate" | "advanced" | "capstone",  // course.ts 未指定は "basic"(ADR #19)
     "lessons": [{ "slug","title","estMinutes","runner","order","slideCount","hintCount" }] }] }
 
 // app/app/generated/slides.client.ts(D が生成形を確定)
@@ -238,7 +239,8 @@ export type AuthUser = { id: string; name: string; email: string; image: string 
 ```ts
 // すべて server-only(*.server.ts)。env は Env、userId は AuthUser["id"]
 export function getCoursesOverview(env: Env, userId: string | null): Promise<CourseOverview[]>;
-// CourseOverview = { slug, title, description, lessonCount, passedCount, firstLessonSlug }
+// CourseOverview = { slug, title, description, level, lessonCount, passedCount, firstLessonSlug }
+//   level は CourseLevel("basic"|"intermediate"|"advanced"|"capstone"。ADR #19 / CURRICULUM-2)
 
 export function getCourseDetail(env: Env, userId: string | null, courseSlug: string): Promise<CourseDetail | null>;
 // CourseDetail = { slug, title, description, lessons: { slug, title, estMinutes, order, slideCount,
@@ -268,11 +270,14 @@ export function getMypage(env: Env, userId: string): Promise<MypageData>;
 export function runRetention(env: Env, now?: Date): Promise<{ cleared: number }>; // §7.5(90日、最新合格除外)。workers/app.ts の scheduled から呼ぶ
 
 // ~/features/gamification/achievements.ts(クライアント安全 — DB 依存なし)
-export const ACHIEVEMENTS: { id: string; title: string; description: string; icon: string;
-                             condition: (ctx: AchievementCtx) => boolean }[];
+export function buildAchievements(courses: readonly { slug; title; level? }[]):
+  { id: string; title: string; description: string; icon: string;
+    condition: (ctx: AchievementCtx) => boolean }[];
 // AchievementCtx = { stats: { currentStreak, longestStreak, totalPassed }, passedCountByCourse: Record<string, number>,
 //                    courseLessonCounts: Record<string, number>, lessonSlug: string }
-// MVP 9種(§2.5): first_pass / course_complete_{html-basics,css-basics,js-basics} / passed_10/50/100 / streak_7/30
+// 実体は ~/features/gamification/achievements.server.ts の ACHIEVEMENTS(content-meta のコース一覧を注入して構築)。
+// 固定6種(first_pass / passed_10/50/100 / streak_7/30)+ course_complete_{slug} をコース数分動的生成(ADR #19)。
+// 既存3種 course_complete_{html-basics,css-basics,js-basics} の id・文言・icon は凍結(DB 保存済みのため不変)
 ```
 
 日付ユーティリティ: `~/features/progress/jst.ts` に `jstDateString(epochMs): "YYYY-MM-DD"` / `jstYesterday(dateStr)` を置き、vitest でテスト。

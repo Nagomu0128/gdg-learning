@@ -9,6 +9,7 @@ import { useFetcher } from "react-router";
 import { CodeEditor } from "~/features/editor/code-editor";
 import { clearDraft, editableSubset, loadDraft, restoreFiles, saveDraft } from "~/features/editor/draft";
 import { FileTabs } from "~/features/editor/file-tabs";
+import { FileTree } from "~/features/editor/file-tree";
 import { composePreview, judge, runWorkerConsole } from "~/features/judge";
 import type { ExerciseState, SubmitResult } from "~/features/progress/types";
 import type { LoadedLesson } from "~/generated/lessons.client";
@@ -69,6 +70,9 @@ export default function ExerciseScreen(props: ExerciseScreenProps) {
   );
   const hasJs = useMemo(() => Object.keys(lessonFiles).some((name) => name.endsWith(".js")), [lessonFiles]);
   const showRun = hasJs || !isDom;
+  // ファイル数 >= 3 なら md 以上でタブの代わりに左サイドのツリーペインを表示(CURRICULUM-2)。
+  // md 未満は常にタブ(タブ UI はレスポンシブ用に常時レンダリングし CSS で切替)。
+  const useFileTree = visibleFiles.length >= 3;
 
   // ---- エディタ状態(FileMap 一元管理。hidden 含む全ファイルの現在値) ----
   const [files, setFiles] = useState<FileMap>(() =>
@@ -309,6 +313,39 @@ export default function ExerciseScreen(props: ExerciseScreenProps) {
           ? "合格です! おめでとうございます"
           : failMessage(verdict)));
 
+  // 中央セクションのエディタ + 実行バー(タブ表示 / ツリー表示の両レイアウトで共有)
+  const editorAndRun = (
+    <>
+      <div className="min-h-0 flex-1 overflow-hidden bg-white">
+        {activeMeta !== undefined ? (
+          <CodeEditor
+            fileName={activeFile}
+            value={files[activeFile] ?? ""}
+            readOnly={!activeMeta.editable}
+            onChange={handleEditorChange}
+            onRun={showRun ? triggerRun : undefined}
+          />
+        ) : (
+          <p className="p-4 text-slate-500 text-sm">表示できるファイルがありません</p>
+        )}
+      </div>
+      {showRun && (
+        <div className="flex items-center gap-2 border-slate-200 border-t bg-white px-3 py-2">
+          <button
+            data-testid="run-button"
+            type="button"
+            onClick={triggerRun}
+            disabled={running}
+            className="rounded-xl bg-slate-800 px-4 py-1.5 font-medium text-sm text-white hover:bg-slate-700 disabled:opacity-60"
+          >
+            ▶ 実行
+          </button>
+          <span className="text-slate-400 text-xs">Ctrl / ⌘ + Enter でも実行できます</span>
+        </div>
+      )}
+    </>
+  );
+
   return (
     <div className="flex h-[calc(100dvh-53px)] min-h-0 flex-col bg-slate-50">
       {/* md 未満: 手順 / コード / プレビュー のタブ切替 */}
@@ -358,40 +395,32 @@ export default function ExerciseScreen(props: ExerciseScreenProps) {
           />
         </aside>
 
-        {/* 中央: ファイルタブ + エディタ + 実行 */}
+        {/* 中央: ファイルタブ(3ファイル以上の md+ はファイルツリー)+ エディタ + 実行 */}
         <section
           className={clsx(
             mobilePane === "code" ? "flex" : "hidden",
-            "min-h-0 min-w-0 flex-1 flex-col border-slate-200 md:flex md:border-r",
+            "min-h-0 min-w-0 flex-1 border-slate-200 md:flex md:border-r",
+            useFileTree ? "flex-row" : "flex-col",
           )}
         >
-          <FileTabs files={visibleFiles} active={activeFile} onSelect={setActiveFile} />
-          <div className="min-h-0 flex-1 overflow-hidden bg-white">
-            {activeMeta !== undefined ? (
-              <CodeEditor
-                fileName={activeFile}
-                value={files[activeFile] ?? ""}
-                readOnly={!activeMeta.editable}
-                onChange={handleEditorChange}
-                onRun={showRun ? triggerRun : undefined}
-              />
-            ) : (
-              <p className="p-4 text-slate-500 text-sm">表示できるファイルがありません</p>
-            )}
-          </div>
-          {showRun && (
-            <div className="flex items-center gap-2 border-slate-200 border-t bg-white px-3 py-2">
-              <button
-                data-testid="run-button"
-                type="button"
-                onClick={triggerRun}
-                disabled={running}
-                className="rounded-xl bg-slate-800 px-4 py-1.5 font-medium text-sm text-white hover:bg-slate-700 disabled:opacity-60"
-              >
-                ▶ 実行
-              </button>
-              <span className="text-slate-400 text-xs">Ctrl / ⌘ + Enter でも実行できます</span>
-            </div>
+          {useFileTree ? (
+            <>
+              {/* md+: 左サイドのファイルツリーペイン。md 未満はツリーを隠しタブを表示(CSS のみで切替) */}
+              <div className="hidden w-44 shrink-0 border-slate-200 border-r md:block">
+                <FileTree files={visibleFiles} active={activeFile} onSelect={setActiveFile} />
+              </div>
+              <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+                <div className="md:hidden">
+                  <FileTabs files={visibleFiles} active={activeFile} onSelect={setActiveFile} />
+                </div>
+                {editorAndRun}
+              </div>
+            </>
+          ) : (
+            <>
+              <FileTabs files={visibleFiles} active={activeFile} onSelect={setActiveFile} />
+              {editorAndRun}
+            </>
           )}
         </section>
 
