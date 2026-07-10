@@ -1,5 +1,35 @@
 import { defineLesson } from "@codesteps/lesson-kit";
 
+// :hover 中の computed style は取得できず、生 CSS への正規表現(source check)では
+// コメントに同じ構文を書くだけで合格してしまう。そこでパース済みの CSS(CSSOM)を
+// document.styleSheets から走査し、「:hover を含むセレクタのルールに有効な宣言が
+// 1つ以上あるか」を検証する。判定 iframe では <link> が同一ドキュメントの <style> に
+// インライン合成されるため、sandbox(opaque origin)でも cssRules の読み取りは制限されない。
+function hasHoverRuleWithDeclaration(doc: Document): boolean {
+  const visit = (rules: CSSRuleList): boolean => {
+    for (const rule of Array.from(rules)) {
+      // instanceof は実行環境の realm に依存し得るため、ダックタイピングで判別する
+      if ("selectorText" in rule && "style" in rule) {
+        const styleRule = rule as CSSStyleRule;
+        if (styleRule.selectorText.includes(":hover") && styleRule.style.length > 0) return true;
+      }
+      // @media 等のグループ(入れ子ルール)も再帰的にたどる
+      if ("cssRules" in rule && visit((rule as CSSGroupingRule).cssRules)) return true;
+    }
+    return false;
+  };
+  return Array.from(doc.styleSheets).some((sheet) => {
+    // cssRules を読めないシート(cross-origin 等。インライン <style> では起きない)は対象外
+    let rules: CSSRuleList;
+    try {
+      rules = sheet.cssRules;
+    } catch {
+      return false;
+    }
+    return visit(rules);
+  });
+}
+
 export default defineLesson({
   slug: "cap-01-profile-card",
   title: "プロフィールカード",
@@ -72,11 +102,10 @@ export default defineLesson({
       message: "style.css の .card { ... } の中に border-radius で角丸を付けましょう",
     },
     {
-      type: "source",
+      type: "custom",
       id: "hover-effect",
-      file: "style.css",
-      pattern: ":hover[^{]*\\{[^}]*[a-z-]+\\s*:",
       message: "マウスをのせたときの変化を :hover のルールで書きましょう(例: .card:hover { ... })",
+      run: (ctx) => hasHoverRuleWithDeclaration(ctx.document),
     },
   ],
   hints: [

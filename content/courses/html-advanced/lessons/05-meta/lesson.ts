@@ -50,7 +50,7 @@ export default defineLesson({
       type: "source",
       file: "index.html",
       pattern:
-        "<meta(?=[^>]*name\\s*=\\s*[\"']viewport[\"'])[^>]*content\\s*=\\s*[\"']width=device-width,\\s*initial-scale=1[\"']",
+        "<meta(?=[^>]*name\\s*=\\s*[\"']viewport[\"'])[^>]*content\\s*=\\s*[\"']width=device-width,\\s*initial-scale=1(?:\\.0)?[\"']",
       flags: "i",
       message: 'viewport の content は "width=device-width, initial-scale=1" にしましょう',
     },

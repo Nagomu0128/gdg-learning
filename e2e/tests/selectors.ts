@@ -11,7 +11,19 @@
 export const TESTID = {
   /** 教材自己整合性検証ページのサマリ(確定契約) */
   validateSummary: "validate-summary",
+  /** 演習画面のファイルツリーペイン(features/editor/file-tree.tsx。3ファイル以上の md+ で表示) */
+  fileTree: "file-tree",
 } as const;
+
+/** ファイルツリーの項目(file-tree.tsx がファイル名ごとに生成する data-testid) */
+export function fileTreeItemTestId(fileName: string): string {
+  return `file-tree-item-${fileName}`;
+}
+
+/** ファイルタブ(file-tabs.tsx がファイル名ごとに生成する data-testid) */
+export function fileTabTestId(fileName: string): string {
+  return `file-tab-${fileName}`;
+}
 
 export const UI_TEXT = {
   /** 演習画面の提出ボタン(CONTRACTS §7「できた!」) */

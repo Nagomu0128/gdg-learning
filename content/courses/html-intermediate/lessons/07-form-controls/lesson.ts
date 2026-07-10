@@ -63,12 +63,24 @@ export default defineLesson({
       message: '2つのラジオボタンに、同じ name="again" を付けましょう',
     },
     {
+      id: "label-again-no",
+      type: "element",
+      selector: 'label[for="again-no"]',
+      message: '「いいえ」のラジオボタン(id="again-no")にも、for="again-no" を付けた label を書きましょう',
+    },
+    {
       id: "label-for",
       type: "attribute",
       selector: "label",
       name: "for",
       equals: "snack",
       message: '「すきなおやつ」の label に for="snack" を付けて、select の id とつなぎましょう',
+    },
+    {
+      id: "label-comment",
+      type: "element",
+      selector: 'label[for="comment"]',
+      message: 'ひとこと欄の label に for="comment" を付けて、textarea の id とつなぎましょう',
     },
   ],
   hints: [

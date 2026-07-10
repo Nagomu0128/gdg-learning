@@ -106,7 +106,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
             </h1>
             <p className="mt-5 max-w-xl text-base text-slate-600 leading-relaxed">
               {SITE_NAME} は、スライドで学んで・ブラウザでそのまま書いて・その場で判定される、 HTML / CSS /
-              JavaScript の入門学習サービスです。書いたコードがすぐ動くから、続きます。
+              JavaScript をゼロから応用まで学べる学習サービスです。書いたコードがすぐ動くから、続きます。
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <StartButton loggedIn={loggedIn} tone="blue" testid="cta-start" />
