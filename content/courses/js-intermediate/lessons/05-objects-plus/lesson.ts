@@ -32,7 +32,10 @@ console.log(merge({ a: 1 }, { b: 2 }));
       type: "source",
       id: "use-destructuring",
       file: "script.js",
-      pattern: "const\\s*\\{",
+      // 宣言での分割代入(const { ... })に加え、引数での分割代入(function introduce({ ... }))も
+      // 正しい別解として許容する。裸の \(\s*\{ は initial の merge({ a: 1 }, ...) 呼び出しに
+      // マッチしてしまうため、必ず function 宣言のヘッダに限定すること
+      pattern: "(?:const|let|var)\\s*\\{|function\\s+\\w+\\s*\\(\\s*\\{",
       message: "分割代入(const のあとに波かっこ)を使って、person から name と age を取り出しましょう",
     },
     {

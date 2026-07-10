@@ -2,8 +2,10 @@
 // - providerImportSource: MDXProvider(@mdx-js/react)経由でコンポーネントを解決する
 //   (スライドの h1/p/code 等のスタイルと <Callout> は ~/features/slides/mdx-components.tsx が提供)
 // - コードブロックは @shikijs/rehype でビルド時にハイライトし、クライアントに Shiki を載せない(§4.3)
+// - GFM(remark-gfm)はテーブル構文のために有効化(表示は mdx-components.tsx の table/th/td)
 import type { Options } from "@mdx-js/rollup";
 import rehypeShiki, { type RehypeShikiOptions } from "@shikijs/rehype";
+import remarkGfm from "remark-gfm";
 
 const shikiOptions: RehypeShikiOptions = {
   theme: "github-light",
@@ -11,5 +13,6 @@ const shikiOptions: RehypeShikiOptions = {
 
 export const mdxOptions: Options = {
   providerImportSource: "@mdx-js/react",
+  remarkPlugins: [remarkGfm],
   rehypePlugins: [[rehypeShiki, shikiOptions]],
 };

@@ -66,6 +66,20 @@ export default defineLesson({
       equals: "2",
       message: '合計の行の td に colspan="2" を付けて、2列分をつなげましょう',
     },
+    {
+      id: "total-label",
+      type: "text",
+      selector: "tbody td[colspan]",
+      contains: "合計",
+      message: 'colspan="2" を付けたセルに「合計」の文字を書きましょう(このセルを合計の行に使います)',
+    },
+    {
+      id: "total-amount",
+      type: "text",
+      selector: "tbody td[colspan]",
+      contains: "5000円",
+      message: "合計のセルに、合計の金額「5000円」も書きましょう(3000円 + 2000円 = 5000円)",
+    },
   ],
   hints: [
     "表のタイトルは caption、見出し行のまとまりは thead、データ行のまとまりは tbody です。caption は table の最初に書きます",

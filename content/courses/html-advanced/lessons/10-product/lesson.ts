@@ -56,6 +56,13 @@ export default defineLesson({
       message: '価格の要素に data-price="4980" を付けましょう',
     },
     {
+      id: "price-text",
+      type: "text",
+      selector: "#price",
+      contains: "4980",
+      message: "価格の要素に「4980円」と表示しましょう",
+    },
+    {
       id: "details-exists",
       type: "element",
       selector: "details",

@@ -145,8 +145,60 @@ const solutionCss = `body {
 }
 `;
 
+// ---- :hover 判定ヘルパー(CSSOM 走査) --------------------------------------
+// :hover 中の computed style は取得できず、生 CSS への正規表現(source check)では
+// コメントに同じ構文を書くだけで合格してしまう。そこでパース済みの CSS(CSSOM)を
+// document.styleSheets から走査し、実際に効くルールとして存在するかを検証する。
+// 判定 iframe では <link> が同一ドキュメントの <style> にインライン合成されるため、
+// sandbox(opaque origin)でも cssRules の読み取りは制限されない。
+
+/** cssRules を読めないシート(cross-origin 等。インライン <style> では起きない)は null */
+function safeRules(sheet: CSSStyleSheet): CSSRuleList | null {
+  try {
+    return sheet.cssRules;
+  } catch {
+    return null;
+  }
+}
+
+/** @media 等のグループも再帰的にたどり、セレクタを持つスタイルルールをすべて集める */
+function collectStyleRules(doc: Document): CSSStyleRule[] {
+  const found: CSSStyleRule[] = [];
+  const visit = (rules: CSSRuleList): void => {
+    for (const rule of Array.from(rules)) {
+      // instanceof は実行環境の realm に依存し得るため、ダックタイピングで判別する
+      if ("selectorText" in rule && "style" in rule) found.push(rule as CSSStyleRule);
+      if ("cssRules" in rule) visit((rule as CSSGroupingRule).cssRules);
+    }
+  };
+  for (const sheet of Array.from(doc.styleSheets)) {
+    const rules = safeRules(sheet);
+    if (rules !== null) visit(rules);
+  }
+  return found;
+}
+
+/** セレクタリスト(カンマ区切り)のいずれかが selector と一致するルールを集める */
+function rulesFor(doc: Document, selector: string): CSSStyleRule[] {
+  return collectStyleRules(doc).filter((rule) =>
+    rule.selectorText.split(",").some((s) => s.trim() === selector),
+  );
+}
+
+/** 宣言値のシリアライズはブラウザ差があり得るため、正規化(空白除去 + 小文字化)して受容集合と比較する */
+function declaresValue(rules: CSSStyleRule[], property: string, accepted: string[]): boolean {
+  return rules.some((rule) => {
+    const value = rule.style.getPropertyValue(property).toLowerCase().replace(/\s+/g, "");
+    return value !== "" && accepted.includes(value);
+  });
+}
+
+/** background-color: #0369a1 の宣言値として受け入れるシリアライズ表現(空白除去・小文字) */
+const HOVER_BACKGROUND_VALUES = ["#0369a1", "rgb(3,105,161)", "rgba(3,105,161,1)", "rgba(3,105,161,1.0)"];
+
 // 中級の総合: flex 中央寄せ + position(relative/absolute + top/right)+ transition の組合せ。
-// :hover 中の computed は判定できないため .cta:hover は source check(css-09 / css-int-08 と同じ方針)。
+// :hover 中の computed は判定できないため .cta:hover は CSSOM(document.styleSheets)を走査する
+// custom check で検証する(css-09 / css-int-08 と同じ方針。コメント内の構文では合格しない)。
 export default defineLesson({
   slug: "css-int-10-hero",
   title: "総合: ヒーローセクション",
@@ -238,18 +290,16 @@ export default defineLesson({
     },
     {
       id: "cta-hover-rule",
-      type: "source",
-      file: "style.css",
-      pattern: "\\.cta:hover\\s*\\{",
+      type: "custom",
       message: ".cta:hover のルール(マウスをのせたとき用のスタイル)を書きましょう",
+      run: (ctx) => rulesFor(ctx.document, ".cta:hover").length > 0,
     },
     {
       id: "cta-hover-background",
-      type: "source",
-      file: "style.css",
-      pattern: "\\.cta:hover\\s*\\{[^}]*background-color\\s*:\\s*#0369a1",
-      flags: "i",
+      type: "custom",
       message: ".cta:hover のルールの中で、background-color を #0369a1 にしましょう",
+      run: (ctx) =>
+        declaresValue(rulesFor(ctx.document, ".cta:hover"), "background-color", HOVER_BACKGROUND_VALUES),
     },
   ],
   hints: [

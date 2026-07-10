@@ -86,6 +86,16 @@ export default defineLesson({
       selector: "footer",
       message: "ページの下部情報を footer で書きましょう",
     },
+    {
+      // ガード: nav / aside / footer が main の中に入る誤った配置を弾く(solution は全ランドマークが
+      // main の兄弟なので合格する。main がまだ無い段階でも真空成立させない)
+      id: "landmarks-outside-main",
+      type: "custom",
+      message: "nav / aside / footer は main の中ではなく、main と並べて配置しましょう",
+      run: (ctx) =>
+        ctx.document.querySelector("main") !== null &&
+        ctx.document.querySelector("main nav, main aside, main footer") === null,
+    },
   ],
   hints: [
     "ランドマークは「ページのどの部分が何か」を伝える目印のタグです。nav はメニュー、main は本文(ページに1つだけ)、aside は補足、footer は下部情報です",
