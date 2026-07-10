@@ -7,7 +7,7 @@ import { ulid } from "ulidx";
 import { z } from "zod";
 import { getDb, schema } from "~/db";
 import { track } from "~/features/analytics.server";
-import { ACHIEVEMENTS } from "~/features/gamification/achievements";
+import { ACHIEVEMENTS } from "~/features/gamification/achievements.server";
 import { evaluateNewAchievements } from "~/features/gamification/evaluate.server";
 import type { Env } from "~/lib/env";
 import { findCourseMeta, findLessonMeta, getContentVersion, listCourseMeta } from "./content-meta.server";
@@ -63,6 +63,7 @@ export async function getCoursesOverview(env: Env, userId: string | null): Promi
     slug: course.slug,
     title: course.title,
     description: course.description,
+    level: course.level,
     lessonCount: course.lessons.length,
     passedCount: course.lessons.filter((l) => passed.has(l.slug)).length,
     firstLessonSlug: course.lessons[0]?.slug ?? "",
@@ -390,6 +391,7 @@ export async function getMypage(env: Env, userId: string): Promise<MypageData> {
     slug: course.slug,
     title: course.title,
     description: course.description,
+    level: course.level,
     lessonCount: course.lessons.length,
     passedCount: course.lessons.filter((l) => statusBySlug.get(l.slug) === "passed").length,
     firstLessonSlug: course.lessons[0]?.slug ?? "",

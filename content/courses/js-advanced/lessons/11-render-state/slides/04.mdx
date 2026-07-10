@@ -1,0 +1,17 @@
+# イベントは「state を変えて render()」
+
+イベントの処理では、画面の文字を直接さわりません。やることは2つだけです。
+
+```js
+button.addEventListener("click", () => {
+  // 1. state を変える
+  state.following = !state.following;
+
+  // 2. 画面を描き直す
+  render();
+});
+```
+
+`!` は true と false を反転する演算子です。`!true` は false に、`!false` は true になります。
+
+<Callout type="info">textContent を書き換えるのは render() の中だけ、というルールにすると、表示がおかしいときに調べる場所が1か所ですみます。</Callout>

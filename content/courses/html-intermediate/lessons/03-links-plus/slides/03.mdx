@@ -1,0 +1,14 @@
+# 新しいタブで開く
+
+`target="_blank"` を付けると、リンクが新しいタブで開きます。このとき、セットで `rel="noopener"` も付けるのがお約束です。
+
+```html
+<a href="https://example.com" target="_blank" rel="noopener">すきなサイト</a>
+```
+
+- `target="_blank"` — リンクを新しいタブで開く
+- `rel="noopener"` — 開いた先のページから、もとのページを操作されないようにする安全装置
+
+<Callout type="warn">
+  target="_blank" を書くときは、必ず rel="noopener" もいっしょに付けましょう。セキュリティのための大事な習慣です。
+</Callout>

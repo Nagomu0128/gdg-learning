@@ -6,18 +6,21 @@ import { discoverContent } from "./validate";
 const FIXTURES = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "__fixtures__");
 
 describe("discoverContent", () => {
-  it("正常な教材を発見し、order / slideCount / runner / assets を解決する", async () => {
+  it("正常な教材を発見し、order / slideCount / runner / assets / level を解決する", async () => {
     const { courses, errors } = await discoverContent(path.join(FIXTURES, "valid"));
     expect(errors).toEqual([]);
-    expect(courses).toHaveLength(1);
+    expect(courses).toHaveLength(2);
+    // order 未指定同士は slug 順(content-meta.json の courses 配列順の正)
+    expect(courses.map((c) => c.def.slug)).toEqual(["demo", "demo-two"]);
     const course = courses[0];
-    expect(course?.def.slug).toBe("demo");
+    expect(course?.def.level).toBeUndefined(); // 未指定は codegen 側で "basic" に倒す
     expect(course?.lessons.map((l) => l.slug)).toEqual(["demo-01-dom", "demo-02-worker"]);
     expect(course?.lessons.map((l) => l.order)).toEqual([1, 2]);
     expect(course?.lessons.map((l) => l.runner)).toEqual(["dom", "worker"]);
     expect(course?.lessons.map((l) => l.slideCount)).toEqual([1, 1]);
     expect(course?.lessons[0]?.assetsDir).not.toBeNull();
     expect(course?.lessons[1]?.assetsDir).toBeNull();
+    expect(courses[1]?.def.level).toBe("intermediate");
   });
 
   it("コンテンツが 0 件でも正常終了する(空の結果)", async () => {

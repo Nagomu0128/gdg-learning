@@ -1,0 +1,17 @@
+# async function と await
+
+関数に async を付けると、その中で await が使えるようになります。
+
+```js
+async function fetchTotal() {
+  const first = await fetchData(100, 200);
+  const second = await fetchData(200, 200);
+  return first + second;
+}
+```
+
+- await は「Promise が解決するまで待って、その値を取り出す」書き方です
+- first に 100、second に 200 が入り、ふつうの計算と同じように合計できます
+- 非同期処理なのに、上から順に読める手順書のように書けます
+
+<Callout type="warn">await は、async を付けた関数の中でしか使えません。</Callout>

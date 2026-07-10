@@ -1,0 +1,16 @@
+# 親に1つだけ登録する
+
+子要素へのクリックは、親要素にも順番に伝わっていきます(バブリング)。これを利用して、親の ul に処理を1つだけ登録するのがイベントデリゲーション(イベントの委任)です。
+
+```js
+list.addEventListener("click", (event) => {
+  // event.target = 実際にクリックされた要素
+  if (event.target.tagName === "LI") {
+    event.target.classList.toggle("done");
+  }
+});
+```
+
+- `event.target` で「どの要素がクリックされたのか」がわかります
+- `tagName` はタグ名を大文字で返します(li なら `"LI"`)
+- 受けているのは親なので、**あとから追加された li にもそのまま効きます**

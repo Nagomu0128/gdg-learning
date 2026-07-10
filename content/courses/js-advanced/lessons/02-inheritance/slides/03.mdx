@@ -1,0 +1,21 @@
+# 自分だけのメソッドを足す
+
+子クラスには、親クラスにないメソッドを追加できます。
+
+```js
+class Dog extends Animal {
+  bark() {
+    return "ワンワン";
+  }
+}
+
+const dog = new Dog("ポチ");
+console.log(dog.introduce());
+console.log(dog.bark());
+```
+
+- `new Dog("ポチ")` では Animal の constructor が動き、this.name が「ポチ」になります
+- `dog.introduce()` は Animal から引き継いだメソッドで、「わたしはポチです」を返します
+- `dog.bark()` は Dog だけが持つメソッドです
+
+<Callout type="info">共通の機能は親クラスに、種類ごとの機能は子クラスに書く、と整理できます。</Callout>

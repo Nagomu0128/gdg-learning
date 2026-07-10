@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" width="400" height="250" preserveAspectRatio="none" role="img" aria-label="夕暮れの海辺">
+  <title>夕暮れの海辺</title>
+  <rect width="400" height="250" fill="#fde68a" />
+  <circle cx="200" cy="130" r="34" fill="#f97316" />
+  <rect y="130" width="400" height="80" fill="#38bdf8" />
+  <rect y="210" width="400" height="40" fill="#fef3c7" />
+  <polygon points="300,120 300,80 330,115" fill="#f8fafc" />
+  <path d="M285 122 L345 122 L332 138 L296 138 Z" fill="#7c2d12" />
+</svg>

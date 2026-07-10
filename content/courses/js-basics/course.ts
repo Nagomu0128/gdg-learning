@@ -7,6 +7,7 @@ export default defineCourse({
   description:
     "プログラミングの基礎をJavaScriptで。変数・条件分岐・ループ・関数から、ページを動かすDOM操作まで一歩ずつ学びます。",
   order: 3,
+  level: "basic",
   lessons: [
     "js-01-hello",
     "js-02-variables",

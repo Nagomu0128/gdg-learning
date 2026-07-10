@@ -1,0 +1,25 @@
+# 進め方 1 — 追加を作る
+
+最初のゴールは「入力した文字が li になってリストに増える」ことです。処理は addTodo 関数にまとめましょう。
+
+```js
+const input = document.getElementById("todo-input");
+const list = document.getElementById("todo-list");
+
+function addTodo() {
+  const text = input.value;
+  if (text === "") {
+    return; // 空のままなら何もしない
+  }
+  const li = document.createElement("li");
+  li.textContent = text;
+  list.appendChild(li);
+  input.value = ""; // 次の入力のために空に戻す
+}
+
+document.getElementById("add-button").addEventListener("click", addTodo);
+```
+
+ここまでで一度プレビューを確認しましょう。入力 → 追加 → li が増える、が動けば第一段階クリアです。
+
+<Callout type="info">このあと li の中に削除ボタンも入れるので、文字は span を作って入れる形(span の textContent に文字、li に span を appendChild)にしておくと整理しやすくなります。</Callout>

@@ -1,0 +1,26 @@
+# thead・tbody・tfoot — 表の3つのエリア
+
+行のかたまりに意味を持たせるタグが3つあります。
+
+```html
+<table>
+  <caption>文ぼうぐの値段</caption>
+  <thead>
+    <!-- 見出しの行 -->
+  </thead>
+  <tbody>
+    <!-- データ本体の行 -->
+  </tbody>
+  <tfoot>
+    <!-- 合計などのまとめの行 -->
+  </tfoot>
+</table>
+```
+
+- `<thead>` — 見出しの行のかたまり
+- `<tbody>` — データ本体の行のかたまり
+- `<tfoot>` — 合計・小計など、**まとめの行**のかたまり
+
+<Callout type="info">
+  tfoot に分けておくと、「この行はデータではなく、まとめだ」と機械にも伝わります。書く順番は thead → tbody → tfoot です。
+</Callout>

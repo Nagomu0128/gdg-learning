@@ -1,0 +1,16 @@
+# grid-template-rows で行を設計する
+
+列を決める `grid-template-columns` とペアになるのが、行の高さを決める `grid-template-rows` です。
+
+```css
+.page {
+  display: grid;
+  grid-template-columns: 200px 400px;
+  grid-template-rows: 60px 240px 60px;
+}
+```
+
+- 書いた高さの数 = 行の数。この例は「60px・240px・60px の3行」です
+- 2列 × 3行で、合計6個のます目ができます
+
+<Callout type="info">「ヘッダー行は低く、メインの行は高く」のように、ページの構造を数字でそのまま表現できます。</Callout>

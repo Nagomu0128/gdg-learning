@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120" role="img" aria-label="お皿にのったパンケーキ">
+  <title>お皿にのったパンケーキ</title>
+  <rect x="0" y="0" width="200" height="120" rx="12" fill="#fdf3e3" />
+  <ellipse cx="100" cy="98" rx="74" ry="12" fill="#ffffff" stroke="#c9b8a3" stroke-width="3" />
+  <ellipse cx="100" cy="86" rx="54" ry="13" fill="#e8a44c" stroke="#b3762f" stroke-width="3" />
+  <ellipse cx="100" cy="73" rx="50" ry="12" fill="#f2b45f" stroke="#b3762f" stroke-width="3" />
+  <ellipse cx="100" cy="60" rx="46" ry="11" fill="#f7c675" stroke="#b3762f" stroke-width="3" />
+  <path d="M74 62 Q76 72 70 76 M100 64 Q102 74 96 78 M126 62 Q128 72 122 76" fill="none" stroke="#a65f1e" stroke-width="4" stroke-linecap="round" />
+  <rect x="88" y="42" width="24" height="14" rx="3" fill="#fdf0b8" stroke="#d9c25f" stroke-width="2" />
+</svg>

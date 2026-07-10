@@ -1,0 +1,12 @@
+# 正規表現と .test()
+
+正規表現は `/` と `/` で囲んで書きます。`.test(文字列)` は、文字列の中にパターンと合う部分があれば `true` を返します。
+
+```js
+const pattern = /cat/;
+
+console.log(pattern.test("my cat")); // true
+console.log(pattern.test("dog")); // false
+```
+
+`/cat/` は「c、a、t という文字の並びがある」という、いちばん単純なパターンです。ここに特別な記号を組み合わせて、いろいろな形を表していきます。

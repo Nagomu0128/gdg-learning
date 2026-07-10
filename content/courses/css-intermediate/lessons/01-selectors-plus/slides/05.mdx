@@ -1,0 +1,28 @@
+# やってみよう
+
+カフェのお品書きページに、3種類のセレクタでスタイルを付けます。`style.css` のコメントの場所に、次のコードをそのまま書き写しましょう。
+
+```css
+h1, h2 {
+  color: darkslateblue;
+}
+
+ul > li {
+  border-left-width: 4px;
+  border-left-style: solid;
+  border-left-color: steelblue;
+  padding-left: 8px;
+}
+
+h2 + p {
+  background-color: lightyellow;
+}
+```
+
+プレビューで確かめるポイント
+
+1. 見出し2つがまとめて紺色になる
+2. 外側のリストだけに左のライン(内側の番号リストには付かない)
+3. 「本日のおすすめ」の直後の段落だけ背景が薄い黄色になる
+
+書けたら「できた!」ボタンで判定します。

@@ -1,0 +1,16 @@
+# find: 最初の 1 つを探す
+
+`find` は、条件が `true` になった「最初の要素そのもの」を返します。filter と違って、返るのは配列ではなく要素 1 つです。
+
+```js
+const users = [
+  { name: "タロウ", age: 25 },
+  { name: "ハナコ", age: 17 },
+];
+
+const user = users.find((u) => u.name === "ハナコ");
+
+console.log(user); // { name: "ハナコ", age: 17 }
+```
+
+<Callout type="warn">当てはまる要素がないときは undefined が返ります。「配列が返る filter」「要素が 1 つ返る find」と覚えましょう。</Callout>

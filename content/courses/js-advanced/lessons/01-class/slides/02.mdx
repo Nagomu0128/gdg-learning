@@ -1,0 +1,17 @@
+# class の書き方
+
+クラスは「もの」の設計図です。データ(名前など)と、それを使う処理をひとまとめにできます。
+
+```js
+class User {
+  constructor(name) {
+    this.name = name;
+  }
+}
+```
+
+- `class クラス名 { ... }` で定義します。クラス名は大文字で始めるのが慣習です
+- `constructor` は、インスタンスを作るときに一度だけ呼ばれる特別なメソッドです
+- `this` は「作られたインスタンス自身」を指します。`this.name = name;` で、受け取った名前をインスタンスに覚えさせます
+
+<Callout type="info">this.name のように this に覚えさせた値を「プロパティ」と呼びます。</Callout>

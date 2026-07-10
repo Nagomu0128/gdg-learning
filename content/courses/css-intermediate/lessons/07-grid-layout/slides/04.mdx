@@ -1,0 +1,16 @@
+# grid-column-start / end で横断させる
+
+要素を複数の列に横断させるには、その要素自身に「どの線から始まり、どの線で終わるか」を書きます。
+
+```css
+header {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+```
+
+- `grid-column-start: 1`: 1番の線(左はし)から始める
+- `grid-column-end: 3`: 3番の線(右はし)で終える
+- 結果、ヘッダーは2列ぶんをまるごと横断します
+
+<Callout type="info">start / end を指定しなかった要素は、これまでどおり左上から順に空いているます目へ流しこまれます。</Callout>

@@ -1,0 +1,19 @@
+# クリックとタイマーを組み合わせる
+
+クリックの処理の中で setTimeout を予約すると、「押した瞬間の変化」と「少し待ってからの変化」の 2 段階が作れます。
+
+```js
+button.addEventListener("click", () => {
+  // 1. すぐに実行される
+  message.textContent = "はかっています";
+
+  // 2. 300ミリ秒後に実行される
+  setTimeout(() => {
+    message.textContent = "できあがり!";
+  }, 300);
+});
+```
+
+流れ: ボタンを押す → すぐ「はかっています」→ 0.3 秒待つ →「できあがり!」
+
+<Callout type="info">似た仲間に `setInterval`(一定間隔でくり返し実行)もあります。時計やストップウォッチはそちらの出番です。今回は 1 回だけの setTimeout を使います。</Callout>

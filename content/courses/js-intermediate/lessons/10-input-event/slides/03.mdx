@@ -1,0 +1,16 @@
+# value で読み、テンプレートリテラルで組み立てる
+
+入力欄に今入っている文字は `input.value` で取り出せます。イベントの処理の中で読めば、常に最新の文字が手に入ります。
+
+```js
+const input = document.getElementById("name-input");
+const preview = document.getElementById("preview");
+
+input.addEventListener("input", () => {
+  preview.textContent = `こんにちは、${input.value}さん!`;
+});
+```
+
+表示する文字は、テンプレートリテラル(バッククォートで囲み、`${ }` で値を埋め込む書き方)で組み立てると読みやすくなります。
+
+<Callout type="info">処理の流れ: 文字を打つ → input イベントが起きる → value を読む → textContent に反映する。1 文字ごとにこれがくり返されるので、表示が「リアルタイムに」ついてきます。</Callout>

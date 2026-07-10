@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" width="480" height="320" preserveAspectRatio="none" role="img" aria-label="朝焼けの山なみ">
+  <title>朝焼けの山なみ</title>
+  <rect width="480" height="320" fill="#fed7aa" />
+  <circle cx="360" cy="90" r="36" fill="#fb923c" />
+  <polygon points="0,320 130,120 260,320" fill="#7c2d12" />
+  <polygon points="130,120 175,190 85,190" fill="#fff7ed" />
+  <polygon points="180,320 320,150 460,320" fill="#9a3412" />
+  <polygon points="320,150 365,205 275,205" fill="#fff7ed" />
+  <rect y="290" width="480" height="30" fill="#65a30d" />
+</svg>

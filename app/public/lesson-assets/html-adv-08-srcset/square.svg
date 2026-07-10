@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="正方形の夕焼けの山のイラスト">
+  <title>正方形の夕焼けの山のイラスト</title>
+  <rect width="200" height="200" fill="#ffe5b4" />
+  <circle cx="148" cy="62" r="26" fill="#e76f51" />
+  <polygon points="0,200 70,90 140,200" fill="#6d597a" />
+  <polygon points="80,200 155,110 230,200" fill="#355070" />
+  <rect y="180" width="200" height="20" fill="#b56576" />
+</svg>

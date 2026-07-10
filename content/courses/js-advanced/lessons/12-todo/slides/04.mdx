@@ -1,0 +1,22 @@
+# クリックの仕分け — デリゲーション
+
+render() のたびに li を作り直すので、li に1つずつ登録するとすぐ効かなくなります。クリックは親の `list` で1回だけ受けて、`event.target` で仕分けましょう。
+
+```js
+list.addEventListener("click", (event) => {
+  const target = event.target;
+  if (target.classList.contains("delete")) {
+    // 削除ボタン: 親の li の番号を調べて、配列から取り除く
+    const index = Number(target.parentNode.dataset.index);
+    todos.splice(index, 1);
+    render();
+  } else if (target.tagName === "LI") {
+    // li 本体: done を反転する
+    const index = Number(target.dataset.index);
+    todos[index].done = !todos[index].done;
+    render();
+  }
+});
+```
+
+`splice(index, 1)` は「index 番目から1個取り除く」という配列のメソッドです。

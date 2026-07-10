@@ -1,0 +1,20 @@
+# 完成形を設計する
+
+HTML はできあがっています。スタイルを付ける部品は3つです。
+
+```html
+<section class="hero">
+  <span class="badge">夏の予約受付中</span>
+  <div class="hero-inner">
+    <h1>週末、空の旅へ。</h1>
+    <p>行き先を選ぶだけで、旅のプランがきっと見つかります。</p>
+    <a class="cta" href="https://example.com">旅を計画する</a>
+  </div>
+</section>
+```
+
+- `.hero`: 高さ 400px の舞台。中身を中央にそろえ、バッジの基準にもなる
+- `.badge`: 右上に固定するお知らせバッジ
+- `.cta`: マウスをのせると色がなめらかに変わるボタン
+
+<Callout type="info">大きな部品から順に(舞台 → バッジ → ボタン)作っていくと迷いません。</Callout>

@@ -1,0 +1,14 @@
+# position: sticky とは
+
+`position: sticky` を指定した要素は、ふだんはふつうの位置にあります。スクロールして画面から出そうになると、指定した位置にはり付いて追従します。
+
+```css
+.site-header {
+  position: sticky;
+  top: 0;
+}
+```
+
+ニュースサイトや通販サイトのヘッダーでよく見かける、定番のテクニックです。
+
+<Callout type="info">よく似た position: fixed は「最初から最後までずっと画面に固定」です。sticky は「元の位置までスクロールが来たらはり付く」ので、ページの途中にある見出しなどにも使えます。</Callout>

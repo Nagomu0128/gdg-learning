@@ -1,0 +1,19 @@
+# cloneNodeで複製する
+
+template の中身は `template.content` に入っています。これを `cloneNode(true)` で複製して、ページに追加します。
+
+```js
+const template = document.getElementById("item-template");
+const list = document.getElementById("list");
+
+const clone = template.content.cloneNode(true);
+clone.querySelector("li").textContent = "りんご";
+list.appendChild(clone);
+```
+
+- `cloneNode(true)` の true は「中身ごとコピーする」という意味です
+- 複製は何回でもできるので、for 文と組み合わせると同じ形のタグを量産できます
+
+<Callout type="warn">
+  true を書き忘れると中身が空っぽの複製になり、li が見つからずエラーになります。
+</Callout>

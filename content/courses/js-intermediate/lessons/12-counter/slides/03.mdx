@@ -1,0 +1,17 @@
+# 判定との約束(id の契約)
+
+HTML の構造やデザインは自由ですが、判定は次の id を見ます。必ずこの名前で作りましょう。
+
+- `count` — 数を表示する要素(はじめの中身は 0)
+- `plus` — +1 する button
+- `minus` — -1 する button
+- `reset` — 0 に戻す button
+
+```html
+<p id="count">0</p>
+<button id="plus">+1</button>
+<button id="minus">-1</button>
+<button id="reset">リセット</button>
+```
+
+イベント登録は 3 つのボタンそれぞれに行います。1 つの addEventListener には 1 つのボタンの処理だけを書くと、見通しよく作れます。

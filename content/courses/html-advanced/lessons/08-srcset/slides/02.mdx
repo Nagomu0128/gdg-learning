@@ -1,0 +1,22 @@
+# picture の仕組み — 候補の中から1枚選ぶ
+
+`<picture>` は、複数の画像候補から条件に合う1枚をブラウザに選ばせる入れ物です。
+
+```html
+<picture>
+  <source media="(min-width: 700px)" srcset="wide.svg">
+  <img src="square.svg" alt="山の風景">
+</picture>
+```
+
+ブラウザは上から順に見ていきます。
+
+1. `<source>` の `media` の条件に**合えば**、その `srcset` の画像を表示
+2. どの source の条件にも**合わなければ**、最後の `<img>` の画像を表示
+
+- `media` の条件はCSSのメディアクエリと同じ書き方です。`(min-width: 700px)` は「画面の幅が 700px 以上」という意味
+- `<source>` には終了タグがありません(`<img>` と同じ仲間です)
+
+<Callout type="warn">
+  `<img>` は省略できません。条件に合わなかったときに表示する本命であり、alt(画像の説明)を持つのも img の役目です。
+</Callout>

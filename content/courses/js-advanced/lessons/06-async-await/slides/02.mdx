@@ -1,0 +1,15 @@
+# then をつなぐと読みにくい
+
+前のレッスンの then を使って、2つの結果を順番に受け取り、合計してみます。
+
+```js
+fetchData(100, 200).then((first) => {
+  fetchData(200, 200).then((second) => {
+    console.log(first + second);
+  });
+});
+```
+
+- fetchData は「ミリ秒後に値が届く」Promise を返す関数だとします
+- then の中に then が入って、どんどん深くなってしまいます
+- 処理が増えるほど読みにくくなるこの形を、すっきり書き直せるのが async / await です

@@ -1,0 +1,17 @@
+# animation-* で要素に割り当てる
+
+`@keyframes` は定義しただけでは動きません。動かしたい要素に `animation-*` プロパティで割り当てます。
+
+```css
+.loader {
+  animation-name: spin;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+```
+
+- `animation-name` — 使う `@keyframes` の名前
+- `animation-duration` — 1周にかける時間(`1s` = 1秒、`500ms` = 0.5秒)
+- `animation-iteration-count` — くり返す回数。`infinite` で無限にくり返します
+
+<Callout type="warn">animation-name の値と @keyframes に付けた名前は、1文字でもちがうと動きません。まず名前がそろっているかを確かめましょう。</Callout>

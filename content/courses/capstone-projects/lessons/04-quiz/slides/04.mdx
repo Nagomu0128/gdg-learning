@@ -1,0 +1,27 @@
+# 進め方 2 — クリックで答え合わせして進める
+
+選択肢のボタンには、作るときに click の処理を付けておきます。何番目の選択肢が押されたかを知るために、番号ごと渡すのがコツです。
+
+```js
+q.choices.forEach((choiceText, index) => {
+  const button = document.createElement("button");
+  button.className = "choice";
+  button.textContent = choiceText;
+  button.addEventListener("click", () => {
+    answer(index); // 押された番号を渡す
+  });
+  choicesEl.appendChild(button);
+});
+```
+
+answer 関数のやることは3つだけです。
+
+1. `index === questions[current].answer` なら score を1増やす
+2. current を1進める
+3. まだ問題が残っていれば render() で描き直し、3問終わっていたら `id="score"` に点数を表示する
+
+```js
+scoreEl.textContent = `3問中 ${score}問 正解!`;
+```
+
+プレビューで実際にクリックしながら、1問ずつ進むことを確かめて作りましょう。

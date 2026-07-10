@@ -1,0 +1,20 @@
+# 要件 — 判定が見るもの
+
+判定がチェックするのは次の項目**だけ**です。ここに出てくる名前は判定との約束ごとなので、そのまま使ってください。
+
+index.html:
+
+- `class="card"` の要素がある
+- `.card` の中に `img` がある(同梱の画像 `avatar.svg` が使えます)
+- `.card` の中に `h1` がある(名前)
+- `.card` の中に `p` がある(紹介文)
+
+style.css:
+
+- `.card { ... }` の中に `background-color` の宣言がある
+- `.card { ... }` の中に `border-radius`(角丸)の宣言がある
+- `:hover` を使ったルールが1つ以上ある(マウスをのせたときの変化)
+
+これ以外の構造・色・配置・文章は、すべて自由です。
+
+<Callout type="warn">背景色は background 1語の短縮形ではなく、background-color と書いてください。判定は background-color の宣言を探します。角丸は border-radius でも、border-top-left-radius のような書き方でもかまいません。</Callout>

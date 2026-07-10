@@ -1,0 +1,23 @@
+# 進め方のヒント
+
+覚えておく値(状態)は2つだけです。まずこの2行から始めましょう。
+
+```js
+let tenths = 0; // 0.1秒が何回きたか
+let timerId = null; // 動いているタイマーの id(止まっているときは null)
+```
+
+**スタート**: setInterval で 0.1秒ごとに tenths を1増やし、表示を書き換えます。
+
+```js
+timerId = setInterval(() => {
+  tenths = tenths + 1;
+  display.textContent = (tenths / 10).toFixed(1);
+}, 100);
+```
+
+**ストップ**: `clearInterval(timerId)` でくり返しを止めます。
+
+**リセット**: タイマーを止めて tenths を 0 に戻し、表示も「0.0」に書き換えます。
+
+<Callout type="info">toFixed(1) は、数値を「小数1桁の文字列」にするメソッドです。10 / 10 なら "1.0"、14 / 10 なら "1.4" になります。0 のときも "0.0" になるので、表示の形がそろいます。</Callout>

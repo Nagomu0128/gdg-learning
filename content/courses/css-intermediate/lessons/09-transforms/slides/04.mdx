@@ -1,0 +1,13 @@
+# transform-origin で基準点を決める
+
+変形は、既定では**要素のまんなか**を基準に行われます。この基準点を変えるのが `transform-origin` です。
+
+```css
+.badge {
+  transform: rotate(-10deg);
+  transform-origin: top left;
+}
+```
+
+- `top left` で「左上の角」が基準になります。画びょうを左上に刺してかたむけるイメージです
+- 既定の `center` のほか、`bottom right` のように、たて・よこのキーワードの組み合わせで指定します

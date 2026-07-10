@@ -1,0 +1,14 @@
+# 身近な高階関数
+
+じつは、配列の map も高階関数です。
+
+```js
+const numbers = [1, 2, 3];
+const doubled = numbers.map((n) => n * 2);
+console.log(doubled);
+```
+
+- map は「各要素をどう変換するか」を関数で受け取ります
+- アロー関数 `(n) => n * 2` を渡すのは、まさに「関数を引数に渡す」ことそのものです
+
+<Callout type="info">「処理の一部だけを差し替えたい」ときに高階関数が活躍します。</Callout>

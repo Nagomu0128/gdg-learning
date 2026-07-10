@@ -1,0 +1,17 @@
+# 関数を返す関数
+
+JavaScript では、関数の戻り値として関数を返せます。
+
+```js
+function makeGreeter() {
+  return function () {
+    return "こんにちは";
+  };
+}
+
+const greeter = makeGreeter();
+console.log(greeter());
+```
+
+- `makeGreeter()` の戻り値は関数です。変数 greeter に入れて、`greeter()` と呼び出せます
+- 関数も数値や文字列と同じ「値」なので、return で返したり変数に入れたりできます

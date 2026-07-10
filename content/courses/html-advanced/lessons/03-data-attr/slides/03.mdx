@@ -1,0 +1,15 @@
+# datasetで読み取る
+
+タグにメモした data-* 属性は、JavaScript から `要素.dataset.名前` で読み取れます。
+
+```js
+const item = document.querySelector("li");
+console.log(item.dataset.price); // "150"
+```
+
+- `data-price` 属性は `dataset.price` で読めます(`data-` を取った名前)
+- 読み取った値は文字列なので、計算に使うときは `Number()` で数値に変えます
+
+<Callout type="info">
+  このレッスンの script.js(編集不可)には、すべての li の data-price を合計して「合計: ○円」と表示するプログラムが用意してあります。HTML に正しくメモを付けるのが今回の仕事です。
+</Callout>

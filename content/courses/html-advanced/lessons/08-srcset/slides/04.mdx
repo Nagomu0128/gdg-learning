@@ -1,0 +1,13 @@
+# やってみよう
+
+山のしゃしん館に、画面の広さで切り替わる画像をのせましょう。
+
+1. `<picture>` を書く
+2. その中に `<source media="(min-width: 700px)" srcset="wide.svg">` を書く
+3. 最後に `<img src="square.svg" alt="画像の説明">` を書く
+
+順番が大事です: source が先、img が最後。
+
+<Callout type="info">
+  プレビューの幅が 700px 以上なら横長(wide.svg)、せまければ正方形(square.svg)が表示されます。プレビューの幅を変えると画像が切り替わる様子も観察してみましょう。書けたら「できた!」ボタンで提出です。
+</Callout>

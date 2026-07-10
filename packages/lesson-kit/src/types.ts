@@ -135,12 +135,16 @@ export type LessonDef = {
   solution: Record<string, string>;
 };
 
+export type CourseLevel = "basic" | "intermediate" | "advanced" | "capstone";
+
 export type CourseDef = {
   slug: string;
   title: string;
   description: string;
   /** コース一覧・content-meta.json 内の表示順(昇順)。未指定は末尾(slug 順) */
   order?: number;
+  /** 難度レベル(ADR #19)。UI のセクション分けとバッジ導出に使う。未指定は "basic" */
+  level?: CourseLevel;
   /** レッスン slug の順序付きリスト */
   lessons: string[];
 };

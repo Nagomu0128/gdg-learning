@@ -1,0 +1,16 @@
+# grid-template-columns で列の設計図を書く
+
+列のつくり方は `grid-template-columns` に、**列の幅を左から順に**書きます。
+
+```css
+.gallery {
+  display: grid;
+  grid-template-columns: 100px 200px 100px;
+}
+```
+
+- 書いた幅の数 = 列の数。この例は「100px・200px・100px の3列」です
+- 子要素は左上から順に、自動でます目へ流しこまれます
+- 4個目の要素は自動で2行目に折り返します
+
+<Callout type="info">値と値のあいだは半角スペースで区切ります。カンマは使いません。</Callout>

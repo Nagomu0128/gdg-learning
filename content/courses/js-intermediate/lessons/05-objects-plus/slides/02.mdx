@@ -1,0 +1,21 @@
+# 分割代入
+
+オブジェクトから値を取り出すとき、これまでは 1 つずつ書いていました。分割代入を使うと、まとめて取り出せます。
+
+```js
+const person = { name: "タロウ", age: 25 };
+
+// いままでの書き方
+const name1 = person.name;
+const age1 = person.age;
+
+// 分割代入(まとめて取り出す)
+const { name, age } = person;
+
+console.log(name); // タロウ
+console.log(age); // 25
+```
+
+`const` のあとに波かっこを書き、取り出したいキーの名前を並べます。
+
+<Callout type="info">できる変数の名前は、オブジェクトのキーと同じ名前になります。</Callout>

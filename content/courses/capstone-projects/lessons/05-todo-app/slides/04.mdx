@@ -1,0 +1,31 @@
+# 進め方 2 — 完了・削除・残り件数
+
+**完了トグル**: li へのクリックで class の `done` を付け外しします。CSS で `.done` に取り消し線などを付けると、完了が見た目でわかります。
+
+```js
+li.addEventListener("click", () => {
+  li.classList.toggle("done");
+  updateCount();
+});
+```
+
+**削除**: li の中に `class="delete"` のボタンを作り、クリックで li.remove() します。ボタンのクリックは li にも伝わってしまう(イベント伝播)ので、最初に止めるのがコツです。
+
+```js
+deleteButton.addEventListener("click", (event) => {
+  event.stopPropagation(); // li の完了トグルに伝えない
+  li.remove();
+  updateCount();
+});
+```
+
+**残り件数**: 「done が付いていない li の数」を数えて `#count` に表示します。
+
+```js
+function updateCount() {
+  const remaining = document.querySelectorAll("#todo-list li:not(.done)").length;
+  document.getElementById("count").textContent = `残り ${remaining} 件`;
+}
+```
+
+追加・完了・削除、どの処理の最後でも updateCount() を呼びましょう。

@@ -1,0 +1,18 @@
+# 呼び出すたびに新しく作られる
+
+関数の中の変数は、関数を呼び出すたびに新しく作り直されます。
+
+```js
+function countUp() {
+  let count = 0; // 呼び出すたびに 0 から
+  count = count + 1;
+  return count;
+}
+
+console.log(countUp()); // 1
+console.log(countUp()); // 1(2 にはならない)
+```
+
+`count` のように、あとから値を変える変数は `const` では宣言できません。再代入できる `let` を使います。
+
+<Callout type="warn">もし `count` を関数の外で宣言すると、値が呼び出しをまたいで残り、呼ぶたびに増え続けてしまいます。関数の中に閉じ込めることで、毎回同じ動きになります。</Callout>

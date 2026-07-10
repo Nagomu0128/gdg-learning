@@ -1,0 +1,12 @@
+# やってみよう
+
+読み込み中のページに、回転するスピナーを付けます。`style.css` を編集しましょう。
+
+`.loader` は上側だけ濃い青の円形になっています。これを回します。
+
+1. ファイル末尾のコメントの場所に `@keyframes spin { }` を定義し、`from` に `transform: rotate(0deg);`、`to` に `transform: rotate(360deg);` を書く
+2. `.loader` のルールに `animation-name: spin;` `animation-duration: 1s;` `animation-iteration-count: infinite;` の3行を書く
+
+プレビューで円がなめらかに回り続けたら成功です。
+
+書けたら「できた!」ボタンで判定します。

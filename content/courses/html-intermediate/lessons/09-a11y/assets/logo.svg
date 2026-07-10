@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120" role="img" aria-label="としょかんだよりのロゴ">
+  <title>としょかんだよりのロゴ</title>
+  <rect x="0" y="0" width="200" height="120" rx="12" fill="#e9f5f2" />
+  <path d="M40 40 Q70 28 100 40 L100 88 Q70 76 40 88 Z" fill="#ffffff" stroke="#2a9d8f" stroke-width="4" stroke-linejoin="round" />
+  <path d="M160 40 Q130 28 100 40 L100 88 Q130 76 160 88 Z" fill="#ffffff" stroke="#2a9d8f" stroke-width="4" stroke-linejoin="round" />
+  <line x1="52" y1="50" x2="88" y2="46" stroke="#94c9c0" stroke-width="3" stroke-linecap="round" />
+  <line x1="52" y1="60" x2="88" y2="56" stroke="#94c9c0" stroke-width="3" stroke-linecap="round" />
+  <line x1="52" y1="70" x2="88" y2="66" stroke="#94c9c0" stroke-width="3" stroke-linecap="round" />
+  <line x1="112" y1="46" x2="148" y2="50" stroke="#94c9c0" stroke-width="3" stroke-linecap="round" />
+  <line x1="112" y1="56" x2="148" y2="60" stroke="#94c9c0" stroke-width="3" stroke-linecap="round" />
+  <line x1="112" y1="66" x2="148" y2="70" stroke="#94c9c0" stroke-width="3" stroke-linecap="round" />
+</svg>

@@ -1,0 +1,19 @@
+# sectionとarticle
+
+`<section>` はテーマごとのまとまり、`<article>` は「そこだけを切り取っても意味が通る」まとまりです。ニュースの1記事やブログの1投稿が `<article>` の代表例です。
+
+```html
+<section>
+  <article>
+    <h2>記事の見出し</h2>
+    <p>記事の本文です。</p>
+  </article>
+</section>
+```
+
+- `<article>` の中には、ふつう見出し(`<h2>` など)を入れます
+- 「この部分だけを友だちに送っても意味が通じるか?」が article を使う目安です
+
+<Callout type="info">
+  section は「章」、article は「記事」とおぼえると使い分けやすいです。
+</Callout>

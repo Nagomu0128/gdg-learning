@@ -1,0 +1,29 @@
+# caption・thead・tbody
+
+`<caption>` は**表のタイトル**です。`<table>` の最初に書きます。
+
+`<thead>` は見出しの行のまとまり、`<tbody>` はデータの行のまとまりです。行(`<tr>`)をこの2つでグループ分けします。
+
+```html
+<table>
+  <caption>模擬店の売上表</caption>
+  <thead>
+    <tr>
+      <th>商品</th>
+      <th>売上</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>やきそば</td>
+      <td>3000円</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+<Callout type="info">
+
+グループ分けしておくと、あとで CSS を書くとき「見出しの行だけ色を変える」といった指定もかんたんになります。
+
+</Callout>

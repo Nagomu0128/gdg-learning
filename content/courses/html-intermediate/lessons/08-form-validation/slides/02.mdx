@@ -1,0 +1,19 @@
+# required と maxlength
+
+`required` を付けた入力欄は**必須**になります。空のまま送信しようとすると、ブラウザが「入力してください」と警告して止めてくれます。
+
+```html
+<input id="username" type="text" required>
+```
+
+`maxlength` は**入力できる文字数の上限**です。上限をこえた文字は、そもそも入力できなくなります。
+
+```html
+<input id="username" type="text" required maxlength="8">
+```
+
+<Callout type="info">
+
+required のように「値を書かずに、付けるだけ」の属性もあります。属性は半角スペースで区切って、1つのタグにいくつでもならべられます。
+
+</Callout>

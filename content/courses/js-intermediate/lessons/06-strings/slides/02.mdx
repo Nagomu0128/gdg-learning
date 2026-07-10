@@ -1,0 +1,18 @@
+# 分ける・取り出す・大文字にする
+
+`split` は、区切り文字で文字列を分けて配列にします。
+
+```js
+const parts = "Taro Yamada".split(" ");
+console.log(parts); // ["Taro", "Yamada"]
+```
+
+配列と同じように、文字列も `[0]` で先頭の文字を取り出せます。大文字にするには `toUpperCase()` を使います。
+
+```js
+const word = "taro";
+console.log(word[0]); // "t"
+console.log(word[0].toUpperCase()); // "T"
+```
+
+<Callout type="info">逆にすべて小文字にする toLowerCase() もあります。セットで覚えましょう。</Callout>

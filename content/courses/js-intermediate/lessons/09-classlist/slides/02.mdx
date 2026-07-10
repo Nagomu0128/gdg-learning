@@ -1,0 +1,13 @@
+# classList の基本
+
+要素の `classList` には、class を操作するためのメソッドがそろっています。
+
+```js
+const panel = document.getElementById("panel");
+
+panel.classList.add("hidden");      // クラスを付ける
+panel.classList.remove("hidden");   // クラスを外す
+panel.classList.contains("hidden"); // 付いているか調べる(true / false)
+```
+
+<Callout type="info">`panel.className = "hidden"` と直接代入すると、もともと付いていた他のクラスまで消えてしまいます。classList なら指定したクラスだけを安全に操作できます。</Callout>

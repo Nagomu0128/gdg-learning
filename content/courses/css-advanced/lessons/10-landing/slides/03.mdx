@@ -1,0 +1,18 @@
+# 部品1: テーマカラーと追従ヘッダー
+
+01(カスタムプロパティ)と 07(追従ヘッダー)で書いた形を、そのまま組み合わせます。
+
+```css
+:root {
+  --main-color: #166534;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  background-color: var(--main-color);
+  color: white;
+}
+```
+
+<Callout type="info">色を var(--main-color) で参照しておくと、見出しやフッターにも同じ色を使い回せて、あとから1か所の変更でテーマカラーを一新できます。</Callout>

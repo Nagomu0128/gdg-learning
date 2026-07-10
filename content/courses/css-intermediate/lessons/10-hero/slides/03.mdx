@@ -1,0 +1,19 @@
+# flex で上下左右の中央へ
+
+中身をど真ん中に置くのは、flex の定番の型です。
+
+```css
+.hero {
+  height: 400px;
+  background-color: #e0f2fe;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+```
+
+- `justify-content: center;`: 横方向の中央にそろえる
+- `align-items: center;`: 縦方向の中央にそろえる
+- 縦の中央寄せは、`height` で高さを決めてはじめて見た目に表れます
+
+<Callout type="info">中央寄せは Grid でも作れますが、今回は Flexbox を使います。</Callout>

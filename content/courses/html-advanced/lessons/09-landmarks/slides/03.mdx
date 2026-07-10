@@ -1,0 +1,19 @@
+# aria-labelledbyで名前を付ける
+
+ランドマークに「名前」を付けると、案内がもっと分かりやすくなります。`aria-labelledby` 属性に、中の見出しの id を書いて対応させます。
+
+```html
+<nav aria-labelledby="menu-title">
+  <h2 id="menu-title">メニュー</h2>
+  <ul>
+    <li><a href="#">ほんをさがす</a></li>
+  </ul>
+</nav>
+```
+
+- `aria-labelledby="menu-title"` と `id="menu-title"` が同じ名前でつながっています
+- これでスクリーンリーダーは「メニュー ナビゲーション」のように読み上げられます
+
+<Callout type="info">
+  メニューが複数あるページ(上部のメニューとフッターのメニューなど)では、名前がないとどれも同じ「ナビゲーション」と案内されてしまいます。名前はその区別に役立ちます。
+</Callout>

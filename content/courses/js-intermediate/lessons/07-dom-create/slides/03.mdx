@@ -1,0 +1,17 @@
+# appendChild で追加する
+
+作った要素は、親になる要素の `appendChild` でページに追加します。追加されて、はじめて画面に表示されます。
+
+```js
+// 親になる ul 要素を取得する
+const list = document.getElementById("list");
+
+// 作る → 中身を入れる → 追加する
+const item = document.createElement("li");
+item.textContent = "りんご";
+list.appendChild(item);
+```
+
+この「作る → 中身を入れる → 追加する」の 3 ステップが基本の型です。
+
+<Callout type="info">`appendChild` は「子ども(child)として末尾に追加する」という意味です。同じ親に何個でも追加でき、追加した順に並びます。</Callout>

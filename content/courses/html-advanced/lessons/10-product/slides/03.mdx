@@ -1,0 +1,19 @@
+# 購入確認のdialog
+
+「購入する」ボタンで dialog をモーダルとして開き、「閉じる」ボタンで閉じます。レッスン2と同じ形ですが、今回は script.js も自分で書きます。
+
+```js
+const buyButton = document.getElementById("buy");
+const dialog = document.getElementById("confirm");
+const closeButton = document.getElementById("close");
+
+buyButton.addEventListener("click", () => {
+  dialog.showModal();
+});
+```
+
+- 閉じる処理も同じ形です。closeButton に対して `dialog.close()` を呼びます
+
+<Callout type="warn">
+  id の対応が命です。HTML 側の id="buy"・id="confirm"・id="close" と、script.js の getElementById の名前がそろっていないと動きません。
+</Callout>

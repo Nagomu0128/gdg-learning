@@ -1,0 +1,17 @@
+# detailsとsummary
+
+`<details>` タグは、中身を折りたたんで隠しておけるタグです。`<summary>` に書いた部分だけが最初から見えていて、クリックすると残りの中身が開きます。
+
+```html
+<details>
+  <summary>配送について</summary>
+  <p>ご注文から3日以内にお届けします。</p>
+</details>
+```
+
+- 最初は summary の行だけが表示されます
+- クリックするたびに、開く / 閉じるが切り替わります
+
+<Callout type="info">
+  よくある質問(FAQ)や長い説明の折りたたみによく使われます。JavaScript なしで動くのがポイントです。
+</Callout>

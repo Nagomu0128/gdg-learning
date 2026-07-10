@@ -1,0 +1,14 @@
+# Map — キーと値の対応表
+
+`Map` は「キー → 値」のペアを覚える対応表です。`set(キー, 値)` で登録し、`get(キー)` で取り出します。
+
+```js
+const scores = new Map();
+scores.set("算数", 90);
+scores.set("国語", 75);
+
+console.log(scores.get("算数")); // 90
+console.log(scores.size); // 2
+```
+
+<Callout type="info">オブジェクトでも似たことはできますが、Map は「あとから自由に追加・削除する対応表」に向いています。登録した順番を覚えていて、`.size` で個数もすぐわかります。</Callout>

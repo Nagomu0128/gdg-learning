@@ -1,0 +1,20 @@
+# textarea と label の for
+
+`<textarea>` は、**何行でも書ける**大きな入力欄です。感想やコメントの欄に使います。`<input>` とちがい、終了タグ `</textarea>` が必要です。
+
+```html
+<textarea id="comment"></textarea>
+```
+
+`<label>` は入力欄の「名札」です。`for` 属性に**入力欄の id** を書くと、ラベルと入力欄がつながります。つながっていると、ラベルをクリックするだけで入力欄をえらべます。
+
+```html
+<label for="comment">ひとこと</label>
+<textarea id="comment"></textarea>
+```
+
+<Callout type="info">
+
+label の `for` と入力欄の `id` は「同じ文字列」のペアにします。`for="comment"` と `id="comment"` のように対応させます。
+
+</Callout>

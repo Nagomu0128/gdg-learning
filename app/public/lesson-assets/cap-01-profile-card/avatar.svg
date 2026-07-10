@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="アバター">
+  <circle cx="48" cy="48" r="48" fill="#fde68a" />
+  <circle cx="48" cy="38" r="16" fill="#b45309" />
+  <path d="M16 88 a32 26 0 0 1 64 0 z" fill="#b45309" />
+</svg>

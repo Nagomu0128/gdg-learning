@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" width="320" height="220" role="img" aria-label="今週の気温の変化を表す折れ線グラフ">
+  <title>今週の気温の変化</title>
+  <rect x="0" y="0" width="320" height="220" fill="#ffffff" />
+  <line x1="48" y1="170" x2="296" y2="170" stroke="#2b2d42" stroke-width="2" />
+  <line x1="48" y1="24" x2="48" y2="170" stroke="#2b2d42" stroke-width="2" />
+  <text x="16" y="20" font-size="12" fill="#2b2d42">気温</text>
+  <text x="284" y="192" font-size="12" fill="#2b2d42">曜日</text>
+  <text x="64" y="188" font-size="12" fill="#2b2d42">月</text>
+  <text x="104" y="188" font-size="12" fill="#2b2d42">火</text>
+  <text x="144" y="188" font-size="12" fill="#2b2d42">水</text>
+  <text x="184" y="188" font-size="12" fill="#2b2d42">木</text>
+  <text x="224" y="188" font-size="12" fill="#2b2d42">金</text>
+  <text x="264" y="188" font-size="12" fill="#2b2d42">土</text>
+  <polyline points="68,132 108,124 148,100 188,108 228,76 268,60" fill="none" stroke="#e76f51" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="68" cy="132" r="4" fill="#e76f51" />
+  <circle cx="108" cy="124" r="4" fill="#e76f51" />
+  <circle cx="148" cy="100" r="4" fill="#e76f51" />
+  <circle cx="188" cy="108" r="4" fill="#e76f51" />
+  <circle cx="228" cy="76" r="4" fill="#e76f51" />
+  <circle cx="268" cy="60" r="4" fill="#e76f51" />
+</svg>

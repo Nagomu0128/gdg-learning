@@ -1,0 +1,12 @@
+# createElement で要素を作る
+
+`document.createElement("タグ名")` と書くと、新しい要素を作れます。
+
+```js
+const item = document.createElement("li");
+item.textContent = "りんご";
+```
+
+1 行目で `<li>` 要素が作られ、2 行目で中の文字を設定しています。
+
+<Callout type="warn">この時点では、要素はまだ画面に表示されません。作った要素は JavaScript の変数の中にあるだけで、ページ(DOM ツリー)にはつながっていないからです。</Callout>

@@ -214,6 +214,7 @@ export const courseSchema = z
     title: z.string().min(1),
     description: z.string().min(1),
     order: z.number().int().positive().optional(),
+    level: z.enum(["basic", "intermediate", "advanced", "capstone"]).optional(),
     lessons: z.array(z.string().regex(slugPattern)).min(1),
   })
   .superRefine((course, ctx) => {

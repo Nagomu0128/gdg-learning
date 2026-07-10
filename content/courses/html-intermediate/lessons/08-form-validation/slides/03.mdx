@@ -1,0 +1,22 @@
+# type="email" — 入力欄の種類を変える
+
+`<input>` の `type` 属性を変えると、入力欄の種類そのものが変わります。
+
+```html
+<input id="email" type="email" required>
+```
+
+`type="email"` にすると、`@` のない文字列で送信しようとしたとき、ブラウザが「メールアドレスを入力してください」と警告してくれます。
+
+よく使う type には、こんなものがあります。
+
+- `type="text"` — ふつうの文字(初期値)
+- `type="email"` — メールアドレス
+- `type="number"` — 数値
+- `type="date"` — 日付
+
+<Callout type="info">
+
+スマートフォンでは、type="email" の欄を選ぶと「@ 付きのキーボード」が出るなど、入力のしやすさも変わります。
+
+</Callout>

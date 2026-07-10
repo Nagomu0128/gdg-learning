@@ -1,0 +1,22 @@
+# ふりかえり — 区画とページ内リンク
+
+ページの大わくは、意味のまとまりごとにタグで区画するのでした。
+
+```html
+<header>ページの頭。ブログ名などを入れる</header>
+<article>それだけで1つの読みものになる記事</article>
+<aside>本筋から少し外れた補足</aside>
+<footer>ページの最後のしめくくり</footer>
+```
+
+ページ内リンクは、`href` の「#」のうしろと、飛び先の `id` の値をぴったりそろえます。
+
+```html
+<a href="#today">きょうの記事へ</a>
+
+<article id="today">...</article>
+```
+
+<Callout type="info">
+  header の中の h1 はブログ全体の名前、article の中の h2 は記事の見出し、と役割を分けるときれいな文書設計になります。
+</Callout>

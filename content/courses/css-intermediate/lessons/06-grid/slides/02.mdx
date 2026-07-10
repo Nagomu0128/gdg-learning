@@ -1,0 +1,22 @@
+# Grid は親に指定する
+
+Grid(グリッド)は、要素をます目(格子)の上にならべるしくみです。Flexbox と同じで、指定するのはならべたい要素そのものではなく、**それらを包む親要素**です。
+
+```html
+<div class="gallery">
+  <div class="tile">A</div>
+  <div class="tile">B</div>
+  <div class="tile">C</div>
+  <div class="tile">D</div>
+</div>
+```
+
+```css
+.gallery {
+  display: grid;
+}
+```
+
+`display: grid;` と書いた段階では、見た目はまだほとんど変わりません。次のスライドで「列の設計図」を渡すと、ます目にならびはじめます。
+
+<Callout type="info">Flexbox は「一方向(横 or 縦)」のならべ替えが得意、Grid は「行と列の2次元」の配置が得意です。作りたい形で使い分けます。</Callout>

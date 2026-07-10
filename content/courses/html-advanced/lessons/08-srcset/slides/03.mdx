@@ -1,0 +1,22 @@
+# 書き方の型
+
+今回使う2枚の画像は、あらかじめ用意してあります。
+
+- `wide.svg` — 横長の風景(広い画面用)
+- `square.svg` — 正方形の風景(ふだん用)
+
+書き方の型はこうです。
+
+```html
+<picture>
+  <source media="(min-width: 700px)" srcset="wide.svg">
+  <img src="square.svg" alt="山の風景">
+</picture>
+```
+
+- source の画像指定は `src` ではなく `srcset` です(候補セットという意味の名前)
+- `media="(min-width: 700px)"` のスペースの位置まで、この形のとおりに書きましょう
+
+<Callout type="info">
+  提出したときの判定は、幅 800px の画面で行われます。800px は「700px 以上」の条件に合うので、wide.svg が選ばれる、というわけです。
+</Callout>

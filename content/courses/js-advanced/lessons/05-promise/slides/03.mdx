@@ -1,0 +1,15 @@
+# Promise は「あとで届く値」の入れ物
+
+Promise は、まだ手に入っていない値を表すオブジェクトです。
+
+```js
+const promise = new Promise((resolve) => {
+  setTimeout(() => {
+    resolve("done");
+  }, 300);
+});
+```
+
+- new Promise には、resolve という関数を受け取る関数を渡します
+- 中の処理が終わったタイミングで `resolve(値)` を呼ぶと、Promise がその値で「解決」します
+- この例では、300ミリ秒後に "done" という値で解決します

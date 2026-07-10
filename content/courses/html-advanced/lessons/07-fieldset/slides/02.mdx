@@ -1,0 +1,20 @@
+# fieldset と legend — 入力欄のグループ
+
+`<fieldset>` は、関連する入力欄をひとまとめに囲むタグです。グループの見出しは `<legend>` で、`<fieldset>` の中の最初に書きます。
+
+```html
+<form>
+  <fieldset>
+    <legend>お届け先</legend>
+    <label for="name">お名前</label>
+    <input id="name" type="text">
+  </fieldset>
+</form>
+```
+
+- ブラウザでは、グループのまわりに枠線が付き、legend がその枠のタイトルになります
+- スクリーンリーダーは「お届け先の、お名前」のように、グループ名と一緒に読み上げてくれます
+
+<Callout type="info">
+  legend は fieldset の中に1つだけ。fieldset の開始タグのすぐ次に書くのがルールです。
+</Callout>

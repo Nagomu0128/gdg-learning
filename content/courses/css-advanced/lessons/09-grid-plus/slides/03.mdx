@@ -1,0 +1,16 @@
+# minmax() で幅に下限を作る
+
+`1fr` だけの列は、スペースがせまいとどこまでも細くなってしまいます。`minmax(最小, 最大)` を使うと「これ以上は縮まない」列が作れます。
+
+```css
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(100px, 1fr));
+  column-gap: 24px;
+}
+```
+
+- 各列は、広いときは `1fr` として等分で伸び、せまくなっても `100px` より細くなりません
+- `repeat()` の「幅」の部分に `minmax()` を入れ子にするのがポイントです
+
+<Callout type="info">さらに repeat(auto-fit, minmax(200px, 1fr)) と書くと「入るだけ列を作る」自動レイアウトもできます。今回は列の数を 3 に決めて練習します。</Callout>

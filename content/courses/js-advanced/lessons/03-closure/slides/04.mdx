@@ -1,0 +1,15 @@
+# カウンターはそれぞれ独立
+
+makeCounter() を呼ぶたびに、新しい count が作られます。
+
+```js
+const counterA = makeCounter();
+const counterB = makeCounter();
+
+console.log(counterA());
+console.log(counterA());
+console.log(counterB());
+```
+
+- counterA は 1、2 と数えますが、counterB は自分専用の count を持つので 1 から数えます
+- 「関数ごとに別々の変数を覚えている」ことがクロージャのポイントです

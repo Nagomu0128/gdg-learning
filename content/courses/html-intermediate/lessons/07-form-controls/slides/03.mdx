@@ -1,0 +1,18 @@
+# ラジオボタン — name でグループになる
+
+`<input type="radio">` は、ならんだ選択肢から**どれか1つだけ**えらべる丸いボタンです。
+
+大事なのは `name` 属性です。**同じ name を付けたラジオボタン同士が1つのグループ**になり、グループの中で1つだけえらべるようになります。
+
+```html
+<input type="radio" name="again" id="again-yes">
+<label for="again-yes">はい</label>
+<input type="radio" name="again" id="again-no">
+<label for="again-no">いいえ</label>
+```
+
+<Callout type="warn">
+
+name がばらばらだと、「はい」と「いいえ」を両方えらべてしまいます。グループにしたいボタンには、必ず同じ name を付けましょう。
+
+</Callout>

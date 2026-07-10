@@ -1,0 +1,20 @@
+# caption — 表のタイトル
+
+`<caption>` は表のタイトルです。`<table>` の中の、いちばん最初に書きます。
+
+```html
+<table>
+  <caption>文ぼうぐの値段</caption>
+  <tr>
+    <th>商品</th>
+    <th>値段</th>
+  </tr>
+</table>
+```
+
+- スクリーンリーダーは、まず caption を読み上げて「これは何の表か」を伝えます
+- 表の上に `<p>` でタイトルを書くのとちがい、「この表のタイトルだ」と機械にも伝わります
+
+<Callout type="info">
+  caption は table の中に1つだけ。table の開始タグのすぐ次の行に書くのがルールです。
+</Callout>

@@ -1,0 +1,17 @@
+# 初期値と応用
+
+初期値の `0` を渡しておくと、空の配列でもエラーにならず、初期値がそのまま返ります。集計では初期値を書くのが安全です。
+
+```js
+const empty = [];
+console.log(empty.reduce((sum, n) => sum + n, 0)); // 0
+```
+
+合計が作れれば、平均はすぐです。「合計 ÷ 個数」を計算します。個数は `numbers.length` で取れます。
+
+```js
+const numbers = [10, 20, 30];
+const ave = total(numbers) / numbers.length; // 60 / 3 = 20
+```
+
+<Callout type="info">一度作った関数は、別の関数の中から呼び出せます。total を作ってから、average の中で使い回しましょう。</Callout>

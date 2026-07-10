@@ -1,0 +1,24 @@
+# ふりかえり — figureと入れ子リスト
+
+図版は `<figure>` で囲み、`<img>` と `<figcaption>`(説明文)をセットにするのでした。img には画像の内容を説明する `alt` も忘れずに付けます。
+
+```html
+<figure>
+  <img src="photo.svg" alt="画像の説明">
+  <figcaption>図1: 図の説明文</figcaption>
+</figure>
+```
+
+リストの項目の中にリストを入れるときは、`<li>` の閉じタグの前に内側の `<ul>` を書くのでした。
+
+```html
+<ul>
+  <li>ホットケーキミックス</li>
+  <li>トッピング
+    <ul>
+      <li>はちみつ</li>
+      <li>バター</li>
+    </ul>
+  </li>
+</ul>
+```

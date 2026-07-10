@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 160" width="320" height="160" role="img" aria-label="横長の山の風景イラスト">
+  <title>横長の山の風景イラスト</title>
+  <rect width="320" height="160" fill="#a8dadc" />
+  <circle cx="270" cy="42" r="22" fill="#ffb703" />
+  <polygon points="0,160 90,60 180,160" fill="#2a9d8f" />
+  <polygon points="120,160 220,40 320,160" fill="#264653" />
+  <polygon points="198,71 220,40 242,71" fill="#f1faee" />
+  <rect y="140" width="320" height="20" fill="#588157" />
+</svg>

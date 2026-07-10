@@ -1,0 +1,17 @@
+# 書き方の型とopen属性
+
+`<summary>` は `<details>` の中の最初に書きます。summary のあとに、開いたときに見せたい中身を続けます。
+
+```html
+<details open>
+  <summary>見出し</summary>
+  <p>開いたときに表示される中身</p>
+</details>
+```
+
+- `open` 属性を付けると、最初から開いた状態で表示されます
+- `<summary>` を書かなかった場合は、ブラウザが「詳細」という見出しを自動で表示します
+
+<Callout type="warn">
+  summary を details の外に書くと、ただの文字になってしまい、クリックしても開閉しません。必ず details の中の最初に入れましょう。
+</Callout>

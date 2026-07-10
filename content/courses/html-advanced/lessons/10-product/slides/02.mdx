@@ -1,0 +1,21 @@
+# ページの設計図
+
+上から順に、4つのブロックを作ります。どれもこのコースで作った部品です。
+
+```html
+<h1>ワイヤレスヘッドホン</h1>
+<p id="price" data-price="4980">4980円</p>
+<details>
+  <summary>スペック</summary>
+  <table>...</table>
+</details>
+<button id="buy">購入する</button>
+<dialog id="confirm">...</dialog>
+```
+
+- 価格: 表示は「4980円」、データとしては `data-price="4980"`(レッスン3の形)
+- スペック: details で折りたたみ、中身は表(レッスン1の形)
+
+<Callout type="info">
+  表は table の中に tr をならべ、各行に th(項目名)と td(値)を書く形でしたね。重さや連続再生時間など、スペックを2行ほど書きましょう。
+</Callout>

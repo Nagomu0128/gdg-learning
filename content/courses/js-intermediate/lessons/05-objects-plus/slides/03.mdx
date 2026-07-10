@@ -1,0 +1,23 @@
+# スプレッド構文
+
+オブジェクトの前にピリオドを 3 つ付けると、中身をその場に展開できます。2 つのオブジェクトをあわせた新しいオブジェクトが簡単に作れます。
+
+```js
+const base = { a: 1 };
+const extra = { b: 2 };
+
+const merged = { ...base, ...extra };
+
+console.log(merged); // { a: 1, b: 2 }
+```
+
+同じキーがあるときは、あとに書いた方の値で上書きされます。
+
+```js
+const settings = { color: "red", size: 10 };
+const custom = { color: "blue" };
+
+console.log({ ...settings, ...custom }); // { color: "blue", size: 10 }
+```
+
+<Callout type="info">元のオブジェクトは変わりません。スプレッドは中身をコピーした新しいオブジェクトを作ります。</Callout>

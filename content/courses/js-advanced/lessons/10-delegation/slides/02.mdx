@@ -1,0 +1,17 @@
+# 1つずつ登録すると、困ることがある
+
+li のそれぞれに登録しても、いちおう動きます。でも、この書き方には弱点があります。
+
+```js
+const items = document.querySelectorAll("li");
+for (const li of items) {
+  li.addEventListener("click", () => {
+    li.classList.toggle("done");
+  });
+}
+```
+
+- 100 個あれば 100 回、登録の処理が走ります
+- そして、**あとから追加した li には効きません**(登録した時点にあった li だけです)
+
+<Callout type="warn">TODO リストのように「あとから項目が増える」UI では、この弱点が致命的になります。</Callout>

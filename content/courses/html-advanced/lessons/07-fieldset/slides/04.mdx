@@ -1,0 +1,16 @@
+# inputmode — スマホのキーボードを切り替える
+
+スマホでゆうびん番号を入力するとき、ふつうの文字キーボードが出てくると不便ですよね。`inputmode` 属性を付けると、その欄に合ったキーボードが表示されます。
+
+```html
+<input id="zip" type="text" inputmode="numeric">
+```
+
+- `numeric` — 数字キーボード(ゆうびん番号・認証コードなど)
+- `decimal` — 小数も打てる数字キーボード
+- `tel` — 電話番号用キーボード
+- `email` — @ が打ちやすいキーボード
+
+<Callout type="info">
+  「数字なら type="number" では?」と思うかもしれません。type="number" は「数値」の入力欄なので、ゆうびん番号のように 0 で始まる番号には向きません。text のまま inputmode="numeric" を付けるのが定番です。
+</Callout>

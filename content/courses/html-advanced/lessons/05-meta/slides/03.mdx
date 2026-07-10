@@ -1,0 +1,14 @@
+# スマホ対応のviewport
+
+viewport は「ページを表示する画面の幅をどう扱うか」の設定です。これがないと、スマホがページ全体を縮小表示してしまい、文字が豆つぶのように小さくなります。
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1">
+```
+
+- `width=device-width` は「ページの幅を端末の画面幅に合わせる」という意味です
+- `initial-scale=1` は「最初の拡大率を等倍にする」という意味です
+
+<Callout type="info">
+  name に「設定の名前」、content に「設定の内容」を書くのが meta タグの型です。この2つはいつもセットで使います。
+</Callout>

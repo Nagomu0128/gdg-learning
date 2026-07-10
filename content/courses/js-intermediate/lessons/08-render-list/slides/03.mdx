@@ -1,0 +1,16 @@
+# くり返しで描画する
+
+`for...of` を使うと、配列から 1 つずつ取り出しながらくり返せます。取り出した値に対して、前のレッスンの 3 ステップ(作る → 中身を入れる → 追加する)を行います。
+
+```js
+const items = ["おにぎり", "みそ汁", "たまご焼き", "お茶"];
+const menu = document.getElementById("menu");
+
+for (const item of items) {
+  const li = document.createElement("li");
+  li.textContent = item;
+  menu.appendChild(li);
+}
+```
+
+くり返しの 1 周ごとに `item` へ「おにぎり」「みそ汁」…が順に入り、li が 1 個ずつ増えていきます。配列が 4 個なら li も 4 個できます。

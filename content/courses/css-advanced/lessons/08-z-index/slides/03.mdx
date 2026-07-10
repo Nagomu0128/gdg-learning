@@ -1,0 +1,20 @@
+# z-index で順番を指定する
+
+`z-index` は重なり順を数字で指定するプロパティです。数字の大きい要素ほど手前に表示されます。
+
+```css
+.card {
+  position: absolute;
+  z-index: 2;
+}
+
+.banner {
+  position: absolute;
+  z-index: 1;
+}
+```
+
+- `2` と `1` をくらべて、大きい `.card` が手前に来ます
+- 数字はとびとびでもかまいません。`10` と `20` のようにしておくと、あとから間に足しやすくなります
+
+<Callout type="warn">z-index は position(static 以外)を指定した要素にだけ効きます。「書いたのに変わらない」ときは、まずその要素に position があるかを確かめましょう。</Callout>

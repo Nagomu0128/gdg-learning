@@ -1,0 +1,20 @@
+# autocomplete — 自動入力を助ける
+
+名前や住所を、ブラウザが自動で入力してくれたことはありませんか? あれは `autocomplete` 属性が手がかりです。「この欄には何が入るか」をブラウザに伝えます。
+
+```html
+<input id="name" type="text" autocomplete="name">
+<input id="zip" type="text" autocomplete="postal-code">
+<input id="mail" type="email" autocomplete="email">
+```
+
+よく使う値には、決められた名前があります。
+
+- `name` — 氏名
+- `postal-code` — ゆうびん番号
+- `email` — メールアドレス
+- `tel` — 電話番号
+
+<Callout type="info">
+  値は自分で発明するのではなく、決められた一覧から選びます。正しい値を付けるだけで、ユーザーの入力の手間がぐっと減ります。
+</Callout>

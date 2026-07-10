@@ -1,0 +1,20 @@
+# 「基本 + 上書き」で考える
+
+メディアクエリは、ふだんのルールを**置き換える**のではなく、条件に合うときだけ**上書き**します。
+
+```css
+.menu {
+  display: flex;
+  flex-direction: row;   /* ふだん: 横ならび */
+}
+
+@media (max-width: 900px) {
+  .menu {
+    flex-direction: column;   /* 900px 以下: 縦ならびに上書き */
+  }
+}
+```
+
+広い画面では上のルールだけが効いて横ならび、900px 以下では `flex-direction` だけが `column` に上書きされて縦ならびになります。`display: flex` は上書きされていないので、そのまま生きています。
+
+<Callout type="warn">このレッスンのプレビューと判定は幅 800px の画面で行われます。800px は「900px 以下」なので、@media の中のルールが適用された状態が正解の見た目です。</Callout>

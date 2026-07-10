@@ -1,0 +1,15 @@
+# 関数を受け取る関数
+
+引数として関数を受け取る関数を「高階関数」と呼びます。
+
+```js
+function applyTwice(fn, x) {
+  return fn(fn(x));
+}
+
+console.log(applyTwice(double, 5));
+```
+
+- 引数 fn には関数が入ります。ふつうの関数と同じように `fn(値)` で呼び出せます
+- `fn(x)` の結果をもう一度 fn に渡すので、double を渡すと 5 → 10 → 20 になります
+- 渡す関数を変えれば、applyTwice はそのままでいろいろな処理に使い回せます

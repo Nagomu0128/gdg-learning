@@ -1,0 +1,17 @@
+# やってみよう
+
+送信ボタンを押すと、確認のダイアログがモーダルで開くようにしましょう。
+
+1. HTML: `id="confirm"` の `<dialog>` タグを書く
+2. dialog の中に `<p>` で確認のメッセージと、`id="close"` の閉じるボタンを入れる
+3. script.js: openButton がクリックされたら `dialog.showModal()` を呼ぶ処理を書く
+
+```js
+openButton.addEventListener("click", () => {
+  // ここで dialog を開く
+});
+```
+
+<Callout type="info">
+  閉じるボタンの処理は script.js の下のほうに用意してあります。プレビューで「送信する」を押して、ダイアログが開いて閉じられたら完成です。
+</Callout>

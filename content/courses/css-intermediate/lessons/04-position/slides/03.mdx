@@ -1,0 +1,17 @@
+# top / left で距離を指定する
+
+浮かせた要素の位置は、基準からの距離で指定します。
+
+```css
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+```
+
+- `top: 12px;`: 基準の上端から 12px 下へ
+- `left: 12px;`: 基準の左端から 12px 右へ
+- 右端や下端から数えたいときは `right` / `bottom` を使います
+
+<Callout type="info">top や left は、position を指定した要素にだけ効きます。ふだんの(static な)要素に書いても動きません。</Callout>

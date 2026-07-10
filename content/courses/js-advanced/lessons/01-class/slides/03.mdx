@@ -1,0 +1,22 @@
+# new とメソッド
+
+設計図(クラス)から実物(インスタンス)を作るには `new` を使います。
+
+```js
+class User {
+  constructor(name) {
+    this.name = name;
+  }
+
+  greet() {
+    return "こんにちは、" + this.name + "です";
+  }
+}
+
+const user = new User("タロウ");
+console.log(user.greet());
+```
+
+- `new User("タロウ")` で、name が「タロウ」の User インスタンスができます
+- `greet()` のように、クラスの中に書いた関数を「メソッド」と呼びます
+- メソッドの中では `this.name` で自分のデータを取り出せます。表示は「こんにちは、タロウです」となります

@@ -1,0 +1,17 @@
+# row-gap / column-gap ですきまを空ける
+
+ます目のあいだのすきまは、gap 系のプロパティで空けます。
+
+```css
+.gallery {
+  display: grid;
+  grid-template-columns: 100px 200px 100px;
+  row-gap: 16px;
+  column-gap: 16px;
+}
+```
+
+- `row-gap`: 行と行のあいだ(縦方向のすきま)
+- `column-gap`: 列と列のあいだ(横方向のすきま)
+
+margin とちがって、グリッドの外側にはすきまができず、**ます目のあいだだけ**に入るのがポイントです。

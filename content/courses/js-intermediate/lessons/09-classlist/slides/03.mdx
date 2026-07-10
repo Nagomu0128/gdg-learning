@@ -1,0 +1,22 @@
+# toggle で切り替える
+
+「付いていなければ付ける、付いていれば外す」を 1 つでやってくれるのが `toggle` です。クリックのたびに切り替えたいときにぴったりです。
+
+```js
+const button = document.getElementById("toggle");
+const panel = document.getElementById("panel");
+
+button.addEventListener("click", () => {
+  panel.classList.toggle("hidden");
+});
+```
+
+CSS 側には、切り替えたい見た目をクラスとして用意しておきます。
+
+```css
+.hidden {
+  display: none;
+}
+```
+
+hidden クラスが付くとパネルは消え、外れると元どおり表示されます。「見た目のルールは CSS に、切り替えの操作は JavaScript に」という分担です。

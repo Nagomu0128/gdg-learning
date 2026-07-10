@@ -1,0 +1,19 @@
+# :hover と組み合わせる
+
+transition は「変化のしかた」を決めるだけなので、「何が変化するか」とセットで使います。定番の相手が、マウスをのせたときのスタイル `:hover` です。
+
+```css
+a {
+  background-color: #0ea5e9;
+  transition-property: background-color;
+  transition-duration: 0.3s;
+}
+
+a:hover {
+  background-color: #0369a1;
+}
+```
+
+transition は**ふだんの状態(a)の側**に書くのがコツです。マウスをのせたときも、はなしたときも、どちらの変化もなめらかになります。
+
+<Callout type="warn">a:hover の側にだけ transition を書くと、マウスをはなしたときの変化は一瞬で戻ってしまいます。</Callout>

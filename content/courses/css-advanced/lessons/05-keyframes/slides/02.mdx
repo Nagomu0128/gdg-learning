@@ -1,0 +1,20 @@
+# @keyframes で動きを定義する
+
+`@keyframes` は「アニメーションの始まりから終わりまで、どう変化するか」を定義するルールです。名前を付けて書きます。
+
+```css
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+```
+
+- `from` はアニメーションの開始時点、`to` は終了時点のスタイルです
+- `transform: rotate(角度)` は要素を回転させるプロパティです。0deg から 360deg まで変化させると、ちょうど1回転します
+
+<Callout type="info">from / to の代わりに `0%` `50%` `100%` のようなパーセントで、途中の経過点を細かく指定することもできます。</Callout>

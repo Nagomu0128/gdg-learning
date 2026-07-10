@@ -1,6 +1,7 @@
 // content-meta.json(B の codegen 出力)の型付きアクセサ。教材メタの正はこのファイル(§7.1: DB に教材テーブルはない)。
 // codegen 未実行のスタブ(courses: [])でも壊れないよう null ガードを徹底する。
 import rawContentMeta from "~/generated/content-meta.json";
+import { type CourseLevel, normalizeLevel } from "./levels";
 
 export type ContentLessonMeta = {
   slug: string;
@@ -16,6 +17,8 @@ export type ContentCourseMeta = {
   slug: string;
   title: string;
   description: string;
+  /** コースレベル(ADR #19)。codegen が必ず出力。旧 content-meta の欠損は listCourseMeta が "basic" に正規化 */
+  level: CourseLevel;
   lessons: ContentLessonMeta[];
 };
 
@@ -39,6 +42,7 @@ export function getContentVersion(): string {
 export function listCourseMeta(): ContentCourseMeta[] {
   return contentMeta.courses.map((course) => ({
     ...course,
+    level: normalizeLevel(course.level),
     lessons: [...(course.lessons ?? [])].sort((a, b) => a.order - b.order),
   }));
 }

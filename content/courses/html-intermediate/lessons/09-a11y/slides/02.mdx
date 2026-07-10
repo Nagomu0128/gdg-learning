@@ -1,0 +1,20 @@
+# altとlabelのfor
+
+どちらも学習ずみの属性ですが、「やさしい HTML」の主役でもあります。
+
+`alt` は画像の**ことばの説明**です。読み上げソフトは、画像の代わりに alt のことばを読み上げます。
+
+```html
+<img src="logo.svg" alt="としょかんだよりのロゴ">
+```
+
+`label` の `for` は、名札(label)と入力欄(input)を**つなぐ**属性です。for の値を input の id とぴったりそろえると、読み上げソフトが入力欄で「本をさがす」と教えてくれるようになります。
+
+```html
+<label for="keyword">本をさがす</label>
+<input id="keyword" type="text">
+```
+
+<Callout type="info">
+  for でつながった label は、クリックすると入力欄にカーソルが移るようにもなります。だれにとっても便利になる書き方です。
+</Callout>

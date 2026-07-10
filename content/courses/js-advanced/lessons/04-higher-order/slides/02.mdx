@@ -1,0 +1,17 @@
+# 関数は値である
+
+JavaScript の関数は、数値や文字列と同じ「値」です。変数に入れたり、引数として渡したりできます。
+
+```js
+function double(n) {
+  return n * 2;
+}
+
+const myFunc = double;
+console.log(myFunc(5));
+```
+
+- `double` と ( ) を付けずに書くと「関数そのもの」を指します
+- 変数 myFunc に入れれば、`myFunc(5)` と呼び出せます。表示は 10 です
+
+<Callout type="warn">double() と書くと「呼び出した結果」に、double と書くと「関数そのもの」になります。この違いが今日のカギです。</Callout>

@@ -1,0 +1,15 @@
+# エラーが起きると、そこで止まる
+
+JavaScript は、処理に失敗すると「エラー」を発生させ、その行でプログラムを止めてしまいます。
+
+たとえば `JSON.parse` は JSON 形式の文字列をオブジェクトに変換する命令ですが、変換できない文字列を渡すとエラーになります。
+
+```js
+const data = JSON.parse('{"a":1}');
+console.log(data); // 変換できた: { a: 1 }
+
+const broken = JSON.parse("これはJSONではない"); // ここでエラー!
+console.log("この行は実行されません");
+```
+
+<Callout type="info">JSON は「データを文字列で表すための世界共通の書き方」です。`'{"a":1}'` のような JSON の文字列は、`JSON.parse` でオブジェクトに戻せます。</Callout>

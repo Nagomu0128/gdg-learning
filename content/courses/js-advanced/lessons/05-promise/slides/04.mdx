@@ -1,0 +1,14 @@
+# then で受け取る
+
+解決した値は、then に渡した関数で受け取ります。
+
+```js
+promise.then((value) => {
+  console.log(value);
+});
+```
+
+- then には「値が届いたらやること」を関数で渡します
+- 300ミリ秒後に Promise が解決すると、value に "done" が入って表示されます
+
+<Callout type="info">「Promise を返す → then で受け取る」が非同期処理の基本の型です。次のレッスンで、もっと読みやすい書き方(async / await)を学びます。</Callout>

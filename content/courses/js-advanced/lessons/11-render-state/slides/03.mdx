@@ -1,0 +1,16 @@
+# render() — state から画面を作り直す
+
+state を見て、画面の表示をすべて更新する関数を1つだけ用意します。名前は render(描画する)が定番です。
+
+```js
+function render() {
+  followers.textContent = `フォロワー: ${state.followers}人`;
+  if (state.following) {
+    button.textContent = "フォロー中";
+  } else {
+    button.textContent = "フォローする";
+  }
+}
+```
+
+render() は「state だけ」を見て表示を決めます。いつ、何回呼んでも、state が同じなら画面も同じになるのがポイントです。

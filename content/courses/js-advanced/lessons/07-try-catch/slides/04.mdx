@@ -1,0 +1,9 @@
+# やってみよう
+
+JSON の文字列を安全にオブジェクトへ変換する関数 `safeParse` を完成させます。
+
+1. `try` のブロックの中で、`JSON.parse(text)` の結果を `return` しましょう
+2. `catch (error)` のブロックの中で、`null` を `return` しましょう
+3. コンソールタブで、成功したときと失敗したときの結果を見てみましょう
+
+<Callout type="warn">safeParse は function 宣言のまま書きます(判定がこの名前の関数を呼び出します)。「失敗したら null」と決めておくと、使う側は `if (data === null)` で安全に分岐できます。</Callout>

@@ -7,6 +7,7 @@ export default defineCourse({
   description:
     "Webページの骨組みをつくるHTML。見出し・リンク・画像・リストなどの基本タグを、手を動かしながらゼロから学びます。",
   order: 1,
+  level: "basic",
   lessons: [
     "html-01-first-page",
     "html-02-headings",

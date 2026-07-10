@@ -1,0 +1,26 @@
+# 進め方のヒント
+
+プログラムの部品は3つです。上から順に作りましょう。
+
+**1. 結果の候補を配列で持つ**
+
+```js
+const results = ["大吉", "中吉", "小吉", "凶"];
+```
+
+**2. ランダムな番号を作る。** `Math.random()` は 0 以上 1 未満の小数を返します。配列の長さをかけて `Math.floor()`(切り捨て)に通すと、0〜3 のどれかの整数になります。
+
+```js
+const index = Math.floor(Math.random() * results.length);
+```
+
+**3. クリックで表示する。** ボタンに click イベントを登録し、選んだ結果を `#result` の textContent に入れます。
+
+```js
+button.addEventListener("click", () => {
+  const index = Math.floor(Math.random() * results.length);
+  result.textContent = results[index];
+});
+```
+
+イベントの形は、JavaScript中級で学んだものと同じです。番号を作る行はクリック処理の**中**に書きます(外に書くと番号が最初の1回しか作られず、毎回同じ結果になってしまいます)。

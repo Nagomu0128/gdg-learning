@@ -1,0 +1,16 @@
+# transition のしくみ
+
+CSS のプロパティの値が切りかわるとき、ブラウザはふつう**一瞬で**切りかえます。transition 系のプロパティを書いておくと、その変化がなめらかなアニメーションになります。
+
+```css
+a {
+  background-color: #0ea5e9;
+  transition-property: background-color;
+  transition-duration: 0.3s;
+}
+```
+
+- `transition-property`: どのプロパティの変化をなめらかにするか
+- `transition-duration`: 変化にかける時間。`s` は秒の単位で、`0.3s` は0.3秒
+
+<Callout type="info">時間の単位には s(秒)のほかに ms(ミリ秒)もあります。300ms = 0.3s です。</Callout>

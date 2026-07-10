@@ -1,0 +1,14 @@
+# async 関数の戻り値は Promise
+
+async function が return した値は、Promise の解決値になります。
+
+```js
+fetchTotal().then((total) => {
+  console.log(total);
+});
+```
+
+- `fetchTotal()` の戻り値は Promise なので、結果は then で受け取ります
+- 100 と 200 がそろってから合計され、300 と表示されます
+
+<Callout type="info">async / await は Promise を置きかえるものではなく、Promise を読みやすく扱うための書き方です。</Callout>

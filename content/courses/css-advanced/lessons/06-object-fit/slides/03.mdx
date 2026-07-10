@@ -1,0 +1,17 @@
+# object-fit で収め方を決める
+
+枠の比率と画像の比率がちがうとき、そのままでは画像が枠に合わせて引き伸ばされ、ゆがんでしまいます。収め方を決めるのが `object-fit` です。
+
+```css
+.photo {
+  width: 240px;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+```
+
+- `fill`(初期値)— 比率を無視して枠いっぱいに引き伸ばす(ゆがむ)
+- `cover` — 比率を保ったまま枠を覆う大きさに広げ、はみ出た部分を切り抜く
+- `contain` — 比率を保ったまま全体が収まる大きさに縮める(すきまが出る)
+
+<Callout type="warn">object-fit は img のような画像系の要素に使います。width や aspect-ratio で枠の大きさが決まっていないと、切り抜く基準がなく効果が見えません。</Callout>

@@ -27,7 +27,7 @@ describe("generateLessons", () => {
 
     const generatedDir = path.join(appDir, "app", "generated");
     const lessonFiles = await readdir(path.join(generatedDir, "lessons"));
-    expect(lessonFiles.sort()).toEqual(["demo-01-dom.ts", "demo-02-worker.ts"]);
+    expect(lessonFiles.sort()).toEqual(["demo-01-dom.ts", "demo-02-worker.ts", "demo2-01-worker.ts"]);
 
     const lessonModule = await readFile(path.join(generatedDir, "lessons", "demo-01-dom.ts"), "utf8");
     expect(lessonModule).toContain('export const meta: LoadedLesson["meta"]');
@@ -40,10 +40,15 @@ describe("generateLessons", () => {
 
     const meta = JSON.parse(await readFile(path.join(generatedDir, "content-meta.json"), "utf8")) as {
       contentVersion: string;
-      courses: { slug: string; lessons: { slug: string; order: number; runner: string }[] }[];
+      courses: { slug: string; level: string; lessons: { slug: string; order: number; runner: string }[] }[];
     };
     expect(meta.contentVersion).not.toBe("");
-    expect(meta.courses).toHaveLength(1);
+    expect(meta.courses).toHaveLength(2);
+    // level: course.ts の指定を透過し、未指定は "basic" を出力する(ADR #19)
+    expect(meta.courses.map((c) => [c.slug, c.level])).toEqual([
+      ["demo", "basic"],
+      ["demo-two", "intermediate"],
+    ]);
     expect(meta.courses[0]?.lessons.map((l) => [l.slug, l.order, l.runner])).toEqual([
       ["demo-01-dom", 1, "dom"],
       ["demo-02-worker", 2, "worker"],

@@ -1,0 +1,22 @@
+# 設計 — 配列の状態と render()
+
+前レッスンの型をそのまま使います。TODO は「文字」と「完了したか」を持つオブジェクトの配列で管理します。
+
+```js
+const todos = []; // 例: { text: "牛乳を買う", done: false } が並ぶ
+
+function render() {
+  list.innerHTML = ""; // いったん空にして、配列から作り直す
+  todos.forEach((todo, index) => {
+    const li = document.createElement("li");
+    li.textContent = todo.text;
+    li.dataset.index = index; // 何番目の TODO かを li にメモしておく
+    // todo.done なら li.classList.add("done")
+    // 「削除」ボタンを作って li に appendChild する
+    list.appendChild(li);
+  });
+  // #count には done でない TODO の数を入れる
+}
+```
+
+<Callout type="info">`li.dataset.index = index` と書くと、li に `data-index` 属性として番号を記録できます。読むときは `Number(li.dataset.index)` で数値に戻します。</Callout>

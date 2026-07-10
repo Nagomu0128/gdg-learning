@@ -1,0 +1,17 @@
+# var() で変数を使う
+
+定義した変数は、`var(変数名)` の形で値の場所に書けます。
+
+```css
+h1 {
+  color: var(--main-color);
+}
+
+.button {
+  background-color: var(--main-color);
+}
+```
+
+同じ変数を何か所でも使えます。テーマカラーを変えたくなったら、`:root` の1行を書き換えるだけで、`var(--main-color)` を使っているすべての場所が一度に変わります。
+
+<Callout type="info">`var(--main-color, red)` のように2つめの値を書くと、変数が未定義のときの予備の値(フォールバック)になります。</Callout>

@@ -1,0 +1,15 @@
+# flex-basis: 幅の基準を決める
+
+flex の子の「スタート時点の幅」は `flex-basis` で決めます。
+
+```css
+.side {
+  flex-basis: 200px;
+}
+```
+
+- 初期値は `auto`(中身や width から自動で決まる)
+- ここで決めた基準から、flex-grow で広がったり、入りきらないときに縮んだりします
+- flex のならびの計算では、width よりも flex-basis の指定が優先されます
+
+<Callout type="info">「サイドメニューは 200px を基準に、メイン記事は flex-grow: 1 で残り全部」のように組み合わせるのが定番です。</Callout>

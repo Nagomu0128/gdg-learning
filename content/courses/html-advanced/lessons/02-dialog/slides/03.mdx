@@ -1,0 +1,20 @@
+# showModalとclose
+
+dialog の開け閉めは、dialog 要素が持つ2つのメソッドで行います。
+
+```js
+const dialog = document.getElementById("confirm");
+
+// モーダルとして開く
+dialog.showModal();
+
+// 閉じる
+dialog.close();
+```
+
+- `showModal()` で開くと dialog が最前面に出て、後ろの画面は操作できなくなります。この状態を「モーダル」と呼びます
+- 開いている間、背景が少し暗くなるのもブラウザが自動でやってくれます
+
+<Callout type="warn">
+  showModal() は dialog 要素だけが持つ特別なメソッドです。div など他のタグでは使えません。
+</Callout>

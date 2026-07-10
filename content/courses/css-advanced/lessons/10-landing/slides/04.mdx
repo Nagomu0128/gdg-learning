@@ -1,0 +1,24 @@
+# 部品2: Grid と @media
+
+特徴カードは 09(Grid 上級)の形で3列に、見出しは 03(メディアクエリ)の形で画面幅に反応させます。
+
+```css
+.features {
+  width: 720px;
+  margin: 24px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .hero-title {
+    font-size: 32px;
+  }
+}
+```
+
+- 幅 720px・列間 24px なので、1列は (720 - 48) ÷ 3 = 224px になります
+- 判定は幅 800px の画面で行われるため、(max-width: 900px) の中の指定が適用された状態で確かめられます
+
+<Callout type="warn">@media のルールは style.css のいちばん最後に書きましょう。同じ強さの指定は「あとに書いたほう」が勝つので、前のほうに書くとふだん用の font-size: 40px に負けてしまいます。</Callout>

@@ -1,0 +1,23 @@
+# extends で引き継ぐ
+
+継承を使うと、あるクラスの機能をまるごと引き継いだ新しいクラスを作れます。
+
+```js
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  introduce() {
+    return "わたしは" + this.name + "です";
+  }
+}
+
+class Dog extends Animal {
+}
+```
+
+- `class Dog extends Animal` と書くと、Dog は Animal を継承します
+- Dog は constructor や introduce を自分で書かなくても、Animal のものをそのまま使えます
+
+<Callout type="info">引き継ぐ元(Animal)を親クラス、引き継ぐ先(Dog)を子クラスと呼びます。</Callout>

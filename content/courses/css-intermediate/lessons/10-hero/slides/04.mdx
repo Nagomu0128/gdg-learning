@@ -1,0 +1,29 @@
+# バッジは absolute、ボタンは transition
+
+学んだ型を2つ組み合わせて、仕上げのパーツを作ります。
+
+```css
+.hero {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+.cta {
+  transition-property: background-color;
+  transition-duration: 0.3s;
+}
+
+.cta:hover {
+  background-color: #0369a1;
+}
+```
+
+- バッジ: 基準(.hero)に `relative`、動かす子(.badge)に `absolute` と `top` / `right`
+- ボタン: ふだん側(.cta)に transition を、変化後の色は `:hover` 側に書きます
+
+<Callout type="info">right を使うと「右端からの距離」で指定できます。右上に置くなら top と right の組み合わせです。</Callout>

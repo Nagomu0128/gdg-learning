@@ -1,0 +1,15 @@
+# repeat() でくり返す
+
+同じ幅の列をいくつもならべるとき、`repeat(回数, 幅)` でまとめて書けます。
+
+```css
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 1fr 1fr 1fr と同じ */
+}
+```
+
+- `1fr` は「あいたスペースの取り分」を表す単位でした。`repeat(3, 1fr)` は、スペースを3等分する列を作ります
+- `repeat(4, 100px)` のように、ふつうの長さでも使えます
+
+<Callout type="info">列が増えるほど repeat() の読みやすさが効いてきます。12列のレイアウトも repeat(12, 1fr) の一言で書けます。</Callout>

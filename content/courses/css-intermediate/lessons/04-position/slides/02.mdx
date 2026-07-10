@@ -1,0 +1,18 @@
+# relative と absolute はセットで使う
+
+要素の重なりは、親子のセットで作るのが定番の型です。
+
+```css
+.photo {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+}
+```
+
+- `position: relative`: 要素は今の場所に残ったまま、「ここが位置の基準」という目印になります
+- `position: absolute`: 要素がふだんの流れから浮き上がり、**いちばん近い position 指定のある祖先**を基準に配置されます
+
+<Callout type="warn">親に relative を書き忘れると、基準がページ全体になって、バッジが思わぬ場所へ飛んでいきます。</Callout>

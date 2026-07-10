@@ -1,0 +1,22 @@
+# クロージャ: 変数を覚え続ける
+
+返された関数は、自分が作られた場所の変数をずっと覚えています。このしくみをクロージャと呼びます。
+
+```js
+function makeCounter() {
+  let count = 0;
+  return function () {
+    count = count + 1;
+    return count;
+  };
+}
+
+const counter = makeCounter();
+console.log(counter());
+console.log(counter());
+```
+
+- makeCounter の実行が終わったあとも、返された関数から count は生き続けます
+- `counter()` を呼ぶたびに count が増え、1、2 と表示されます
+
+<Callout type="info">count に外から直接さわる方法はありません。関数を通してだけ更新できる、安全な入れ物になります。</Callout>

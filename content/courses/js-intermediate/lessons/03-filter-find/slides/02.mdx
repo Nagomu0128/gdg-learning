@@ -1,0 +1,25 @@
+# filter: 条件に合うものだけ集める
+
+`filter` は、条件が `true` になった要素だけを集めた「新しい配列」を返します。
+
+```js
+const numbers = [15, 40, 8, 60];
+
+const big = numbers.filter((n) => n >= 20);
+
+console.log(big); // [40, 60]
+```
+
+オブジェクトの配列でも同じです。プロパティを条件に使えます。
+
+```js
+const people = [
+  { name: "タロウ", age: 25 },
+  { name: "ハナコ", age: 17 },
+];
+
+const result = people.filter((person) => person.age >= 20);
+// [{ name: "タロウ", age: 25 }]
+```
+
+<Callout type="info">1 つも当てはまらないときは、空の配列が返ります。エラーにはなりません。</Callout>

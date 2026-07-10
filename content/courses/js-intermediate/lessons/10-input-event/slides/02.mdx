@@ -1,0 +1,15 @@
+# input イベント
+
+イベントには click 以外にもたくさんの種類があります。`input` イベントは、入力欄の中身が変わるたびに起きます。
+
+```js
+const input = document.getElementById("name-input");
+
+input.addEventListener("input", () => {
+  console.log("入力が変わりました");
+});
+```
+
+書き方は click のときとまったく同じで、1 つ目の引数を `"input"` に変えるだけです。
+
+<Callout type="info">click は「1回押したら1回」ですが、input は「1文字打つたびに1回」起きます。「あいう」と打つと 3 回起きる、と考えましょう。</Callout>
