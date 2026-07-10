@@ -118,12 +118,7 @@ export default function MyPage({ loaderData }: Route.ComponentProps) {
                 className="block rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
                 style={{ borderTopWidth: 3, borderTopColor: COURSE_ACCENT[course.slug] ?? "var(--gdg-blue)" }}
               >
-                <div className="flex items-baseline justify-between gap-2">
-                  <span className="font-semibold text-slate-900">{course.title}</span>
-                  <span className="text-slate-500 text-xs tabular-nums">
-                    {course.passedCount} / {course.lessonCount}
-                  </span>
-                </div>
+                <p className="font-semibold text-slate-900">{course.title}</p>
                 <div className="mt-3">
                   <CourseProgressBar passed={course.passedCount} total={course.lessonCount} />
                 </div>
