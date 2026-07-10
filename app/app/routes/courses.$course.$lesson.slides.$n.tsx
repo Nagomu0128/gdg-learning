@@ -12,6 +12,9 @@ import { loadSlide } from "~/generated/slides.client";
 import { SITE_NAME } from "~/lib/site";
 import type { Route } from "./+types/courses.$course.$lesson.slides.$n";
 
+// 学習画面はフッターを出さない(root.tsx が参照)
+export const handle = { hideFooter: true } as const;
+
 export async function loader({ request, context, params }: Route.LoaderArgs) {
   await requireUser(request, context.cloudflare.env);
   const found = findLessonSlideContext(

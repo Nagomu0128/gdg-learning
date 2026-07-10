@@ -7,6 +7,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useMatches,
   useRouteLoaderData,
 } from "react-router";
 import { getOptionalUser } from "~/features/auth/auth.server";
@@ -25,6 +26,10 @@ export function Layout({ children }: { children: ReactNode }) {
   // ErrorBoundary 描画時は loader データが無いことがある
   const data = useRouteLoaderData<typeof loader>("root");
   const user = data?.user ?? null;
+  // 学習画面(スライド・演習)はフッターを出さない(route の handle で宣言)
+  const hideFooter = useMatches().some(
+    (m) => (m.handle as { hideFooter?: boolean } | undefined)?.hideFooter === true,
+  );
 
   return (
     <html lang="ja">
@@ -56,7 +61,7 @@ export function Layout({ children }: { children: ReactNode }) {
                 <img src="/gdg.svg" alt="" className="h-7 w-7" />
                 <span className="font-bold text-lg text-slate-900 tracking-tight">{SITE_NAME}</span>
               </Link>
-              {/* コース閲覧はログイン必須(ADR #17)のため、ナビはログイン後のみ */}
+              {/* コース閲覧はログイン必須(ADR #17)のため、ナビはログイン後のみ。マイページはユーザーメニュー内 */}
               {user ? (
                 <nav aria-label="メイン" className="flex items-center gap-4 text-slate-600 text-sm">
                   <Link
@@ -65,12 +70,6 @@ export function Layout({ children }: { children: ReactNode }) {
                   >
                     コース一覧
                   </Link>
-                  <Link
-                    to="/me"
-                    className="rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
-                  >
-                    マイページ
-                  </Link>
                 </nav>
               ) : null}
             </div>
@@ -78,20 +77,22 @@ export function Layout({ children }: { children: ReactNode }) {
           </div>
         </header>
         <div className="flex-1">{children}</div>
-        <footer className="border-slate-200 border-t bg-white">
-          <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-6 py-4 text-slate-500 text-sm">
-            <p>© 2026 {SITE_NAME}</p>
-            <nav aria-label="フッター" className="flex items-center gap-4">
-              {/* MVP ではダミーページ不要(SPEC C §3) */}
-              <a href="#top" className="hover:text-slate-700">
-                利用規約
-              </a>
-              <a href="#top" className="hover:text-slate-700">
-                プライバシーポリシー
-              </a>
-            </nav>
-          </div>
-        </footer>
+        {hideFooter ? null : (
+          <footer className="border-slate-200 border-t bg-white">
+            <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-6 py-4 text-slate-500 text-sm">
+              <p>© 2026 {SITE_NAME}</p>
+              <nav aria-label="フッター" className="flex items-center gap-4">
+                {/* MVP ではダミーページ不要(SPEC C §3) */}
+                <a href="#top" className="hover:text-slate-700">
+                  利用規約
+                </a>
+                <a href="#top" className="hover:text-slate-700">
+                  プライバシーポリシー
+                </a>
+              </nav>
+            </div>
+          </footer>
+        )}
         <ScrollRestoration />
         <Scripts />
       </body>

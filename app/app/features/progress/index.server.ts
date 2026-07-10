@@ -402,10 +402,22 @@ export async function getMypage(env: Env, userId: string): Promise<MypageData> {
     for (const lesson of course.lessons) {
       const status = statusBySlug.get(lesson.slug) ?? "not_started";
       if (status === "in_progress" && !firstInProgress) {
-        firstInProgress = { courseSlug: course.slug, lessonSlug: lesson.slug, target: "exercise" };
+        firstInProgress = {
+          courseSlug: course.slug,
+          courseTitle: course.title,
+          lessonSlug: lesson.slug,
+          lessonTitle: lesson.title,
+          target: "exercise",
+        };
       }
       if (status === "not_started" && !firstNotStarted) {
-        firstNotStarted = { courseSlug: course.slug, lessonSlug: lesson.slug, target: "slides" };
+        firstNotStarted = {
+          courseSlug: course.slug,
+          courseTitle: course.title,
+          lessonSlug: lesson.slug,
+          lessonTitle: lesson.title,
+          target: "slides",
+        };
       }
     }
   }

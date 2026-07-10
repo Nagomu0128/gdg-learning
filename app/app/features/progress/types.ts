@@ -63,5 +63,11 @@ export type MypageData = {
   badges: { earned: BadgeView[]; locked: BadgeView[] };
   courses: CourseOverview[];
   solutions: { lessonSlug: string; lessonTitle: string; code: FileMap }[];
-  resume: { courseSlug: string; lessonSlug: string; target: "slides" | "exercise" } | null;
+  resume: {
+    courseSlug: string;
+    courseTitle: string;
+    lessonSlug: string;
+    lessonTitle: string;
+    target: "slides" | "exercise";
+  } | null;
 };

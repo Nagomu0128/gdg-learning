@@ -34,6 +34,9 @@ function findLesson(courseSlug: string, lessonSlug: string) {
   return { lesson, nextLessonSlug: course.lessons[index + 1]?.slug ?? null };
 }
 
+// 学習画面はフッターを出さない(root.tsx が参照)
+export const handle = { hideFooter: true } as const;
+
 export async function loader({ request, params, context }: Route.LoaderArgs) {
   const env = context.cloudflare.env;
   const user = await requireUser(request, env);
