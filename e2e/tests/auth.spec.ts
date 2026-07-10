@@ -8,6 +8,19 @@ test.describe("認証ガード(CONTRACTS §4.3 / §6)", () => {
     await expect(page).toHaveURL("/");
   });
 
+  test("未ログインではコース閲覧(一覧・詳細・スライド)も / へリダイレクトされる(ADR #17)", async ({
+    page,
+  }) => {
+    for (const path of [
+      "/courses",
+      "/courses/html-basics",
+      "/courses/html-basics/html-01-first-page/slides/1",
+    ]) {
+      await page.goto(path);
+      await expect(page, `${path} は未ログインで閲覧不可`).toHaveURL("/");
+    }
+  });
+
   test("POST /api/dev-login は 302 + Set-Cookie を返し、以降 /me が 200 になる", async ({ page }) => {
     const res = await page.request.post("/api/dev-login", { maxRedirects: 0 });
     expect(res.status()).toBe(302);

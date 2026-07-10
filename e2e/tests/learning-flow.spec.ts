@@ -1,3 +1,5 @@
+import { readdirSync } from "node:fs";
+import { join } from "node:path";
 import { expect, test } from "@playwright/test";
 // 教材が SSOT(DesignDoc §1.3)— solution を教材定義から直接読む(手書き複製しない)
 import lesson01 from "../../content/courses/html-basics/lessons/01-first-page/lesson";
@@ -27,14 +29,21 @@ test.describe("学習フロー一気通貫(SPEC K §3-2)", () => {
     await page.waitForURL(new RegExp(`/courses/${COURSE_SLUG}/${LESSON_SLUG}/slides/1$`));
 
     // 4. →キーでスライドを最後まで送る(§10.5 キーボード操作)。
-    // ハイドレーション完了前の keydown は無反応のため、「演習リンクが出るまで押す」リトライ方式にする
-    const exerciseLink = page.getByRole("link", { name: UI_TEXT.exerciseLink }).first();
-    for (let i = 0; i < 25 && !(await exerciseLink.isVisible().catch(() => false)); i++) {
+    // スライド本文はクライアント側 loadSlide で描画される = 見出しの出現がハイドレーション完了の証拠。
+    // その後は 1 枚ごとに URL 遷移を確実に待つ(並列実行でサーバーが遅くても押し流されない)
+    const slideCount = readdirSync(
+      join(import.meta.dirname, `../../content/courses/${COURSE_SLUG}/lessons/01-first-page/slides`),
+    ).filter((f) => f.endsWith(".mdx")).length;
+    const slideRegion = page.getByRole("region", { name: /スライド/ });
+    await expect(slideRegion.getByRole("heading").first()).toBeVisible({ timeout: 30_000 });
+    for (let k = 2; k <= slideCount; k++) {
       await page.keyboard.press("ArrowRight");
-      await page.waitForTimeout(400);
+      await page.waitForURL(new RegExp(`/slides/${k}$`), { timeout: 20_000 });
+      await expect(slideRegion.getByRole("heading").first()).toBeVisible({ timeout: 20_000 });
     }
 
     // 5. 最終スライドの導線から演習へ
+    const exerciseLink = page.getByRole("link", { name: UI_TEXT.exerciseLink }).first();
     await exerciseLink.click();
     await page.waitForURL(new RegExp(`/courses/${COURSE_SLUG}/${LESSON_SLUG}/exercise$`));
 

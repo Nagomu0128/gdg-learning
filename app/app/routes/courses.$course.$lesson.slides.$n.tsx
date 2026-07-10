@@ -1,8 +1,9 @@
 // 解説スライド(紙芝居)ルート(D 所有。DesignDoc §2.1, §2.2 / CONTRACTS §6 / SPEC D §4)。
-// 未ログインでも閲覧可(進捗保存なし — CONTRACTS §6.1)。
+// ログイン必須(ADR #17 — 当初は未ログイン閲覧可だった)。
 import { MDXProvider } from "@mdx-js/react";
 import { type ComponentType, useEffect, useState } from "react";
 import { Link, redirect, useNavigate } from "react-router";
+import { requireUser } from "~/features/auth/auth.server";
 import { type ContentMeta, findLessonSlideContext } from "~/features/slides/content-meta";
 import { slideMdxComponents } from "~/features/slides/mdx-components";
 import contentMetaJson from "~/generated/content-meta.json";
@@ -11,7 +12,8 @@ import { loadSlide } from "~/generated/slides.client";
 import { SITE_NAME } from "~/lib/site";
 import type { Route } from "./+types/courses.$course.$lesson.slides.$n";
 
-export function loader({ params }: Route.LoaderArgs) {
+export async function loader({ request, context, params }: Route.LoaderArgs) {
+  await requireUser(request, context.cloudflare.env);
   const found = findLessonSlideContext(
     contentMetaJson as unknown as ContentMeta,
     params.course,

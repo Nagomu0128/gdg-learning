@@ -31,36 +31,48 @@ export function Layout({ children }: { children: ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <title>{SITE_NAME}</title>
         <Meta />
         <Links />
       </head>
       <body className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
         <header className="border-slate-200 border-b bg-white">
+          {/* Google 4色のアクセントバー(GDG ブランド) */}
+          <div
+            aria-hidden="true"
+            className="h-1 w-full"
+            style={{
+              background:
+                "linear-gradient(90deg, var(--gdg-blue) 0 25%, var(--gdg-red) 25% 50%, var(--gdg-yellow) 50% 75%, var(--gdg-green) 75% 100%)",
+            }}
+          />
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-3">
             <div className="flex items-center gap-6">
               <Link
                 to="/"
-                className="rounded font-bold text-indigo-600 text-lg focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
+                className="flex items-center gap-2.5 rounded focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
               >
-                {SITE_NAME}
+                <img src="/gdg.svg" alt="" className="h-7 w-7" />
+                <span className="font-bold text-lg text-slate-900 tracking-tight">{SITE_NAME}</span>
               </Link>
-              <nav aria-label="メイン" className="flex items-center gap-4 text-slate-600 text-sm">
-                <Link
-                  to="/courses"
-                  className="rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
-                >
-                  コース一覧
-                </Link>
-                {user ? (
+              {/* コース閲覧はログイン必須(ADR #17)のため、ナビはログイン後のみ */}
+              {user ? (
+                <nav aria-label="メイン" className="flex items-center gap-4 text-slate-600 text-sm">
+                  <Link
+                    to="/courses"
+                    className="rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
+                  >
+                    コース一覧
+                  </Link>
                   <Link
                     to="/me"
                     className="rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
                   >
                     マイページ
                   </Link>
-                ) : null}
-              </nav>
+                </nav>
+              ) : null}
             </div>
             <LoginButton user={user} devLoginEnabled={data?.devLoginEnabled ?? false} />
           </div>

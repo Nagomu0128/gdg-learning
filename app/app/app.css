@@ -1,4 +1,11 @@
+/* Noto Sans JP(セルフホスト — 外部オリジンへのリクエストなし・CSP 'self' のまま) */
+@import "@fontsource-variable/noto-sans-jp";
 @import "tailwindcss";
+
+@theme {
+  --font-sans:
+    "Noto Sans JP Variable", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", system-ui, sans-serif;
+}
 
 /* トーン(CONTRACTS §10): 背景 slate-50 / 文字 slate-900 / primary indigo-600 / 成功 emerald-600 / 失敗 rose-600 */
 :root {
@@ -7,4 +14,10 @@
   --cs-color-primary: #4f46e5; /* indigo-600 */
   --cs-color-success: #059669; /* emerald-600 */
   --cs-color-danger: #e11d48; /* rose-600 */
+
+  /* GDG / Google ブランドカラー(LP・アクセント用) */
+  --gdg-blue: #4285f4;
+  --gdg-red: #ea4335;
+  --gdg-yellow: #fbbc04;
+  --gdg-green: #34a853;
 }

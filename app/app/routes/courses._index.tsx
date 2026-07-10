@@ -1,14 +1,14 @@
-// コース一覧。CONTRACTS §6: loader は { user, courses } を返す。
+// コース一覧。CONTRACTS §6: loader は { user, courses } を返す。ログイン必須(ADR #17)。
 import { Link } from "react-router";
-import { getOptionalUser } from "~/features/auth/auth.server";
+import { requireUser } from "~/features/auth/auth.server";
 import { getCoursesOverview } from "~/features/progress/index.server";
 import { CourseProgressBar } from "~/features/progress/progress-bar";
 import type { Route } from "./+types/courses._index";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const env = context.cloudflare.env;
-  const user = await getOptionalUser(request, env);
-  const courses = await getCoursesOverview(env, user?.id ?? null);
+  const user = await requireUser(request, env);
+  const courses = await getCoursesOverview(env, user.id);
   return { user, courses };
 }
 

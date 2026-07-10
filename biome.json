@@ -12,8 +12,12 @@
       "!**/drizzle",
       "!**/playwright-report",
       "!**/test-results",
-      "!**/node_modules"
+      "!**/node_modules",
+      "!**/app/public"
     ]
+  },
+  "css": {
+    "parser": { "tailwindDirectives": true }
   },
   "formatter": {
     "enabled": true,

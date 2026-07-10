@@ -1,16 +1,17 @@
 // コース詳細(レッスン一覧 + 進捗バー)。CONTRACTS §6: loader は { user, course } を返す(404 対応)。
+// ログイン必須(ADR #17)。
 // flatRoutes ではこのルートが courses.$course.$lesson.* の親レイアウトになるため、
 // 子ルート(スライド・演習)がマッチしているときは Outlet だけを描画する。
 import { Link, Outlet, useParams } from "react-router";
-import { getOptionalUser } from "~/features/auth/auth.server";
+import { requireUser } from "~/features/auth/auth.server";
 import { getCourseDetail, type LessonStatus } from "~/features/progress/index.server";
 import { CourseProgressBar } from "~/features/progress/progress-bar";
 import type { Route } from "./+types/courses.$course";
 
 export async function loader({ request, context, params }: Route.LoaderArgs) {
   const env = context.cloudflare.env;
-  const user = await getOptionalUser(request, env);
-  const course = await getCourseDetail(env, user?.id ?? null, params.course);
+  const user = await requireUser(request, env);
+  const course = await getCourseDetail(env, user.id, params.course);
   if (!course) {
     throw new Response("コースが見つかりません", { status: 404 });
   }
