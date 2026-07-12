@@ -198,6 +198,44 @@ describe("stripComments — js", () => {
     expect(out).toContain("keep()");
     expect(out).toBe(src);
   });
+
+  // 再レビュー must-fix: 曖昧な `/`(} ) キーワード直後)を除算に倒すと、続く正規表現の
+  // 文字クラス内 // や /* を外側ループが誤検出して実コードを削除していた。正規表現側に倒して修正。
+  it("} 直後の正規表現(文字クラス内 //)で後続コードが消えない", () => {
+    const src = "function noop() {}\n/[a//z]/.test(x);\nmarkDone();";
+    const out = stripComments(src, "js");
+    expect(out).toContain(".test(x)");
+    expect(out).toContain("markDone()");
+    expect(out).toBe(src);
+  });
+
+  it("} 直後の正規表現(文字クラス内 /*)で未終端ブロックコメント誤検出が起きない", () => {
+    const src = "if (x) {}\n/[/*]/.test(s);\nmarkDone();";
+    const out = stripComments(src, "js");
+    expect(out).toContain("markDone()");
+    expect(out).toBe(src);
+  });
+
+  it("export default 直後の正規表現(文字クラス内 //)を保持する", () => {
+    const src = "export default /[a//z]/;\nmarkDone();";
+    const out = stripComments(src, "js");
+    expect(out).toContain("/[a//z]/");
+    expect(out).toContain("markDone()");
+    expect(out).toBe(src);
+  });
+
+  it(") 直後の正規表現 if(x)/re/.test(y) を保持する", () => {
+    const src = "if (x) /re/.test(y);";
+    expect(stripComments(src, "js")).toBe(src);
+  });
+
+  it("値(数値)の直後の本物のブロックコメントは従来どおり除去する", () => {
+    expect(stripComments("1 / 2; /* c */ x", "js")).toBe("1 / 2;   x");
+  });
+
+  it("値の直後の本物の行コメント(除算を挟む)も除去する", () => {
+    expect(stripComments("const r = a / b; // c", "js")).toBe("const r = a / b;  ");
+  });
 });
 
 describe("stripCommentsForFile", () => {
