@@ -1,0 +1,19 @@
+# parse で検証して値を受け取る
+
+スキーマの `parse` に値を渡すと、形が正しければ「検証済みの値」がそのまま返ります。
+
+```js
+const input = { name: "田中", age: 28 };
+const user = userSchema.parse(input);
+
+user.name; // → "田中"
+user.age;  // → 28
+```
+
+- 形が合っていれば、`parse` は渡した値をそのまま返します
+- 形が違う(例: age が文字列)ときは、`parse` はエラーを投げて処理を止めます
+- 返ってきた `user` は「検証済み」なので、安心して中身を使えます
+
+<Callout type="warn">
+`index.html` では zod をすでに読み込んであります。書くのは `main.js` だけです。
+</Callout>

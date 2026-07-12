@@ -1,0 +1,19 @@
+# 整えた文字列を画面に出す型
+
+`format` の結果は普通の文字列なので、そのまま `textContent` に入れられます。
+
+```js
+const day = dayjs("2026-01-01");
+const jp = day.format("YYYY年MM月DD日");
+
+document.getElementById("jp").textContent = jp;
+console.log(jp);
+```
+
+- `dayjs(...)` で日付を作り、`format` で文字列にしてから表示します
+- 変数にいったん入れておくと、画面表示にもログ出力にも使い回せます
+- `index.html` では dayjs をすでに読み込んであります。書くのは `main.js` だけです
+
+<Callout type="warn">
+日付は現在時刻ではなく固定の "2026-01-01" を使います。`dayjs()` のように引数なしで呼ぶと日によって結果が変わり、判定できません。
+</Callout>

@@ -1,0 +1,16 @@
+# やってみよう
+
+`main.js` の 2 か所を書き換えましょう。
+
+```js
+const due = base.add(7, "day");
+const span = goal.diff(base, "day");
+```
+
+- `due` は base の 7 日後(2026-01-08)
+- `span` は base から goal までの日数(59)
+- 「▶ 実行」でプレビューに 2026-01-08 と 59 が表示されれば成功です
+
+<Callout type="info">
+基準日はどちらも固定です。`add` と `diff` は現在時刻を使わないので、いつ実行しても同じ結果になります。
+</Callout>

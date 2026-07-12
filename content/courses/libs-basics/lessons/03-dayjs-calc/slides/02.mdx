@@ -1,0 +1,17 @@
+# add で日付をずらす
+
+`add` は「もとの日付をずらした新しい日付」を返します。もとの日付は変わりません。
+
+```js
+const base = dayjs("2026-01-01");
+const due = base.add(7, "day"); // 7 日後
+due.format("YYYY-MM-DD");        // → "2026-01-08"
+```
+
+- 第 1 引数はいくつ進めるか、第 2 引数は単位です
+- 単位は `"day"`(日)、`"month"`(月)、`"year"`(年)などが使えます
+- `add` は新しい日付を返すので、変数に受け取って使います
+
+<Callout type="info">
+逆に過去へずらしたいときは `subtract(3, "day")` のように subtract を使います。
+</Callout>

@@ -1,0 +1,17 @@
+# diff で差を求める
+
+`diff` は「自分」から「相手」までの差を数値で返します。
+
+```js
+const base = dayjs("2026-01-01");
+const goal = dayjs("2026-03-01");
+goal.diff(base, "day"); // → 59
+```
+
+- `goal.diff(base, "day")` は「base から goal まで何日か」を表します
+- 単位を `"day"` にすると日数、`"month"` にすると月数になります
+- 返るのは日付ではなく数値なので、そのまま計算や表示に使えます
+
+<Callout type="warn">
+呼ぶ向きで符号が変わります。`goal.diff(base)` は正、`base.diff(goal)` は負です。「新しい方.diff(古い方)」で正の日数になると覚えましょう。
+</Callout>

@@ -1,0 +1,15 @@
+# やってみよう
+
+`main.js` の `user` を書き換えましょう。
+
+```js
+const user = userSchema.parse(input);
+```
+
+- `input` を `userSchema` で検証し、その結果を `user` に受け取ります
+- `input` は正しい形なので、`parse` は値をそのまま返します
+- 「▶ 実行」で名前 田中 と年齢 28 が表示されれば成功です
+
+<Callout type="info">
+次のレッスンでは、エラーを投げずに「正しいかどうか」を安全に受け取る `safeParse` を学びます。
+</Callout>
