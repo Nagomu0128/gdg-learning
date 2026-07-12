@@ -1,0 +1,19 @@
+# 値を安全に取り出す
+
+`keyof` と `T[K]` を組み合わせると、どんなオブジェクトにも使える取り出し関数が書けます。
+
+```ts
+function getProp<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+```
+
+- `K extends keyof T` は「`key` は必ず `obj` に存在するキー」という制約です
+- 戻り値の型 `T[K]` は「そのキーの値の型」になります
+
+```ts
+getProp({ name: "ペン", price: 100 }, "name");  // "ペン"(string)
+getProp({ name: "ペン", price: 100 }, "price"); // 100(number)
+```
+
+キーごとに、返る値の型まで正しく決まります。

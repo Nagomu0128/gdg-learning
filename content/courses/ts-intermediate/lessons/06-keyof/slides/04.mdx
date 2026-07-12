@@ -1,0 +1,15 @@
+# やってみよう
+
+`getProp` に `keyof` とインデックスアクセス型を付けます。
+
+```ts
+function getProp<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+```
+
+手順
+
+1. 型変数を `<T, K extends keyof T>` にする
+2. 引数を `obj: T`、`key: K` にする
+3. 戻り値を `: T[K]` にして `return obj[key];` を書く

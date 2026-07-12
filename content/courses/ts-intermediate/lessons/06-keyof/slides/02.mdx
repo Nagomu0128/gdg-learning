@@ -1,0 +1,17 @@
+# keyof でキー名を型にする
+
+`keyof` は、ある型のプロパティ名を「型」として取り出します。
+
+```ts
+interface Product {
+  name: string;
+  price: number;
+}
+
+type ProductKey = keyof Product; // "name" | "price"
+```
+
+- `keyof Product` は `"name" | "price"` というリテラルのユニオン型になります
+- つまり「`Product` に存在するキーのどれか」を表します
+
+インデックスアクセス型 `Product["name"]` は、そのキーの値の型(ここでは `string`)です。
