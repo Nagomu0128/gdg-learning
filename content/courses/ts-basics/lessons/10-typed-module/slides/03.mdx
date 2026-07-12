@@ -1,0 +1,12 @@
+# priceOf の設計
+
+`priceOf` は「商品」と「税モード」を受け取り、値段を計算して返します。
+
+- 引数: `item: Item`、`mode: Tax`
+- 戻り値: `: number`
+- `mode` が `"in"` なら、`item.price` を 1.1 倍して小数を切り捨てる
+- `mode` が `"out"` なら、`item.price` をそのまま返す
+
+<Callout type="info">
+`Math.floor(110.5)` は `110` になります。1.1 倍で出る小数を整数に直すのに使います。
+</Callout>

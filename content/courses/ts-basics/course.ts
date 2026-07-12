@@ -18,5 +18,6 @@ export default defineCourse({
     "ts-07-interface",
     "ts-08-optional-readonly",
     "ts-09-generics",
+    "ts-10-typed-module",
   ],
 });

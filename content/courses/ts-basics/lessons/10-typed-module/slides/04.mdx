@@ -1,0 +1,13 @@
+# やってみよう
+
+`script.ts` に、3 つの部品を自分で書いて完成させます。
+
+手順
+
+1. `interface Item`(`name: string`、`price: number`)を定義する
+2. `type Tax = "in" | "out";` を定義する
+3. `priceOf` に型(`item: Item, mode: Tax`、戻り値 `: number`)をつけ、税込み・税抜きを計算する
+
+<Callout type="warn">
+`priceOf({ name: "ペン", price: 100 }, "in")` が `110`、`"out"` が `100` になれば成功です。
+</Callout>

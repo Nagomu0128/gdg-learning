@@ -1,0 +1,18 @@
+# 使う 3 つの道具
+
+このレッスンで組み合わせるのは、次の 3 つです。
+
+```ts
+// interface: オブジェクトの形
+interface Item {
+  name: string;
+  price: number;
+}
+
+// 型エイリアス + ユニオン型: 決まった値のどれか
+type Tax = "in" | "out";
+```
+
+- `Item` は「商品」の形(name と price)
+- `Tax` は「税込み(in)か 税抜き(out)か」
+- この 2 つを、関数の引数の型に使います
