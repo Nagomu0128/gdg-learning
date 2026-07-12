@@ -1,0 +1,15 @@
+# rebase の書き方
+
+「載せ替えたいブランチ(feature)にいる状態」で、載せ替え先(main)を指定します。
+
+```
+git switch feature
+git rebase main
+```
+
+- 「feature を main の上に載せ替える」という意味です
+- このレッスンではすでに feature にいるので、`git rebase main` の 1 行で済みます
+
+<Callout type="warn">
+リベースはコミットを作り直します。**すでに他の人と共有した(push した)ブランチ**には、原則リベースを使いません。まだ自分だけの feature ブランチを整えるのに向いています。
+</Callout>
