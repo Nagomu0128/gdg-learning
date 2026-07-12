@@ -1,0 +1,13 @@
+# 進め方のヒント
+
+いきなり全部書かず、順番に組み立てると迷いません。
+
+1. `const [count, setCount] = React.useState(0);` で state を用意する
+2. `<p id="count">{count}</p>` で今の数を表示する
+3. `+1` ボタンを作り、`onClick={() => setCount(count + 1)}` を付ける
+4. 同じ形で `-1`(`count - 1`)と `リセット`(`0`)のボタンを足す
+5. 全体を `<div>` で1つにまとめる
+
+<Callout type="info">
+1段ずつ「実行」で確かめながら進めると、どこで詰まったか分かりやすいです。
+</Callout>

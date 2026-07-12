@@ -1,0 +1,17 @@
+# value と onChange をつなぐ
+
+入力欄の `value` に state を渡し、`onChange` で state を更新します。この2つをつなぐのがコツです。
+
+```jsx
+const [name, setName] = React.useState("");
+
+<input value={name} onChange={(e) => setName(e.target.value)} />
+```
+
+- `value={name}` で、入力欄の中身を常に state に合わせます
+- `onChange` は文字が入力されるたびに呼ばれます
+- `e.target.value` に「今入力欄に入っている文字」が入っています。それを `setName` に渡します
+
+<Callout type="info">
+`e` はイベントの情報です。`e.target` がそのイベントが起きた要素(この input)を指します。
+</Callout>
