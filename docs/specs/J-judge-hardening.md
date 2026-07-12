@@ -117,7 +117,7 @@ per-check 1500ms は worker 外殻 2000ms の 75% を占める。worker 系で 1
 - **initial-must-fail 全量**: 101/101 レッスンが「solution 合格 + initial 不合格」を満たす(既存教材に丸ごと穴の空いたレッスンは無かった)
 - **検出力の実証(カナリア)**: html-01-first-page の checks を doctype keep-check(initial に既にマッチ)だけへ一時的に弱体化 → `FAIL 1/101`「initial のままで合格してしまいます(check に穴があります)」を正しく検出。solution 側の破壊(パターン誤り)も `solution が不合格: <display.message>` で検出
 - **ステージ1リント**: 実教材に対し警告 26 件 → 修正後 24 件。内訳: コメント内のみマッチ 1 件(js-11-dom — 修正済)、source-only レッスン 1 件(html-adv-05-meta — 修正済)、残り 24 件は keep-check / 足場コード検証として**全件監査のうえ意図的と確認**(js-02 の const 足場、js-05 の for 骨格、js-int-07 のお手本 createElement など — いずれも実課題は console / fn / element check が別途検証している)
-- **判定バンドル**: 平均 17.0KB / 最大 24.2KB(50KB 警告閾値に対し十分な余裕。strip-comments / text-diagnosis の追加込み)
+- **判定バンドル**: 平均 18.9KB / 最大 26.1KB(cap-05-todo-app)。50KB 警告閾値に対し十分な余裕(最大でも約 52%)。strip-comments の正規表現リテラル追跡・HTML 属性値/raw-text 対応の強化と text-diagnosis の指摘文字選定の追加込み(強化前は 17.0/24.2KB)。zod/acorn は従来どおり判定バンドルに含まれない(judge-bundle.ts の metafile 検証が担保)
 
 ## 6. 変更ファイル一覧
 
