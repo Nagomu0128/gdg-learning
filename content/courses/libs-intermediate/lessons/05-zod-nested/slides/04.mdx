@@ -1,0 +1,15 @@
+# やってみよう
+
+`customer` と `items` の中身のスキーマを埋めましょう。
+
+```js
+customer: z.object({ name: z.string(), vip: z.boolean() }),
+items: z.array(z.object({ name: z.string(), qty: z.number() })),
+```
+
+- 埋めると、顧客名は 田中、点数は 2、qty の合計は 3 と表示されます
+- 空のままだと検証時に中身が取り除かれ、正しい値になりません
+
+<Callout type="info">
+`order.items.reduce(...)` は配列の qty を合計する定番の書き方です。スキーマを埋めれば、そのまま動きます。
+</Callout>

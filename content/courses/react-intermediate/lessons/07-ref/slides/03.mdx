@@ -1,0 +1,20 @@
+# current を使って操作する
+
+つないだ要素は `inputRef.current` で取り出して操作します。
+
+```jsx
+const focusInput = () => {
+  inputRef.current.focus();
+};
+
+<button id="focus-btn" onClick={focusInput}>
+  入力欄にフォーカス
+</button>
+```
+
+- ボタンを押すと `focusInput` が動きます
+- `inputRef.current.focus()` で入力欄にカーソルが移ります
+
+<Callout type="warn">
+ref は「state で表せない DOM 操作」のための道具です。表示を変えたいときは、まず state を使えないか考えましょう。
+</Callout>

@@ -1,0 +1,17 @@
+# 計算されたキーで更新する
+
+`[e.target.name]` と書くと、`name` 属性の値をキーにして更新できます。これを「計算されたキー」と呼びます。
+
+```jsx
+const handleChange = (e) => {
+  setForm({ ...form, [e.target.name]: e.target.value });
+};
+```
+
+- `...form` で今の入力内容をすべてコピーします
+- `[e.target.name]` は、変更された入力の `name`(`"name"` か `"email"`)になります
+- そのキーだけを `e.target.value` で上書きします
+
+<Callout type="info">
+オブジェクトの `{ [変数]: 値 }` は、変数の中身をキーとして使う書き方です。1つの関数でどの項目にも対応できます。
+</Callout>

@@ -1,0 +1,17 @@
+# useEffect の形
+
+`React.useEffect` は「動かしたい処理」と「いつ動かすか(依存配列)」の2つを渡します。
+
+```jsx
+function App() {
+  const [message, setMessage] = React.useState("");
+  React.useEffect(() => {
+    setMessage("読み込み完了");
+  }, []);
+  return <p id="status">{message}</p>;
+}
+```
+
+- 第1引数の関数が副作用の中身です
+- 第2引数の `[]`(空の依存配列)は「マウント時に一度だけ動かす」という合図です
+- ここでは最初に一度だけ `setMessage` を呼び、`message` を書き換えています

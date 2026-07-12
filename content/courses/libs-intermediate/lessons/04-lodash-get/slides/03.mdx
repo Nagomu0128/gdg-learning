@@ -1,0 +1,21 @@
+# _.cloneDeep で壊さず複製
+
+オブジェクトをそのまま代入しても、複製にはなりません。中身は同じものを指しています。
+
+```js
+const copy = data;      // 同じ中身を共有(浅いコピー)
+copy.user.profile.name = "変更後";
+data.user.profile.name; // "変更後" ← 元まで変わってしまう
+```
+
+`_.cloneDeep` は、深いところまで丸ごと複製します。
+
+```js
+const copy = _.cloneDeep(data); // 独立した複製
+copy.user.profile.name = "変更後";
+data.user.profile.name;         // "山田" ← 元は無傷
+```
+
+<Callout type="warn">
+「コピーを編集したら元データまで変わった」は、浅いコピーによる定番のバグです。元を守りたいときは `_.cloneDeep` を使いましょう。
+</Callout>

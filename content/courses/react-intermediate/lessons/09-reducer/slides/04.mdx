@@ -1,0 +1,12 @@
+# やってみよう
+
+`reducer` を完成させ、`+1` と `-1` で `#count` が増減するようにしましょう。
+
+- `action.type === "increment"` のとき `state + 1` を返します
+- `action.type === "decrement"` のとき `state - 1` を返します
+- それ以外は `return state;` のままにします
+- `+1` で増え、`-1` で減れば成功です
+
+<Callout type="info">
+`dispatch` と `<button>` の配線はすでに用意してあります。あなたは「更新ルール」だけに集中しましょう。
+</Callout>

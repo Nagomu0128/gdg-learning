@@ -1,0 +1,24 @@
+# 進め方のヒント
+
+科目別の合計は、レッスン 7 と同じ「groupBy + mapValues + sumBy」で作れます。
+
+```js
+const bySubject = _.mapValues(
+  _.groupBy(logs, "subject"),
+  (items) => _.sumBy(items, "minutes"),
+);
+```
+
+最長科目は、`bySubject` を並べ替えて先頭を取ります。
+
+```js
+const topSubject = _.orderBy(
+  Object.entries(bySubject).map(([subject, minutes]) => ({ subject, minutes })),
+  ["minutes"],
+  ["desc"],
+)[0].subject;
+```
+
+<Callout type="info">
+`Object.entries` はオブジェクトを `[キー, 値]` の配列にします。並べ替えできる形にしてから `_.orderBy` に渡すのがコツです。
+</Callout>

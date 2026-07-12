@@ -1,0 +1,17 @@
+# オブジェクトを state にする
+
+`React.useState` の初期値にオブジェクトを渡すだけです。
+
+```jsx
+const [user, setUser] = React.useState({ name: "タロウ", age: 20 });
+```
+
+表示するときは、キーを取り出して使います。
+
+```jsx
+<p id="name">{user.name}</p>
+<p id="age">{user.age}</p>
+```
+
+- `user.name` や `user.age` のように、ドットでキーの値にアクセスします
+- 1つの state で複数の値をまとめて管理できます

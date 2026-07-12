@@ -1,0 +1,14 @@
+# 入力を name で見分ける
+
+各入力に `name` 属性を付け、値は state オブジェクトの同じキーにつなぎます。
+
+```jsx
+const [form, setForm] = React.useState({ name: "", email: "" });
+
+<input id="name" name="name" value={form.name} onChange={handleChange} />
+<input id="email" name="email" value={form.email} onChange={handleChange} />
+```
+
+- `name="name"` の入力は `form.name` に、`name="email"` の入力は `form.email` につながります
+- どちらの入力でも同じ `handleChange` を呼びます
+- `handleChange` の中で「どの入力か」を `name` 属性で見分けます

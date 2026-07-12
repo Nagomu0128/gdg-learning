@@ -1,0 +1,21 @@
+# safeParse で結果を受け取る
+
+`safeParse` はエラーを投げず、`{ success: true / false }` の結果を返します。
+
+```js
+const result = priceSchema.safeParse(100);
+result.success; // true(正の数なので合格)
+
+priceSchema.safeParse(-5).success; // false(正の数ではない)
+```
+
+- `result.success` を見て、`"OK"` か `"エラー"` を返せます
+- `.parse` はエラーを投げますが、`safeParse` は投げないので分岐に向いています
+
+```js
+return result.success ? "OK" : "エラー";
+```
+
+<Callout type="info">
+入力チェックのように「エラーで止めたくない」場面では、`parse` ではなく `safeParse` を使うのが定番です。
+</Callout>

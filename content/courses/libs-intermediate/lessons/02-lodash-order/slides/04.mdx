@@ -1,0 +1,15 @@
+# やってみよう
+
+`byAge` と `byRank` を、並べ替えて名前だけにした配列に書き換えましょう。
+
+```js
+const byAge = _.sortBy(members, "age").map((m) => m.name);
+const byRank = _.orderBy(members, ["score", "age"], ["desc", "asc"]).map((m) => m.name);
+```
+
+- `byAge` は `["田中","佐藤","鈴木"]`、`byRank` は `["佐藤","鈴木","田中"]` になります
+- 鈴木と佐藤は同じ score なので、age が若い佐藤が先に来ます
+
+<Callout type="info">
+`.map` で名前だけにしているのは、表示を分かりやすくするためです。並べ替え自体は `_.sortBy` / `_.orderBy` が担います。
+</Callout>

@@ -1,0 +1,23 @@
+# 親が「中身」を渡す
+
+親は、子に渡す props として関数そのものを書きます。
+
+```jsx
+function App() {
+  const [points, setPoints] = React.useState(0);
+  return (
+    <div>
+      <p id="points">{points}</p>
+      <AddButton onAdd={() => setPoints(points + 1)} />
+    </div>
+  );
+}
+```
+
+- `onAdd={() => setPoints(points + 1)}` で、実際の処理を子に渡します
+- 子ボタンが押されるとこの関数が動き、親の `points` が増えます
+- こうして「子で起きたこと」が「親の state 更新」につながります
+
+<Callout type="info">
+関数を渡す props は `onClick` にならって `onAdd`・`onDelete` のように `on` で始める慣習があります。
+</Callout>

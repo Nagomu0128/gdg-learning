@@ -1,0 +1,16 @@
+# やってみよう
+
+`main.js` の 3 つの変数を、トークンで整形した文字列に書き換えましょう。
+
+```js
+const week = day.format("dddd");
+const short = day.format("M月D日");
+const full = day.format("YYYY年MM月DD日 dddd");
+```
+
+- `week` は曜日(Thursday)、`short` は 1月1日、`full` は年月日と曜日をまとめた形にします
+- 「▶ 実行」で 3 つの表示が出て、コンソールにも同じ文字列が出れば成功です
+
+<Callout type="info">
+慣れてきたら `YYYY.MM.DD` や `M/D(dddd)` など、他の組み合わせも試してみましょう(判定は上の 3 つで行います)。
+</Callout>

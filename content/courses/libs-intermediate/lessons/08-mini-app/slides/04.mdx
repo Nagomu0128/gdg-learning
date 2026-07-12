@@ -1,0 +1,11 @@
+# やってみよう
+
+`period` / `total` / `bySubject` / `topSubject` の 4 つを完成させましょう。
+
+- `total` は `_.sumBy(logs, "minutes")` で 180 になります
+- `bySubject` は科目別の合計、`topSubject` はその中で最長の科目です
+- 見出し `period` は `month.format("YYYY年MM月")` です
+
+<Callout type="info">
+最長科目の求め方は `_.orderBy` 以外にもあります。まず自分の考えで書いてみて、詰まったらヒントを開きましょう(判定は結果の値で行います)。
+</Callout>

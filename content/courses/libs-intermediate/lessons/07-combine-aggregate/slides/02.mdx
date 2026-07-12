@@ -1,0 +1,21 @@
+# _.groupBy でグループ分け
+
+`_.groupBy` は、指定したキーが同じ要素どうしをまとめた「グループの表」を作ります。
+
+```js
+const sales = [
+  { category: "食品", amount: 300 },
+  { category: "日用品", amount: 150 },
+  { category: "食品", amount: 200 },
+  { category: "食品", amount: 100 },
+];
+_.groupBy(sales, "category");
+// → { 食品: [ {..300}, {..200}, {..100} ], 日用品: [ {..150} ] }
+```
+
+- キー(`"category"`)が同じ要素が、1 つの配列にまとまります
+- 結果は「カテゴリ名 -> その要素の配列」というオブジェクトです
+
+<Callout type="info">
+`_.groupBy` は「仕分け」までを担当します。合計などの計算は、このあと各グループに対して行います。
+</Callout>

@@ -1,0 +1,11 @@
+# やってみよう
+
+`handleChange` を完成させ、名前・メールのどちらの入力も1つの state で管理しましょう。
+
+- `setForm({ ...form, [e.target.name]: e.target.value })` と書きます
+- 名前を打つと `form.name`、メールを打つと `form.email` が更新されます
+- `#preview` に両方の入力が反映されれば成功です
+
+<Callout type="info">
+入力欄が3つ4つに増えても、この1つの `handleChange` のまま対応できます。まとめて管理する強みです。
+</Callout>

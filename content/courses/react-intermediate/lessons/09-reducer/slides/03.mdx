@@ -1,0 +1,19 @@
+# dispatch でアクションを送る
+
+`React.useReducer(reducer, 初期値)` は「今の状態」と「dispatch 関数」を返します。
+
+```jsx
+const [count, dispatch] = React.useReducer(reducer, 0);
+
+<button id="inc" onClick={() => dispatch({ type: "increment" })}>
+  +1
+</button>
+```
+
+- `count` が今の状態、`dispatch` がアクションを送る関数です
+- `dispatch({ type: "increment" })` を呼ぶと、reducer が `"increment"` の分岐で次の状態を計算します
+- 更新のやり方はすべて reducer に集約されます
+
+<Callout type="info">
+`useState` は「値を直接セット」、`useReducer` は「アクションを送って reducer に任せる」。更新が複雑になるほど reducer が活きます。
+</Callout>

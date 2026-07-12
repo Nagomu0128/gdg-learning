@@ -1,0 +1,21 @@
+# object の中に object
+
+`z.object` の値として、別の `z.object` を書けます。データの入れ子と同じ形にします。
+
+```js
+const orderSchema = z.object({
+  id: z.string(),
+  customer: z.object({
+    name: z.string(),
+    vip: z.boolean(),
+  }),
+});
+```
+
+- `customer` の値がまた `z.object` になっています
+- `z.boolean()` は `true` / `false` を表すスキーマです
+- 検証を通ると `order.customer.name` のように深い値にアクセスできます
+
+<Callout type="info">
+スキーマの入れ子の深さは、検証したいデータの入れ子の深さと同じにします。
+</Callout>

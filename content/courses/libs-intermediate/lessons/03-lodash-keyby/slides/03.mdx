@@ -1,0 +1,20 @@
+# _.mapValues で値だけ変換
+
+`_.mapValues` は、オブジェクトの「キーはそのまま・値だけ」を作り替えます。
+
+```js
+const byId = {
+  a1: { name: "りんご", price: 120 },
+  b2: { name: "みかん", price: 80 },
+};
+_.mapValues(byId, "price");
+// → { a1: 120, b2: 80 }
+```
+
+- 第 2 引数に取り出したいキー名を渡すと、各値をその値に置きかえます
+- 関数を渡すこともできます: `_.mapValues(byId, (v) => v.price)`
+- キー(a1 / b2)は変わらず、値だけが変換されます
+
+<Callout type="info">
+`_.keyBy` で表にし、`_.mapValues` で必要な値だけ抜き出す、という組み合わせがよく使われます。
+</Callout>

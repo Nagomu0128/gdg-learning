@@ -1,0 +1,18 @@
+# 求めるもの
+
+4 つの値を作ります。データは `logs` 配列で用意してあります。
+
+- `period`: 対象月の見出し(2026年02月)
+- `total`: 全ログの合計時間(180)
+- `bySubject`: 科目別の合計(`{"数学":90,"英語":30,"国語":60}`)
+- `topSubject`: 最も長く学習した科目(数学)
+
+```js
+// それぞれ dayjs / lodash で作る
+const period = month.format("YYYY年MM月");
+const total = _.sumBy(logs, "minutes");
+```
+
+<Callout type="info">
+判定はこの 4 つの値で行います。表示先の id(period / total / bySubject / top)は変えずに、値を作る部分を書きましょう。
+</Callout>

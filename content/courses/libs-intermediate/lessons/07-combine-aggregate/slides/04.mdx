@@ -1,0 +1,15 @@
+# やってみよう
+
+`title` を dayjs で、`byCategory` を lodash で作りましょう。
+
+```js
+const title = reportMonth.format("YYYY年MM月");
+const byCategory = _.mapValues(_.groupBy(sales, "category"), (items) => _.sumBy(items, "amount"));
+```
+
+- `title` は 2026年01月、`byCategory` は `{"食品":600,"日用品":150}` になります
+- 食品は 300 + 200 + 100 で 600、日用品は 150 です
+
+<Callout type="info">
+日付は現在時刻ではなく固定の `dayjs("2026-01-31")` を使います。集計と表示で、2 つのライブラリが自然に組み合わさります。
+</Callout>

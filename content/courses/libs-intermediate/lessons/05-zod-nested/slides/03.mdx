@@ -1,0 +1,20 @@
+# array の中に object
+
+`z.array` の中に `z.object` を入れると、「オブジェクトの配列」を検証できます。
+
+```js
+const itemsSchema = z.array(
+  z.object({
+    name: z.string(),
+    qty: z.number(),
+  }),
+);
+// [{ name: "ペン", qty: 2 }, { name: "ノート", qty: 1 }] を検証できる
+```
+
+- `z.array(要素のスキーマ)` で、配列の「1 要素の形」を指定します
+- 検証を通れば `order.items.length` や `order.items[0].qty` が安心して使えます
+
+<Callout type="info">
+配列は要素数が変わっても大丈夫です。「1 要素がどんな形か」だけを決めておけば、何個でも検証できます。
+</Callout>

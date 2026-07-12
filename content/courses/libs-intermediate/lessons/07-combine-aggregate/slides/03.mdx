@@ -1,0 +1,17 @@
+# グループごとに合計する
+
+`_.mapValues` で各グループ(配列)を、`_.sumBy` の合計値に置きかえます。
+
+```js
+const grouped = _.groupBy(sales, "category");
+const byCategory = _.mapValues(grouped, (items) => _.sumBy(items, "amount"));
+// → { 食品: 600, 日用品: 150 }
+```
+
+- `_.mapValues` は各値(グループの配列)に関数を適用します
+- 関数の中で `_.sumBy(items, "amount")` を呼び、その配列の amount を合計します
+- 見出しは dayjs で: `reportMonth.format("YYYY年MM月")`
+
+<Callout type="info">
+「groupBy でまとめ、mapValues + sumBy で集計」は、集計処理の黄金パターンです。
+</Callout>
