@@ -1,0 +1,21 @@
+# どの行を消すか渡す
+
+各行のボタンに「その行の値」を渡しておくと、押されたときにどれを消すか分かります。
+
+```jsx
+{items.map((item, i) => (
+  <li key={i}>
+    <span>{item}</span>
+    <button className="remove" onClick={() => remove(item)}>
+      削除
+    </button>
+  </li>
+))}
+```
+
+- `onClick={() => remove(item)}` で、その行の `item` を `remove` に渡します
+- `remove` はその値を `target` として受け取り、`filter` で除きます
+
+<Callout type="warn">
+今回は分かりやすさのため値そのもので判定していますが、同じ名前が2つあると両方消えます。実務では重複しない id で見分けます(次以降のレッスンで扱います)。
+</Callout>
