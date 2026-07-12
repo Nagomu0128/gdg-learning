@@ -29,7 +29,7 @@ export default defineLesson({
 `,
     },
     "setup.sh": {
-      initial: `# ここから始めよう: main に「動くコード」が1つコミット済みの状態
+      initial: `# 開始状態: main に1コミット(動くコード)
 git init
 echo "console.log('todo app');" > app.js
 git add app.js
@@ -121,19 +121,9 @@ git add app.js
 git commit -m "feat: あいさつを追加"`,
   ],
   solution: {
-    "commands.sh": `# GitHub Flow: main はさわらず、feature ブランチを切って作業します。
-# (# の行はコメント。消さなくてOK。各手順の下にコマンドを1つずつ書こう)
-
-# 1. main から feature ブランチを作って切り替える(作り方はスライド参照)
-git switch -c feature/greeting
-
-# 2. app.js を小さく書きかえる(例: echo で1行、上書き)
+    "commands.sh": `git switch -c feature/greeting
 echo "console.log('hello team');" > app.js
-
-# 3. 変更をステージする
 git add app.js
-
-# 4. コミットして記録する
 git commit -m "feat: あいさつを追加"
 `,
   },
