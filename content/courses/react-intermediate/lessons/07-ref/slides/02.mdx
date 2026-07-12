@@ -1,0 +1,14 @@
+# ref を作ってつなぐ
+
+`React.useRef` で参照を作り、要素の `ref` 属性でつなぎます。
+
+```jsx
+function App() {
+  const inputRef = React.useRef(null);
+  return <input id="target" ref={inputRef} />;
+}
+```
+
+- `React.useRef(null)` は `{ current: null }` という「箱」を作ります
+- `ref={inputRef}` でつなぐと、描画後に `inputRef.current` がその DOM 要素になります
+- `inputRef.current` から `.focus()` などの DOM 操作が呼べます

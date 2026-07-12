@@ -1,0 +1,12 @@
+# やってみよう
+
+`React.useRef` で参照を作り、ボタンを押すと入力欄にフォーカスが移るようにしましょう。
+
+- `const inputRef = React.useRef(null);` で参照を作ります
+- `<input id="target" ref={inputRef} />` でつなぎます
+- `focusInput` の中で `inputRef.current.focus();` を呼びます
+- ボタンを押すと入力欄にカーソルが移れば成功です
+
+<Callout type="info">
+`useRef` で作った箱は、値が変わっても再描画を起こしません。DOM をつかむのにちょうどよい道具です。
+</Callout>
