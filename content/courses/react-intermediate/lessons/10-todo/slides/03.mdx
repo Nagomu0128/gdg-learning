@@ -1,0 +1,21 @@
+# 状態を設計して「追加」する
+
+state は2つ。入力中の文字と、タスクの配列です。各タスクはオブジェクトにします。
+
+```jsx
+const [text, setText] = React.useState("");
+const [todos, setTodos] = React.useState([]);
+const nextId = React.useRef(1);
+
+const add = () => {
+  if (text === "") {
+    return;
+  }
+  setTodos([...todos, { id: nextId.current++, title: text, done: false }]);
+  setText("");
+};
+```
+
+- 各タスクは `{ id, title, done }` の形にすると、切替や削除がラクになります
+- `id` は `useRef` のカウンターで一意にします(削除・切替の目印)
+- 追加後は `setText("")` で入力欄を空に戻します
