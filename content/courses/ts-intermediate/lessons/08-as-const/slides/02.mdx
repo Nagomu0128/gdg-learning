@@ -1,0 +1,18 @@
+# as const で固定する
+
+ふつうの配列は、要素の型が広く `string` と推論されます。
+
+```ts
+const a = ["low", "mid", "high"];
+// a の型は string[](要素は string)
+```
+
+`as const` を付けると、要素は「その文字列そのもの」の型に固定され、読み取り専用になります。
+
+```ts
+const LEVELS = ["low", "mid", "high"] as const;
+// LEVELS の型は readonly ["low", "mid", "high"]
+```
+
+- 要素の型は `"low"` / `"mid"` / `"high"` という正確なリテラル型
+- 書き換え不可(読み取り専用)になります

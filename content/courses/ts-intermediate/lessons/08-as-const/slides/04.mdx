@@ -1,0 +1,21 @@
+# やってみよう
+
+`as const` で固定し、そこから型を取り出します。
+
+```ts
+const LEVELS = ["low", "mid", "high"] as const;
+
+type Level = (typeof LEVELS)[number];
+
+function levelScore(level: Level): number {
+  if (level === "low") return 1;
+  if (level === "mid") return 2;
+  return 3;
+}
+```
+
+手順
+
+1. `LEVELS` のうしろに `as const` を付ける
+2. `type Level = (typeof LEVELS)[number];` で要素の型を取り出す
+3. `levelScore` の引数を `level: Level` にして分岐を書く

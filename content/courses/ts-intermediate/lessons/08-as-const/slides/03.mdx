@@ -1,0 +1,24 @@
+# 要素の型を取り出す
+
+固定した配列から、`(typeof 配列)[number]` で「要素の型」を取り出せます。
+
+```ts
+const LEVELS = ["low", "mid", "high"] as const;
+
+type Level = (typeof LEVELS)[number];
+// Level は "low" | "mid" | "high"
+```
+
+- `typeof LEVELS` は「`LEVELS` の型」
+- そのうしろの `[number]` は「配列の要素の型」を意味します
+- 結果として、`Level` はリテラルのユニオン型になります
+
+この `Level` を引数の型に使えば、決まった値だけを受け取る関数が書けます。
+
+```ts
+function levelScore(level: Level): number {
+  if (level === "low") return 1;
+  if (level === "mid") return 2;
+  return 3;
+}
+```

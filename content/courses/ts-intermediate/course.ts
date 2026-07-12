@@ -16,5 +16,6 @@ export default defineCourse({
     "ts-int-05-utility-types",
     "ts-int-06-keyof",
     "ts-int-07-type-guards",
+    "ts-int-08-as-const",
   ],
 });
