@@ -44,7 +44,7 @@ function hasDom(): boolean {
   return typeof document !== "undefined";
 }
 
-function buildCustomContext(): CustomCheckContext {
+function buildCustomContext(cfg: JudgeConfig): CustomCheckContext {
   return {
     document,
     window: window as Window & typeof globalThis,
@@ -59,6 +59,8 @@ function buildCustomContext(): CustomCheckContext {
     },
     wait: (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms)),
     console: capturedConsole(),
+    // 提出ファイルの原文(hidden 含む)。git-sim 等、原文を要する custom check 用(L-runtime)
+    files: cfg.files,
   };
 }
 
@@ -130,7 +132,7 @@ async function evaluateCheck(check: Check, cfg: JudgeConfig): Promise<boolean> {
     }
     case "custom": {
       if (!hasDom()) return false;
-      const result = await check.run(buildCustomContext());
+      const result = await check.run(buildCustomContext(cfg));
       return Boolean(result);
     }
   }
@@ -230,10 +232,39 @@ function errorVerdict(): Verdict {
   };
 }
 
-/** DOM 判定は document の load(画像等)を上限付きで待ってから評価する */
-function whenDocumentSettled(): Promise<void> {
-  if (!hasDom() || document.readyState === "complete") return Promise.resolve();
+/** rAF が回らない環境(スロットリング等)でも先へ進むための上限 */
+const RENDER_SETTLE_CAP_MS = 150;
+/** フレーム確定後にスケジューラ(React 18 の初期 render 等)を流しきる微小待ち */
+const RENDER_SETTLE_TAIL_MS = 30;
+
+/**
+ * load 後の描画確定待ち(L-runtime): React 18 の初期 render は非同期スケジュール
+ * されるため、ダブル requestAnimationFrame + 微小待ちを挟んでから check を評価する。
+ * 判定 iframe は非表示位置にあり rAF が throttle され得るため、上限付きで必ず進む。
+ */
+function afterRenderSettled(): Promise<void> {
   return new Promise((resolve) => {
+    let done = false;
+    const finish = (): void => {
+      if (done) return;
+      done = true;
+      clearTimeout(cap);
+      setTimeout(resolve, RENDER_SETTLE_TAIL_MS);
+    };
+    const cap = setTimeout(finish, RENDER_SETTLE_CAP_MS);
+    try {
+      requestAnimationFrame(() => requestAnimationFrame(finish));
+    } catch {
+      // rAF が無い環境は cap 側で進む
+    }
+  });
+}
+
+/** DOM 判定は document の load(画像等)を上限付きで待ち、描画確定後に評価する */
+function whenDocumentSettled(): Promise<void> {
+  if (!hasDom()) return Promise.resolve();
+  if (document.readyState === "complete") return afterRenderSettled();
+  return new Promise<void>((resolve) => {
     const timer = setTimeout(resolve, LOAD_WAIT_CAP_MS);
     window.addEventListener(
       "load",
@@ -243,7 +274,7 @@ function whenDocumentSettled(): Promise<void> {
       },
       { once: true },
     );
-  });
+  }).then(afterRenderSettled);
 }
 
 /**

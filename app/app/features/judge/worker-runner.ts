@@ -1,16 +1,18 @@
-// Web Worker ランナー(§6.4)。純粋 JS レッスンの判定と、プレビュー / 見本用のコンソール捕捉。
+// Web Worker ランナー(§6.4)。純粋 JS / TS レッスンの判定と、プレビュー / 見本用のコンソール捕捉。
 
 import type { ConsoleEntry, FileMap, SyntaxDiag, Verdict } from "@codesteps/lesson-kit";
 import { instrumentLoops, TIMEOUT_MESSAGE_JP, WORKER_TIMEOUT_MS } from "@codesteps/lesson-kit";
 import { buildConsoleHook } from "./composer";
 import { isConsoleEntry, isVerdict, messageRecord } from "./guards";
 import { JUDGE_RESULT_KIND, PREVIEW_CONSOLE_KIND, WORKER_CONSOLE_DONE_KIND } from "./protocol";
+import { ensureTranspiler, scriptLangOf, type Transpiler } from "./transpile";
 
 export type WorkerSource = { source: string; syntaxError: SyntaxDiag | null };
 
 /**
  * Worker で実行する 1 本のスクリプトを組み立てる(CONTRACTS §3.3)。
  * 構成: ①コンソールフック ②ループ保護済ユーザー JS ③判定バンドル ④startWorker。
+ * TS / TSX / JSX は「sucrase 変換 → instrumentLoops」の順で実行形にする(L-runtime)。
  * ユーザー JS は try/catch で包む: 最上位で throw(ループ保護超過など)しても
  * 判定バンドル以降が実行される。function 宣言は sloppy mode の Annex B 昇格で
  * globalThis に残るため fn check(globalThis[name] 参照)と両立する。
@@ -21,11 +23,25 @@ export function buildWorkerSource(opts: {
   judgeBundle: string | null;
   nonce: string;
   relayConsole: boolean;
+  /** files に .ts/.tsx/.jsx を含むとき必須(ensureTranspiler で取得) */
+  transpile?: Transpiler;
 }): WorkerSource {
   const parts: string[] = [];
   for (const name of Object.keys(opts.files)) {
-    if (!name.toLowerCase().endsWith(".js")) continue;
-    const result = instrumentLoops(opts.files[name] ?? "");
+    const lang = scriptLangOf(name);
+    if (lang === null) continue;
+    let source = opts.files[name] ?? "";
+    if (lang !== "js") {
+      if (opts.transpile === undefined) {
+        throw new Error(
+          `buildWorkerSource: ${name} の変換には transpile が必要です(ensureTranspiler を先に await する)`,
+        );
+      }
+      const transpiled = opts.transpile(source, lang);
+      if (!transpiled.ok) return { source: "", syntaxError: transpiled.error };
+      source = transpiled.code;
+    }
+    const result = instrumentLoops(source);
     if (!result.ok) return { source: "", syntaxError: result.error };
     parts.push(result.code);
   }
@@ -87,12 +103,13 @@ export function runWorkerJudge(source: string, nonce: string): Promise<Verdict> 
   });
 }
 
-/** worker 系レッスンのプレビュー / 見本用: JS を実行しコンソールを捕捉する(CONTRACTS §3.2) */
-export function runWorkerConsole(
+/** worker 系レッスンのプレビュー / 見本用: JS / TS を実行しコンソールを捕捉する(CONTRACTS §3.2) */
+export async function runWorkerConsole(
   files: FileMap,
 ): Promise<{ console: ConsoleEntry[]; timedOut: boolean; syntaxError: SyntaxDiag | null }> {
   const nonce = crypto.randomUUID();
-  const built = buildWorkerSource({ files, judgeBundle: null, nonce, relayConsole: true });
+  const transpile = (await ensureTranspiler(files)) ?? undefined;
+  const built = buildWorkerSource({ files, judgeBundle: null, nonce, relayConsole: true, transpile });
   if (built.syntaxError !== null) {
     return Promise.resolve({ console: [], timedOut: false, syntaxError: built.syntaxError });
   }

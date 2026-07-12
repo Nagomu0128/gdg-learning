@@ -11,6 +11,7 @@ import {
 import type { LoadedLesson } from "~/generated/lessons.client";
 import { composeDocument } from "./composer";
 import { runDomJudge } from "./dom-runner";
+import { ensureTranspiler } from "./transpile";
 import { buildWorkerSource, runWorkerConsole as runWorkerConsoleImpl, runWorkerJudge } from "./worker-runner";
 
 export { JUDGE_RESULT_KIND, PREVIEW_CONSOLE_KIND } from "./protocol";
@@ -61,12 +62,15 @@ export async function judge(lesson: LoadedLesson, files: FileMap): Promise<Verdi
   const nonce = crypto.randomUUID();
   const markupError = findMarkupError(files);
   if (markupError) return markupError;
+  // TS/TSX/JSX を含むレッスンのみ sucrase チャンクをロードする(L-runtime)
+  const transpile = (await ensureTranspiler(files)) ?? undefined;
   if (lesson.meta.runner === "worker") {
     const built = buildWorkerSource({
       files,
       judgeBundle: lesson.judgeBundle,
       nonce,
       relayConsole: true,
+      transpile,
     });
     if (built.syntaxError !== null) return syntaxErrorVerdict(built.syntaxError);
     return runWorkerJudge(built.source, nonce);
@@ -78,6 +82,7 @@ export async function judge(lesson: LoadedLesson, files: FileMap): Promise<Verdi
     nonce,
     mode: "judge",
     judgeBundle: lesson.judgeBundle,
+    transpile,
   });
   if (composed.jsSyntaxError !== null) return syntaxErrorVerdict(composed.jsSyntaxError);
   return runDomJudge(composed.html, nonce);
@@ -86,19 +91,23 @@ export async function judge(lesson: LoadedLesson, files: FileMap): Promise<Verdi
 /**
  * ライブプレビュー用の srcdoc 合成(§6.1、§6.2)。
  * jsSyntaxError 時は JS を注入しない(HTML / CSS は描画される)。
+ * TS/TSX/JSX レッスンで sucrase を遅延ロードするため async(L-runtime。
+ * `.ts/.tsx/.jsx` を含まないレッスンではチャンクを読み込まず即 resolve する)。
  */
-export function composePreview(input: { files: FileMap; lessonSlug: string; origin: string }): {
+export async function composePreview(input: { files: FileMap; lessonSlug: string; origin: string }): Promise<{
   html: string;
   nonce: string;
   jsSyntaxError: SyntaxDiag | null;
-} {
+}> {
   const nonce = crypto.randomUUID();
+  const transpile = (await ensureTranspiler(input.files)) ?? undefined;
   const { html, jsSyntaxError } = composeDocument({
     files: input.files,
     lessonSlug: input.lessonSlug,
     origin: input.origin,
     nonce,
     mode: "preview",
+    transpile,
   });
   return { html, nonce, jsSyntaxError };
 }

@@ -32,14 +32,27 @@ function compose(files: FileMap, mode: "preview" | "judge" = "preview", judgeBun
   });
 }
 
+/**
+ * 実行されるインライン script の中身(コンソールフックと __FILES__ データ注入を除く)。
+ * preview モードは __FILES__ に「元ソースの JSON(不活性データ)」を含むため、
+ * 「JS を注入しない」性質はこの実行対象スクリプトに対して検証する。
+ */
+function userScriptBodies(html: string): string[] {
+  return [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)]
+    .map((m) => m[1] ?? "")
+    .filter((body) => !body.includes("__CONSOLE__") && !body.trimStart().startsWith("globalThis.__FILES__"));
+}
+
 describe("composeDocument", () => {
   it("link/script を files の中身でインライン化する", () => {
     const { html, jsSyntaxError } = compose(domFiles);
     expect(jsSyntaxError).toBeNull();
     expect(html).toContain("h1 { color: red; }");
     expect(html).toContain('console.log("hi");');
-    expect(html).not.toContain("<link");
-    expect(html).not.toContain("src=");
+    // 実タグとしての <link> / src 参照は残らない(__FILES__ 内の JSON は < を < に
+    // エスケープ済みの不活性データなので、実タグの正規表現にはかからない)
+    expect(html).not.toMatch(/<link\b/i);
+    expect(html).not.toMatch(/<(script|img|source)\b[^>]*\bsrc=/i);
   });
 
   it("注入順序は CSP → <base> → コンソールフック(CONTRACTS §3.3)", () => {
@@ -97,7 +110,8 @@ describe("composeDocument", () => {
     expect(jsSyntaxError).not.toBeNull();
     expect(jsSyntaxError?.message).toContain("文法エラー");
     expect(html).toContain("h1 { color: red; }");
-    expect(html).not.toContain("const x = ;");
+    // 実行対象のスクリプトとしては注入されない(__FILES__ の不活性データは対象外)
+    expect(userScriptBodies(html).join("\n")).not.toContain("const x");
   });
 
   it("全角記号による構文エラーは全角診断メッセージになる(§5.4)", () => {

@@ -16,6 +16,10 @@ function languageFor(fileName: string): Extension {
   if (fileName.endsWith(".html") || fileName.endsWith(".htm")) return html();
   if (fileName.endsWith(".css")) return css();
   if (fileName.endsWith(".js") || fileName.endsWith(".mjs")) return javascript();
+  if (fileName.endsWith(".tsx")) return javascript({ typescript: true, jsx: true });
+  if (fileName.endsWith(".ts")) return javascript({ typescript: true });
+  if (fileName.endsWith(".jsx")) return javascript({ jsx: true });
+  // .sh / .txt / .md はプレーンのまま
   return [];
 }
 

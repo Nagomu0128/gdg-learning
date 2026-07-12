@@ -68,7 +68,11 @@ export default function ExerciseScreen(props: ExerciseScreenProps) {
         .map(([name, file]) => ({ name, editable: file.editable })),
     [lessonFiles],
   );
-  const hasJs = useMemo(() => Object.keys(lessonFiles).some((name) => name.endsWith(".js")), [lessonFiles]);
+  // 実行スクリプト(.js/.ts/.tsx/.jsx)は「▶ 実行」での明示再実行が必要(§2.3)
+  const hasJs = useMemo(
+    () => Object.keys(lessonFiles).some((name) => /\.(js|ts|tsx|jsx)$/.test(name)),
+    [lessonFiles],
+  );
   const showRun = hasJs || !isDom;
   // ファイル数 >= 3 なら md 以上でタブの代わりに左サイドのツリーペインを表示(CURRICULUM-2)。
   // md 未満は常にタブ(タブ UI はレスポンシブ用に常時レンダリングし CSS で切替)。
@@ -112,9 +116,10 @@ export default function ExerciseScreen(props: ExerciseScreenProps) {
   const [running, setRunning] = useState(false);
 
   const composeSafely = useCallback(
-    (target: FileMap): PreviewState => {
+    async (target: FileMap): Promise<PreviewState> => {
       try {
-        const { html, nonce, jsSyntaxError } = composePreview({
+        // composePreview は TS/TSX/JSX レッスンで sucrase を遅延ロードするため async(L-runtime)
+        const { html, nonce, jsSyntaxError } = await composePreview({
           files: target,
           lessonSlug,
           origin: window.location.origin,
@@ -131,17 +136,25 @@ export default function ExerciseScreen(props: ExerciseScreenProps) {
   useEffect(() => {
     if (!isDom) return;
     const changed = lastChangedFileRef.current;
-    // JS の編集ではプレビューを更新しない(明示実行のみ — §2.3)
-    if (changed?.endsWith(".js")) return;
+    // JS 系(実行スクリプト)の編集ではプレビューを更新しない(明示実行のみ — §2.3)
+    if (changed !== null && /\.(js|ts|tsx|jsx)$/.test(changed)) return;
     const delay = changed === null ? 0 : 300;
-    const timer = setTimeout(() => setResultPreview(composeSafely(files)), delay);
-    return () => clearTimeout(timer);
+    let cancelled = false;
+    const timer = setTimeout(() => {
+      void composeSafely(files).then((preview) => {
+        if (!cancelled) setResultPreview(preview);
+      });
+    }, delay);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, [files, isDom, composeSafely]);
 
   const handleRun = useCallback(async () => {
     if (isDom) {
       lastChangedFileRef.current = null;
-      setResultPreview(composeSafely(files));
+      setResultPreview(await composeSafely(files));
       setRunId((id) => id + 1); // JS を再実行するため iframe を再マウント
       return;
     }
@@ -173,7 +186,9 @@ export default function ExerciseScreen(props: ExerciseScreenProps) {
   useEffect(() => {
     if (previewTab !== "sample") return;
     if (isDom) {
-      if (samplePreview === null) setSamplePreview(composeSafely(solutionFiles));
+      if (samplePreview === null) {
+        void composeSafely(solutionFiles).then(setSamplePreview);
+      }
       return;
     }
     if (sampleWorkerRequestedRef.current) return;

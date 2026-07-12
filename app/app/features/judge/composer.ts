@@ -1,9 +1,13 @@
 // srcdoc 合成器(DesignDoc §6.1、SPEC B §1)。app のメインスレッドでのみ実行される
 // (instrumentLoops = acorn を使うため、判定バンドルには入れない)。
+// TS / TSX / JSX は「sucrase 変換 → instrumentLoops → インライン化」の順(L-runtime):
+// acorn は TS を読めないため、必ず変換が先。エディタ・source check には元ソースを渡す
+// (変換後コードはサンドボックス実行にのみ使う)。
 
 import type { FileMap, SyntaxDiag } from "@codesteps/lesson-kit";
 import { instrumentLoops, LOOP_LIMIT_MESSAGE_JP, LOOP_PROTECT_ERROR_MESSAGE } from "@codesteps/lesson-kit";
 import { PREVIEW_CONSOLE_KIND } from "./protocol";
+import { scriptLangOf, type Transpiler } from "./transpile";
 
 export type ComposeMode = "preview" | "judge";
 
@@ -11,12 +15,14 @@ export type ComposeInput = {
   /** hidden 含む実行対象の全ファイル(呼び出し側で initial / 編集値をマージ済み) */
   files: FileMap;
   lessonSlug: string;
-  /** window.location.origin(CSP img-src と <base> に使用) */
+  /** window.location.origin(CSP img-src / script-src と <base> に使用) */
   origin: string;
   nonce: string;
   mode: ComposeMode;
   /** mode === "judge" のとき必須 */
   judgeBundle?: string;
+  /** files に .ts/.tsx/.jsx を含むとき必須(ensureTranspiler / loadTranspiler で取得) */
+  transpile?: Transpiler;
 };
 
 export type ComposeOutput = { html: string; jsSyntaxError: SyntaxDiag | null };
@@ -115,8 +121,10 @@ export function buildConsoleHook(opts: { nonce: string; relay: boolean; scope: "
 }
 
 function buildCspMeta(origin: string): string {
-  // §6.5: 外部ネットワークを遮断 [決定性]。画像は data: と自オリジン(lesson-assets)のみ
-  const csp = `default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: ${origin}`;
+  // §6.5: 外部ネットワークを遮断 [決定性]。画像は data: と自オリジン(lesson-assets)のみ。
+  // script-src の ${origin} は自オリジン配信の vendor スクリプト(/vendor/*.js — L-runtime)用で、
+  // 外部オリジンは引き続き遮断される(決定性維持)
+  const csp = `default-src 'none'; script-src 'unsafe-inline' ${origin}; style-src 'unsafe-inline'; img-src data: ${origin}`;
   return `<meta http-equiv="Content-Security-Policy" content="${csp}">`;
 }
 
@@ -151,12 +159,29 @@ export function composeDocument(input: ComposeInput): ComposeOutput {
   const htmlName = Object.keys(files).find((n) => n.toLowerCase().endsWith(".html"));
   const base = htmlName !== undefined ? (files[htmlName] ?? "") : "";
 
-  // パス1: 全 .js ファイルへループ保護を適用(§6.2: プレビューにも必ず適用)
+  // パス1: 全スクリプトファイル(.js/.ts/.tsx/.jsx)を実行形へ。
+  // 順序は「sucrase 変換 → instrumentLoops」(acorn は TS を読めない)。
+  // ループ保護はプレビューにも必ず適用(§6.2)
   const jsResults = new Map<string, string>();
   let jsSyntaxError: SyntaxDiag | null = null;
   for (const name of Object.keys(files)) {
-    if (!name.toLowerCase().endsWith(".js")) continue;
-    const result = instrumentLoops(files[name] ?? "");
+    const lang = scriptLangOf(name);
+    if (lang === null) continue;
+    let source = files[name] ?? "";
+    if (lang !== "js") {
+      if (input.transpile === undefined) {
+        throw new Error(
+          `composeDocument: ${name} の変換には transpile が必要です(ensureTranspiler を先に await する)`,
+        );
+      }
+      const transpiled = input.transpile(source, lang);
+      if (!transpiled.ok) {
+        if (jsSyntaxError === null) jsSyntaxError = transpiled.error;
+        continue;
+      }
+      source = transpiled.code;
+    }
+    const result = instrumentLoops(source);
     if (result.ok) {
       jsResults.set(name, result.code);
     } else if (jsSyntaxError === null) {
@@ -219,6 +244,12 @@ export function composeDocument(input: ComposeInput): ComposeOutput {
     buildCspMeta(input.origin) +
     `<base href="${input.origin}/lesson-assets/${input.lessonSlug}/">` +
     `<script>\n${buildConsoleHook({ nonce: input.nonce, relay: mode === "preview", scope: "page" })}\n</script>`;
+  if (mode === "preview") {
+    // プレビュー用の files 注入(L-runtime): hidden の再生スクリプト(git レッスンの
+    // preview.js 等)が提出ファイルの原文を読めるようにする。判定時の files は
+    // __JUDGE__.start({ files }) 経由で渡る(custom check は ctx.files を使う)
+    header += `<script>\nglobalThis.__FILES__ = ${escapeJsonForScript(files)};\n</script>`;
+  }
   if (mode === "judge" && input.judgeBundle !== undefined) {
     header +=
       `<script>\n${escapeInlineScript(input.judgeBundle)}\n</script>` +
