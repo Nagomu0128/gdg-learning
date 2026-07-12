@@ -1,0 +1,19 @@
+# 2つの結果を並べて表示する
+
+それぞれの結果を変数に受け取り、画面とコンソールに出します。
+
+```js
+const deadline = deadlineDate.format("YYYY年MM月DD日");
+const total = _.sumBy(tasks, "points");
+
+document.getElementById("deadline").textContent = deadline;
+document.getElementById("points").textContent = String(total);
+```
+
+- `deadline` は文字列、`total` は数値です
+- 数値を `textContent` に入れるときは `String(total)` で文字列にします
+- 表示部分とログ出力の行はすでに書いてあります
+
+<Callout type="warn">
+締め切りは固定の `dayjs("2026-04-01")` を使います。現在時刻(`dayjs()`)にすると、実行するたびに結果が変わってしまいます。
+</Callout>

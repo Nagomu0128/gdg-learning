@@ -1,0 +1,23 @@
+# 渡す側と受け取る側
+
+データを渡すときは、タグに属性のように書きます。受け取る側は `props` で読みます。
+
+```jsx
+// 渡す側: name="タロウ" を Card に渡す
+function App() {
+  return <Card name="タロウ" />;
+}
+
+// 受け取る側: props.name で読む
+function Card(props) {
+  return <h2>ようこそ、{props.name}さん!</h2>;
+}
+```
+
+- 渡すときは `name="タロウ"` のように「名前=値」で書きます
+- 受け取る関数は `props` という引数を1つ受け取ります
+- 渡した `name` は `props.name` として取り出せます
+
+<Callout type="info">
+`props` は「properties(性質)」の略です。名前は props でなくても動きますが、慣習として props を使います。
+</Callout>

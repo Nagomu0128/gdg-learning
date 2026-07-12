@@ -1,0 +1,16 @@
+# やってみよう
+
+`main.js` の 2 か所を書き換えましょう。
+
+```js
+const chunked = _.chunk(numbers, 2);
+const unique = _.uniq(scores);
+```
+
+- `chunked` は 2 個ずつに分けた `[[1,2],[3,4],[5]]`
+- `unique` は重複を除いた `[80,90,100]`
+- 「▶ 実行」でプレビューとコンソールに、この 2 つが表示されれば成功です
+
+<Callout type="warn">
+lodash の関数はすべて `_.` から始めます。`chunk(...)` のように `_.` を付け忘れると「chunk is not defined」になります。
+</Callout>

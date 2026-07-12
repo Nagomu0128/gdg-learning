@@ -1,0 +1,18 @@
+# safeParse は結果を返す
+
+`parse` は形が違うとエラーを投げて処理を止めます。`safeParse` はエラーを投げず、結果オブジェクトを返します。
+
+```js
+const nameSchema = z.string().min(1);
+
+nameSchema.safeParse("たろう"); // → { success: true, data: "たろう" }
+nameSchema.safeParse("");       // → { success: false, error: ... }
+```
+
+- `min(1)` は「1 文字以上」という条件です。空文字はこの条件を満たしません
+- 返ってきた結果の `success` が `true` なら合格、`false` なら不合格です
+- エラーで止まらないので、不正な入力も落ち着いて処理できます
+
+<Callout type="info">
+`z.string().min(1)` のように、型のうしろに条件をつなげて細かいルールを表せます。
+</Callout>

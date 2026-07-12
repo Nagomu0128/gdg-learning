@@ -1,0 +1,16 @@
+# 「今いるブランチ」という考え方
+
+Git にはいつも「今いるブランチ」が 1 つあります。コミットは、その今いるブランチに積まれます。
+
+- `git switch feature` … feature に移動する。以降のコミットは feature に積まれる
+- `git switch main` … main に戻る。作業ツリーも main の内容に戻る
+
+```
+main   ●───●         ← switch main でここに戻る
+        \
+feature  ●───●       ← switch feature でここに来る
+```
+
+<Callout type="warn">
+移動する前に、変更を commit しておきましょう。コミットしていない変更があると、Git は「まだ記録していない作業が消えるかも」と考えて、移動を止めることがあります。
+</Callout>

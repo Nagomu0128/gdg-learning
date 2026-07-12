@@ -1,0 +1,19 @@
+# state を画面のあちこちで使う
+
+state になった入力値は、入力欄以外の場所でも使えます。
+
+```jsx
+const [name, setName] = React.useState("");
+
+<div>
+  <input value={name} onChange={(e) => setName(e.target.value)} />
+  <p>こんにちは、{name}さん</p>
+</div>
+```
+
+- 入力欄に打った文字が `name` に入り、下の `<p>` にもすぐ反映されます
+- 1つの state を複数の場所で使えば、いつも同じ値で表示がそろいます
+
+<Callout type="warn">
+`value` を付けたら `onChange` も必ず付けます。`onChange` がないと入力しても文字が変わらず、打ち込めない入力欄になります。
+</Callout>

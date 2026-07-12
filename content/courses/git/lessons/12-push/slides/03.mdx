@@ -1,0 +1,17 @@
+# -u を付ける意味
+
+初めてそのブランチを送るときは、`-u` を付けます。
+
+```
+git push -u origin feature
+```
+
+- `origin` … 送り先のリモート
+- `feature` … 送るブランチ
+- `-u` … ローカルの feature と origin/feature を「追跡関係」で結ぶ
+
+一度 `-u` で結んでおくと、次からは `git push` と打つだけで同じ場所へ送れます。
+
+<Callout type="info">
+2 回目以降は `git push` だけで OK。`-u`(--set-upstream の短い形)は、その「近道」を作る最初の一手です。
+</Callout>

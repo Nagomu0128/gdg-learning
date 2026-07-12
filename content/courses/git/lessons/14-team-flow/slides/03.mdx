@@ -1,0 +1,16 @@
+# 取り込む先に「戻る」
+
+つまずきやすいのが 3 と 4 の順番です。
+
+```
+git switch main     ← まず取り込む先(main)に戻る
+git merge feature   ← そこで feature を取り込む
+```
+
+- `git merge feature` は「**今いるブランチ**に feature を取り込む」コマンド
+- だから、取り込みたい main に戻ってから実行します
+- feature にいたまま merge すると、取り込む向きが逆になってしまいます
+
+<Callout type="warn">
+「どこにいるか」を常に意識しましょう。迷ったら `git branch` の `*` や `git status` の 1 行目で現在地を確認します。
+</Callout>

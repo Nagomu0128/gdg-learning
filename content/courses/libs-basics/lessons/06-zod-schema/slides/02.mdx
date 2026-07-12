@@ -1,0 +1,18 @@
+# z.object でスキーマを定義する
+
+zod はグローバル変数 `z` から使います。`z.object` に「各項目の型」を書いて、データの形を定義します。
+
+```js
+const userSchema = z.object({
+  name: z.string(),
+  age: z.number(),
+});
+```
+
+- `z.string()` は文字列、`z.number()` は数値を表します
+- 「name は文字列、age は数値」という約束を、そのままコードで書けます
+- この `userSchema` が、あとで検証に使う「ものさし」になります
+
+<Callout type="info">
+スキーマ(schema)は「データのあるべき形」の設計図です。一度作れば、何度でも検証に使い回せます。
+</Callout>

@@ -1,0 +1,19 @@
+# やってみよう
+
+`commands.sh` に、マージのコマンドを 1 行書きます。
+
+```
+git merge feature
+```
+
+うまくいくと、ターミナルに
+
+```
+Fast-forward(早送りマージ)
+```
+
+と表示されます。`git log --oneline` を足すと、feature のコミットが main の履歴に加わっているのが分かります。
+
+<Callout type="info">
+取り込みが終わったら、役目を終えた feature ブランチは `git branch -d feature` で消せます(このレッスンでは必須ではありません)。
+</Callout>

@@ -1,0 +1,15 @@
+# やってみよう
+
+`commands.sh` に、マージのコマンドを 1 行書きます。
+
+```
+git merge feature
+```
+
+うまくいくと、マージコミットが作られます。`git log --graph` を足すと、2 本の線が 1 つに合流した形が見えます。
+
+`git log --oneline` の一番上には、`Merge branch 'feature'` のようなマージコミットが並びます。
+
+<Callout type="info">
+早送り(前レッスン)と 3 方向マージ(今回)は、どちらも同じ `git merge` です。「取り込み先が進んでいたかどうか」で、Git が自動的に方式を選びます。
+</Callout>

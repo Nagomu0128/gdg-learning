@@ -1,0 +1,23 @@
+# コマンドで一巡する
+
+feature ブランチを作ってから、マージして片付けるまでを、コマンドで書くとこうなります。
+
+```
+git switch -c feature/login
+echo "- ログイン機能" >> README.md
+git add README.md
+git commit -m "feat: ログイン機能を追加"
+git switch main
+git merge feature/login
+git branch -d feature/login
+```
+
+1. `git switch -c feature/login` — feature ブランチを作って移動
+2. 変更して `git add` → `git commit`(メッセージは Conventional Commits)
+3. `git switch main` — main に戻る
+4. `git merge feature/login` — feature を main に取り込む
+5. `git branch -d feature/login` — 取り込み済みのブランチを片付ける
+
+<Callout type="warn">
+`>>` は追記です(`>` だと上書き)。マージは必ず main に切り替えてから行います。片付けの `-d` は「取り込み済みなら消す」の意味なので、マージ後に実行します。
+</Callout>

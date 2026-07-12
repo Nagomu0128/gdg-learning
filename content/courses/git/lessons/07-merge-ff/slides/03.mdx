@@ -1,0 +1,17 @@
+# マージの書き方
+
+マージは「**取り込みたい側**のブランチに移動してから」実行します。
+
+```
+git switch main
+git merge feature
+```
+
+- まず取り込み先(ここでは main)にいることを確認します
+- `git merge feature` で、feature の変更を今いる main に取り込みます
+
+このレッスンでは、すでに main にいる状態から始まります。だから 1 行だけで大丈夫です。
+
+<Callout type="warn">
+「どっちに、どっちを取り込むか」を間違えないように。`git merge feature` は「今いるブランチに feature を取り込む」という意味です。
+</Callout>

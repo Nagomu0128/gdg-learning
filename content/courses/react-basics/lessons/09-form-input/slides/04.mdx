@@ -1,0 +1,21 @@
+# やってみよう
+
+入力欄には `value={name}` がすでに付いています。あとは `onChange` で state を更新します。
+
+```jsx
+// いまの状態(入力しても反映されない)
+<input id="name-input" value={name} onChange={(e) => {}} />
+
+// 完成の形
+<input id="name-input" value={name} onChange={(e) => setName(e.target.value)} />
+```
+
+手順
+
+1. `onChange={(e) => {}}` を `onChange={(e) => setName(e.target.value)}` に書き換える
+2. 「実行」で入力欄に名前を打ち、下のあいさつが変わるか確認する
+3. 「できた!」を押して判定する
+
+<Callout type="info">
+入力した文字が「こんにちは、〜さん」にそのまま出れば成功です。value と onChange がつながっています。
+</Callout>

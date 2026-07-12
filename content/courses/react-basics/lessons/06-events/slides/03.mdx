@@ -1,0 +1,22 @@
+# state を更新して画面を変える
+
+`useState` が返す更新関数(`setCount`)に新しい値を渡すと、state が変わり、画面も作り直されます。
+
+```jsx
+function Counter() {
+  const [count, setCount] = React.useState(0);
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      +1
+    </button>
+  );
+}
+```
+
+- `setCount(count + 1)` は「今の値より1大きい数」を新しい state にします
+- 更新すると React が自動でコンポーネントを呼び直し、新しい `count` で画面を作ります
+- `count = count + 1` のように直接書き換えても画面は変わりません。必ず `setCount` を使います
+
+<Callout type="info">
+「値を変える」と「画面を作り直す」を、`setCount` が一度に引き受けてくれます。
+</Callout>

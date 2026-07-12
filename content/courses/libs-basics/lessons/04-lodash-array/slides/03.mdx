@@ -1,0 +1,20 @@
+# _.uniq で重複を除く・配列を表示する
+
+`_.uniq` は配列から重複した値を取り除き、最初の 1 つだけ残します。
+
+```js
+_.uniq([80, 80, 90, 100, 100, 100]);
+// → [80, 90, 100]
+```
+
+配列をそのまま `textContent` に入れると `80,90,100` のようにカンマ区切りになり、配列の形(かっこ)が分かりにくくなります。`JSON.stringify` で `[80,90,100]` の形にしてから表示します。
+
+```js
+const unique = _.uniq(scores);
+document.getElementById("uniq").textContent = JSON.stringify(unique);
+// → "[80,90,100]"
+```
+
+<Callout type="info">
+`JSON.stringify` は配列やオブジェクトを「そのままの形の文字列」にする標準の関数です。中身を確認したいときに便利です。
+</Callout>

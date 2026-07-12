@@ -1,0 +1,21 @@
+# やってみよう
+
+`app.jsx` のボタンには、何もしない `onClick={() => {}}` が付いています。ここを書き換えます。
+
+```jsx
+// いまの状態(押しても何も起きない)
+<button id="plus" onClick={() => {}}>+1</button>
+
+// 完成の形
+<button id="plus" onClick={() => setCount(count + 1)}>+1</button>
+```
+
+手順
+
+1. `onClick={() => {}}` を `onClick={() => setCount(count + 1)}` に書き換える
+2. 「実行」でプレビューのボタンを押し、数が増えるか確認する
+3. 「できた!」を押して判定する
+
+<Callout type="info">
+押すたびに `0` → `1` → `2` と増えれば成功です。数を覚えているのは state のおかげです。
+</Callout>

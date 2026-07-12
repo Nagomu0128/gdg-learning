@@ -1,0 +1,17 @@
+# 解決して「続ける」
+
+```
+git rebase main
+echo "設定 = 本番と機能を両立" > config.txt
+git add config.txt
+git rebase --continue
+```
+
+1. `git rebase main` … 載せ替え開始。ここで衝突して止まる
+2. `echo "..." > config.txt` … 印を消して、正しい内容に直す
+3. `git add config.txt` … 「解決したよ」と伝える
+4. `git rebase --continue` … 続きを進めて完了する
+
+<Callout type="warn">
+ここが merge との違いです。merge は `git commit` で完了しましたが、rebase は `git rebase --continue` で続けます。add までは同じ、最後だけ違う、と覚えましょう。
+</Callout>

@@ -2,6 +2,7 @@
 // 教材が SSOT — solution は教材定義から直接読む(learning-flow.spec.ts と同じ流儀)。
 import { expect, type Page, test } from "@playwright/test";
 import gitLesson from "../../content/courses/git/lessons/01-init/lesson";
+import gitTeamFlowLesson from "../../content/courses/git/lessons/14-team-flow/lesson";
 import libLesson from "../../content/courses/libs-basics/lessons/01-script-tag/lesson";
 import reactLesson from "../../content/courses/react-basics/lessons/01-first-component/lesson";
 import tsLesson from "../../content/courses/ts-basics/lessons/01-hello-types/lesson";
@@ -61,6 +62,28 @@ test.describe("レッスン実行基盤(L-runtime)", () => {
     // コミット結果の出力([main <hash>] 形式)と履歴グラフも再生される
     await expect(frame.getByText(/\[main [0-9a-f]{7}\]/)).toBeVisible();
     await expect(frame.getByText(/履歴.*git log --graph/)).toBeVisible();
+
+    await submitAndExpectClear(page);
+  });
+
+  test("git-14: 総合レッスンのフロー一巡(分岐→コミット→マージ→push)が再生され、判定に合格する", async ({
+    page,
+  }) => {
+    test.setTimeout(120_000);
+    await devLogin(page);
+    await page.goto("/courses/git/git-14-team-flow/exercise");
+
+    const solution = gitTeamFlowLesson.solution["commands.sh"];
+    expect(solution, "git-14 の solution に commands.sh が存在する前提").toBeTruthy();
+    await fillEditor(page, solution as string);
+
+    // .sh の編集は 300ms デバウンスでプレビューに自動追従する
+    const frame = page.frameLocator('iframe[title="あなたの結果"]');
+    await expect(frame.getByText("$ git switch -c feature")).toBeVisible({ timeout: 30_000 });
+    // 各段階の出力: feature でのコミット / 早送りマージ / リモートへの push
+    await expect(frame.getByText(/\[feature [0-9a-f]{7}\]/)).toBeVisible();
+    await expect(frame.getByText(/Fast-forward/)).toBeVisible();
+    await expect(frame.getByText(/To origin/)).toBeVisible();
 
     await submitAndExpectClear(page);
   });

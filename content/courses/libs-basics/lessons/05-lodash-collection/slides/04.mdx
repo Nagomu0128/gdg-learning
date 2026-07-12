@@ -1,0 +1,16 @@
+# やってみよう
+
+`main.js` の 2 か所を書き換えましょう。
+
+```js
+const grouped = _.groupBy(items, "type");
+const total = _.sumBy(items, "price");
+```
+
+- `grouped` から `grouped.fruit.length`(= 2)を計算する行は用意してあります
+- `total` は price の合計(390)です
+- 「▶ 実行」でフルーツの数 2 と合計 390 が表示されれば成功です
+
+<Callout type="info">
+`groupBy` でまとめてから件数や合計を出す流れは、集計の定番パターンです。キー名を変えれば、別の切り口でも集計できます。
+</Callout>

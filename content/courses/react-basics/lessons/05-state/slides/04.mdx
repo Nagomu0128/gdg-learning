@@ -1,0 +1,21 @@
+# やってみよう
+
+`app.jsx` の `const count = 0;` を、state を使う形に書き換えます。
+
+```jsx
+// 書き換える前(ただの変数)
+const count = 0;
+
+// 書き換えた後(state)
+const [count, setCount] = React.useState(0);
+```
+
+手順
+
+1. `const count = 0;` を `const [count, setCount] = React.useState(0);` に書き換える
+2. 「実行」でプレビューに `0` が表示されるか確認する
+3. 「できた!」を押して判定する
+
+<Callout type="info">
+表示される数は同じ `0` ですが、中身は「React が覚えている state」に変わりました。これで数を変えられる準備ができます。
+</Callout>

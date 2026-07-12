@@ -1,0 +1,17 @@
+# onClick でイベントを受け取る
+
+要素に `onClick` を付けると、クリックされたときに関数が呼ばれます。
+
+```jsx
+<button onClick={() => console.log("押された")}>
+  ボタン
+</button>
+```
+
+- `onClick={ }` の中に「実行したい関数」を渡します
+- `() => ...` は「呼ばれたときに動く関数」の書き方(アロー関数)です
+- HTML の `onclick` と似ていますが、React では `onClick` と大文字が入ります
+
+<Callout type="warn">
+`onClick={handleClick()}` のように `()` を付けて呼び出すと、クリック前にすぐ実行されてしまいます。関数は「渡すだけ」です。
+</Callout>

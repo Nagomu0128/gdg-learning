@@ -1,0 +1,14 @@
+# やってみよう
+
+`commands.sh` で、ファイルを書き換えてから 2 種類の diff を見比べます。
+
+1. `echo "おはよう" > greeting.txt` — 中身を書き換える
+2. `git diff` — まだステージしていない変更が表示される
+3. `git add greeting.txt` — ステージに載せる
+4. `git diff --staged` — 今度はステージ済みの変更が表示される
+
+同じ変更でも、add の前後で表示される diff が入れ替わることを確かめましょう。
+
+<Callout type="info">
+add したあとに `git diff`(--staged なし)を実行すると、今度は何も出ません。変更はもうステージに移ったからです。
+</Callout>

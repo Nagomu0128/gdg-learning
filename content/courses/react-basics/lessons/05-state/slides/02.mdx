@@ -1,0 +1,18 @@
+# state を作る
+
+`React.useState(初期値)` で state を作ります。返ってくるのは「今の値」と「更新する関数」の2つです。
+
+```jsx
+function Counter() {
+  const [count, setCount] = React.useState(0);
+  return <p id="count">{count}</p>;
+}
+```
+
+- `React.useState(0)` は、初期値が `0` の state を用意します
+- 返り値の配列を `const [count, setCount] = ...` で2つに分けて受け取ります
+- `count` が今の値、`setCount` が値を変える関数です(更新は次のレッスンで学びます)
+
+<Callout type="info">
+`[count, setCount]` という書き方は「配列の分割代入」です。1行で2つの値を受け取れます。
+</Callout>

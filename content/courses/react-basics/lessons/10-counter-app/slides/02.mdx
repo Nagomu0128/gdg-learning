@@ -1,0 +1,24 @@
+# 作るもの
+
+3つのボタンと、今の数を表示する場所を用意します。
+
+```jsx
+function App() {
+  const [count, setCount] = React.useState(0);
+  return (
+    <div>
+      <p id="count">{count}</p>
+      <button id="plus" onClick={() => setCount(count + 1)}>+1</button>
+      <button id="minus" onClick={() => setCount(count - 1)}>-1</button>
+      <button id="reset" onClick={() => setCount(0)}>リセット</button>
+    </div>
+  );
+}
+```
+
+- 数は state で1つだけ持ちます
+- ボタンごとに、渡す新しい値だけが違います(`count + 1` / `count - 1` / `0`)
+
+<Callout type="info">
+判定は id を目印にします。表示は `id="count"`、ボタンは `id="plus"` / `id="minus"` / `id="reset"` にしてください。
+</Callout>

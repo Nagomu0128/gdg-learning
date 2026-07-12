@@ -1,0 +1,22 @@
+# やってみよう
+
+`fruits` には3つの果物が入っています。これを `<li>` のリストにします。
+
+```jsx
+// 完成の形
+<ul id="fruits">
+  {fruits.map((fruit) => (
+    <li key={fruit}>{fruit}</li>
+  ))}
+</ul>
+```
+
+手順
+
+1. `<ul id="fruits">` の中に `{fruits.map((fruit) => <li key={fruit}>{fruit}</li>)}` を書く
+2. 「実行」で「りんご・ばなな・みかん」の3つが並ぶか確認する
+3. 「できた!」を押して判定する
+
+<Callout type="info">
+`map` の外側は `{ }`、作る `<li>` には `key={fruit}` を忘れずに付けましょう。
+</Callout>

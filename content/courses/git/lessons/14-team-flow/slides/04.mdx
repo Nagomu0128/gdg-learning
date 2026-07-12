@@ -1,0 +1,19 @@
+# やってみよう
+
+`commands.sh` に、一連の流れを上から順に書きます。
+
+```
+git switch -c feature
+echo "ログイン機能" > login.txt
+git add login.txt
+git commit -m "ログイン機能を実装"
+git switch main
+git merge feature
+git push
+```
+
+うまくいくと、feature の変更が main に取り込まれ、最後の push でリモートにも反映されます。これでチーム開発の 1 サイクルが完成です。
+
+<Callout type="info">
+このコースはここまでです。init から push まで、実際の開発で毎日使う流れを一通り体験しました。あとはくり返すたびに、手が自然に動くようになります。
+</Callout>

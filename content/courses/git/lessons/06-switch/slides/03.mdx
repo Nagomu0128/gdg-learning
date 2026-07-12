@@ -1,0 +1,14 @@
+# 移動の書き方
+
+```
+git switch feature
+git switch hotfix
+```
+
+- すでにあるブランチには、名前を指定するだけで移動できます
+- 何度でも行き来できます。`git switch main` で本流に戻れます
+- 移動したあと `git branch` を実行すると、`*` の位置が動いているのが分かります
+
+<Callout type="info">
+`git switch -` と書くと「ひとつ前にいたブランチ」に戻れます。feature と main を何度も往復するときに便利です。
+</Callout>
