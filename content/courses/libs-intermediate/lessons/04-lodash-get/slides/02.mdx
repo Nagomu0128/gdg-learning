@@ -1,0 +1,17 @@
+# _.get で安全に取り出す
+
+`_.get` は、ドットでつないだパスで深い値を取り出します。途中が無くてもエラーになりません。
+
+```js
+const data = { user: { profile: { name: "山田" } } };
+_.get(data, "user.profile.name");     // "山田"
+_.get(data, "user.profile.address");  // undefined(エラーにならない)
+_.get(data, "user.profile.age", 0);   // 0(第 3 引数が既定値)
+```
+
+- 第 2 引数はドット区切りの文字列パスです
+- 第 3 引数を渡すと、値が無いときにそれを返します(既定値)
+
+<Callout type="info">
+`data.user.profile.address.city` を直接書くと、`address` が無い瞬間にエラーで止まります。`_.get` はそこを穏やかに処理します。
+</Callout>

@@ -1,0 +1,16 @@
+# やってみよう
+
+`city` と `zip` を `_.get` で取り出し、`copy` を `_.cloneDeep` に書き換えましょう。
+
+```js
+const city = _.get(data, "user.profile.address.city");
+const zip = _.get(data, "user.profile.address.zip", "未登録");
+const copy = _.cloneDeep(data);
+```
+
+- `city` は 東京、`zip` は存在しないので既定値の 未登録 になります
+- `copy` を `_.cloneDeep` にすると、元の名前は 山田 のまま・コピー側だけ 変更後 になります
+
+<Callout type="info">
+初期コードのままだと、浅いコピーのせいで「元の名前」まで 変更後 になってしまいます。`_.cloneDeep` で直ることを確かめましょう。
+</Callout>
