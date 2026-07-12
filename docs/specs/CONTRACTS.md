@@ -350,7 +350,7 @@ FormData: `intent: "submit" | "view-solution"`。submit 時は `verdict`(Verdict
 - Tailwind CSS v4(`@import "tailwindcss"` in app.css、@tailwindcss/vite)。カスタム CSS 最小限。
 - トーン: 背景 slate-50 / 文字 slate-900 / プライマリ indigo-600 / 成功 emerald-600 / 失敗 rose-600。角丸 rounded-xl、カード shadow-sm + border。コントラスト AA(§10.5)。
 - 共通 UI は `~/components/ui/`(C が Button/Card/ProgressBar/Badge を用意)。フォントはシステムスタック(外部フォント読み込み禁止)。
-- キーボード: スライド ←→、演習 Ctrl/Cmd+Enter 実行。エディタ以外の全操作はキーボード到達可能(§10.5)。
+- キーボード: スライド ←→、演習 Ctrl/Cmd+Enter 実行。全操作はキーボード到達可能。エディタ内は Tab=インデント / Escape 直後の Tab=フォーカス脱出(脱出手段の周知ヒント必須 — §10.5 / ADR #20)。
 - ユーザーコード表示(マイページ解答等)は**必ずテキストとしてエスケープ描画**(React の {} 描画は安全。dangerouslySetInnerHTML 禁止)(§10.2)。
 
 ## 11. コマンド一覧(scaffold が整備)
