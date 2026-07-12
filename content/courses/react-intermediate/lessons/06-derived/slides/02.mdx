@@ -1,0 +1,20 @@
+# 描画のたびに計算する
+
+派生値は、コンポーネントの中でふつうの変数として計算します。
+
+```jsx
+function App() {
+  const [count, setCount] = React.useState(1);
+  const total = count * 100;
+  return (
+    <div>
+      <p id="count">{count}</p>
+      <p id="total">{total}</p>
+    </div>
+  );
+}
+```
+
+- `const total = count * 100;` は描画のたびに計算されます
+- `count` が変わると再描画が起き、`total` も新しい値で計算し直されます
+- だから `total` は常に `count` と辻褄が合います
