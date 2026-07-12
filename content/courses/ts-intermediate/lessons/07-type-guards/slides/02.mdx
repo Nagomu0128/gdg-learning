@@ -1,0 +1,22 @@
+# is で型ガードを作る
+
+戻り値の型を `引数名 is 型` と書くと、その関数は型ガードになります。
+
+```ts
+interface Fish {
+  swim: string;
+}
+interface Bird {
+  fly: string;
+}
+type Pet = Fish | Bird;
+
+function isFish(pet: Pet): pet is Fish {
+  return "swim" in pet;
+}
+```
+
+- `pet is Fish` は「この関数が `true` を返したら、`pet` は `Fish` だ」という宣言です
+- 中身では `"swim" in pet` で、キー `swim` を持つかどうかを調べています
+
+`"キー" in オブジェクト` は、そのキーがあれば `true` になります。

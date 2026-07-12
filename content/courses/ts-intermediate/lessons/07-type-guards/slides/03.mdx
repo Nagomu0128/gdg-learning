@@ -1,0 +1,19 @@
+# 型ガードで絞り込む
+
+型ガードを `if` に使うと、その中で型が1つに定まります。
+
+```ts
+function move(pet: Pet): string {
+  if (isFish(pet)) {
+    return "泳ぐ: " + pet.swim;
+  }
+  return "飛ぶ: " + pet.fly;
+}
+```
+
+- `if (isFish(pet))` の中では `pet` は `Fish` なので `pet.swim` が使えます
+- その外では `pet` は `Bird` に絞り込まれ、`pet.fly` が使えます
+
+<Callout type="info">
+型ガードがないと、`pet.swim` も `pet.fly` も「あるか分からない」ため、そのままでは使えません。
+</Callout>

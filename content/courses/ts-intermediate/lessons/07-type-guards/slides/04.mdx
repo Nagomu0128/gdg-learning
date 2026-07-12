@@ -1,0 +1,22 @@
+# やってみよう
+
+型ガード `isFish` を作り、`move` で絞り込みます。
+
+```ts
+function isFish(pet: Pet): pet is Fish {
+  return "swim" in pet;
+}
+
+function move(pet: Pet): string {
+  if (isFish(pet)) {
+    return "泳ぐ: " + pet.swim;
+  }
+  return "飛ぶ: " + pet.fly;
+}
+```
+
+手順
+
+1. `isFish` の戻り値の型を `pet is Fish` にし、`"swim" in pet` を返す
+2. `move` の中で `if (isFish(pet))` を使って分ける
+3. `Fish` 側で `pet.swim`、`Bird` 側で `pet.fly` を使う
