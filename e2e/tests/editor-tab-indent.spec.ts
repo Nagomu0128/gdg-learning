@@ -9,13 +9,15 @@ const EXERCISE_URL = `/courses/${COURSE_SLUG}/${LESSON_SLUG}/exercise`;
 
 test.describe("エディタの Tab インデント(SPEC E §5)", () => {
   test("Tab でスペース挿入・フォーカス保持、Escape→Tab でエディタ外へ", async ({ page }) => {
-    test.setTimeout(60_000);
+    test.setTimeout(120_000);
 
     await devLogin(page);
     await page.goto(EXERCISE_URL);
 
+    // 演習画面は遅延ロード(CodeMirror を SSR に載せない)。dev サーバーの初回コンパイルが
+    // 重なると 30 秒を超えるため 60 秒待つ(file-tree / learning-flow と同じ方針)
     const editor = page.locator(".cm-content").first();
-    await editor.waitFor({ state: "visible", timeout: 30_000 });
+    await expect(editor).toBeVisible({ timeout: 60_000 });
     await editor.click();
     await expect(editor).toBeFocused();
 
