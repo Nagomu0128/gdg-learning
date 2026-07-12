@@ -1,0 +1,15 @@
+# やってみよう
+
+`byId` と `priceById` を、変換した結果に書き換えましょう。
+
+```js
+const byId = _.keyBy(products, "id");
+const priceById = _.mapValues(byId, "price");
+```
+
+- `byId` を作ると、下にある `byId["a1"]` から名前(りんご)が取り出せます
+- `priceById` は `{"a1":120,"b2":80}` の形になります
+
+<Callout type="info">
+まず `_.keyBy` で表を作り、その表を `_.mapValues` に渡すのがコツです。順番を意識してみましょう。
+</Callout>
