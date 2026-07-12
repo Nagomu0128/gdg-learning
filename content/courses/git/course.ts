@@ -16,5 +16,6 @@ export default defineCourse({
     "git-05-branch-create",
     "git-06-switch",
     "git-07-merge-ff",
+    "git-08-merge-3way",
   ],
 });
