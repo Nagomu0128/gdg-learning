@@ -1,0 +1,27 @@
+# 関数に型を付ける
+
+決めた型を使って、3つの関数を組み立てます。
+
+```ts
+function findById<T extends { id: number }>(items: T[], id: number): T | undefined {
+  return items.find((item) => item.id === id);
+}
+
+function priorityScore(priority: Priority): number {
+  if (priority === "high") return 3;
+  if (priority === "mid") return 2;
+  return 1;
+}
+
+function totalScore(tasks: Task[]): number {
+  let sum = 0;
+  for (const task of tasks) {
+    sum = sum + priorityScore(task.priority);
+  }
+  return sum;
+}
+```
+
+- `findById` は制約付きジェネリクスで「`id` を持つ配列」なら何でも探せます
+- `priorityScore` は `Priority` の値ごとに点数を返します
+- `totalScore` は `Task[]` を受け取り、点数を合計します

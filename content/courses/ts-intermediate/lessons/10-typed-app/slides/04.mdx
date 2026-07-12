@@ -1,0 +1,15 @@
+# やってみよう
+
+型を先に決めてから、関数を完成させます。自分の手で組み立ててみましょう。
+
+手順
+
+1. `type Priority = "low" | "mid" | "high";` を定義する
+2. `interface Task` に `id` / `title` / `priority: Priority` を持たせる
+3. `findById` に `<T extends { id: number }>` の制約を付ける
+4. `priorityScore` の引数を `priority: Priority` にして3分岐する
+5. `totalScore` の引数を `tasks: Task[]` にして合計を返す
+
+<Callout type="info">
+迷ったら、これまでのレッスンを振り返ってみましょう。型が決まれば中身は素直に書けます。
+</Callout>

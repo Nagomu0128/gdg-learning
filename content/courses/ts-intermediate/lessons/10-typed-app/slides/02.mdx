@@ -1,0 +1,17 @@
+# まず型を決める
+
+タスクの「優先度」と「タスクそのもの」の形を型で表します。
+
+```ts
+type Priority = "low" | "mid" | "high";
+
+interface Task {
+  id: number;
+  title: string;
+  priority: Priority;
+}
+```
+
+- `Priority` は3つの決まった値のどれか(リテラルのユニオン型)
+- `Task` は `id` / `title` / `priority` を持つオブジェクトの形
+- `priority` の型に `Priority` を使うことで、不正な値を防げます
