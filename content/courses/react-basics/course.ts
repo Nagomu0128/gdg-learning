@@ -18,5 +18,6 @@ export default defineCourse({
     "react-07-conditional",
     "react-08-render-list",
     "react-09-form-input",
+    "react-10-counter-app",
   ],
 });
