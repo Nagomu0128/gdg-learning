@@ -101,15 +101,22 @@
 
 1 check の評価上限 1500ms。custom check の `ctx.wait(ms)` の合計がこれを超えないように書くこと(超えると其の check は不合格扱い)。長い待ちが必要な演出は教材側で分割する。
 
-## 5. 変更ファイル一覧
+## 5. 検証結果(2026-07 実施)
+
+- **initial-must-fail 全量**: 101/101 レッスンが「solution 合格 + initial 不合格」を満たす(既存教材に丸ごと穴の空いたレッスンは無かった)
+- **検出力の実証(カナリア)**: html-01-first-page の checks を doctype keep-check(initial に既にマッチ)だけへ一時的に弱体化 → `FAIL 1/101`「initial のままで合格してしまいます(check に穴があります)」を正しく検出。solution 側の破壊(パターン誤り)も `solution が不合格: <display.message>` で検出
+- **ステージ1リント**: 実教材に対し警告 26 件 → 修正後 24 件。内訳: コメント内のみマッチ 1 件(js-11-dom — 修正済)、source-only レッスン 1 件(html-adv-05-meta — 修正済)、残り 24 件は keep-check / 足場コード検証として**全件監査のうえ意図的と確認**(js-02 の const 足場、js-05 の for 骨格、js-int-07 のお手本 createElement など — いずれも実課題は console / fn / element check が別途検証している)
+- **判定バンドル**: 平均 17.0KB / 最大 24.2KB(50KB 警告閾値に対し十分な余裕。strip-comments / text-diagnosis の追加込み)
+
+## 6. 変更ファイル一覧
 
 - `packages/lesson-kit/src/limits.ts` — `CHECK_TIMEOUT_MS` 追加
 - `packages/lesson-kit/src/normalize.ts` — deepEqualWithNaN の +0/-0 等値化・循環ガード
-- `packages/lesson-kit/src/zenkaku.ts` — `toHalfWidth` / `diagnoseTextZenkaku` 追加
-- `packages/lesson-kit/src/strip-comments.ts` — 新設(コメント除去。deep import 可)
+- `packages/lesson-kit/src/text-diagnosis.ts` — 新設: `toHalfWidth` / `diagnoseTextZenkaku`(zenkaku.ts は tsconfig.node から型検査されるため types.ts に依存できない — 分離)
+- `packages/lesson-kit/src/strip-comments.ts` — 新設(コメント除去。`@codesteps/lesson-kit/strip-comments` で deep import 可)
 - `packages/lesson-kit/src/types.ts` / `schemas.ts` — SourceCheck に `ignoreComments?: boolean`(後方互換)
 - `app/app/features/judge/runtime/runtime.ts` — per-check タイムアウト・ignoreComments 適用・text 全角診断の差し替え
 - `app/scripts/codegen/validate.ts` — ステージ1 教材リント(warnings。ビルド非停止)
 - `app/app/routes/dev.validate.tsx` — initial-must-fail 検証 + 並行度 2
 - `e2e/tests/content-validation.spec.ts` — 検証内容の拡張とタイムアウト調整
-- `content/courses/**` — initial-must-fail / リントで見つかった弱い check の強化(slug・題材は不変)
+- `content/courses/js-basics/lessons/11-dom/lesson.ts` / `content/courses/html-advanced/lessons/05-meta/lesson.ts` — 弱い check の強化(slug・題材は不変)
