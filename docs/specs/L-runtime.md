@@ -131,3 +131,4 @@ git-01 判定バンドル合計 **45.3KB**(警告しきい値 50KB 未満)。内
 - `app/scripts/build-vendor.ts`(新規)/ `app/scripts/codegen/index.ts` / `app/scripts/codegen/judge-bundle.ts`
 - `packages/lesson-kit/src/git-sim/**`(新規)/ `packages/lesson-kit/src/types.ts`(CustomCheckContext.files)
 - `content/courses/{ts-basics,react-basics,libs-basics,git}/**`(パイロット4レッスン)
+- `app/vite.config.ts`(**凍結ファイルの例外** — CONTRACTS §9)。追加は `optimizeDeps.include` / `ssr.optimizeDeps.include` の **dev 専用設定のみ**で、動的 import 依存(sucrase 等)の遅延発見による dev サーバ不安定・検証ループ宙吊りを起動時の事前最適化で防ぐ。`vite build` / wrangler 成果物・判定バンドルには非対象。

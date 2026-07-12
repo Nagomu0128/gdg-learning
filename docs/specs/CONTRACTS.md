@@ -356,6 +356,8 @@ FormData: `intent: "submit" | "view-solution"`。submit 時は `verdict`(Verdict
 
 **凍結(要求はレポートで)**: ルート package.json / pnpm-workspace.yaml / tsconfig.base.json / app/package.json / vite.config.ts / react-router.config.ts / app/tsconfig*.json。
 
+> **例外(L-runtime PR / feat/lesson-runtime)**: `vite.config.ts` は原則凍結だが、**dev 専用設定(`optimizeDeps.include` / `ssr.optimizeDeps.include`。`vite build` / wrangler 成果物・ランタイム非対象)に限り**本 PR で例外的に変更する。理由: 動的 import される依存(sucrase / CodeMirror / acorn 等)を dev サーバが遅延発見し、途中の再最適化 → フルリロードが Windows で dev プロセスごと落とす・検証ループを宙吊りにするため、起動時に事前最適化してレース自体を消す(L-runtime §6 / vite.config.ts 冒頭コメント)。ビルド出力・判定バンドルには一切影響しない。
+
 ## 10. UI / スタイル規約
 
 - Tailwind CSS v4(`@import "tailwindcss"` in app.css、@tailwindcss/vite)。カスタム CSS 最小限。
