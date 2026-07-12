@@ -21,5 +21,6 @@ export default defineCourse({
     "git-10-rebase",
     "git-11-rebase-conflict",
     "git-12-push",
+    "git-13-pull-fetch",
   ],
 });

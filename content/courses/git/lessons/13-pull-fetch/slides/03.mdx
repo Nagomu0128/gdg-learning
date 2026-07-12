@@ -1,0 +1,15 @@
+# fetch と pull の違い
+
+```
+git fetch
+git pull origin main
+```
+
+- `git fetch` … リモートの最新を**取ってくるだけ**。手元のブランチはまだ変わらない(様子を見られる)
+- `git pull origin main` … 取ってきて、さらに手元の main に**取り込む**
+
+`pull` は、ざっくり言うと「`fetch` してから、その内容を今のブランチに `merge` する」動きです。
+
+<Callout type="info">
+いきなり pull でも構いませんが、「まず fetch で確認してから pull」という順番にすると、何が来るのかを見てから取り込めて安心です。
+</Callout>
