@@ -1,9 +1,8 @@
 import { defineLesson } from "@codesteps/lesson-kit";
 
-// CURRICULUM-2 html-advanced #5(写経): charset / viewport / description を source check で検証。
-// 全 check が source なので runner を "dom" に明示する(省略すると worker に解決される)。
-// 注意: initial のコメントに <meta や width=device-width の文字列を書かない(source check が
-// コメントにマッチして書く前に合格してしまうため)。
+// CURRICULUM-2 html-advanced #5(写経): charset / viewport / description を source check で検証し、
+// viewport は element check(DOM)でも裏付ける。
+// source check は ignoreComments: true でコメント内の文字列にマッチしない(J-judge-hardening)。
 export default defineLesson({
   slug: "html-adv-05-meta",
   title: "ページ情報を整える",
@@ -35,6 +34,7 @@ export default defineLesson({
       file: "index.html",
       pattern: "<meta[^>]*charset\\s*=\\s*[\"']?utf-8[\"']?",
       flags: "i",
+      ignoreComments: true,
       message: '<meta charset="utf-8"> で文字コードを指定しましょう(文字化けを防ぎます)',
     },
     {
@@ -43,6 +43,7 @@ export default defineLesson({
       file: "index.html",
       pattern: "<meta[^>]*name\\s*=\\s*[\"']viewport[\"']",
       flags: "i",
+      ignoreComments: true,
       message: 'スマホ対応のための <meta name="viewport" ...> を書きましょう',
     },
     {
@@ -52,6 +53,7 @@ export default defineLesson({
       pattern:
         "<meta(?=[^>]*name\\s*=\\s*[\"']viewport[\"'])[^>]*content\\s*=\\s*[\"']width=device-width,\\s*initial-scale=1(?:\\.0)?[\"']",
       flags: "i",
+      ignoreComments: true,
       message: 'viewport の content は "width=device-width, initial-scale=1" にしましょう',
     },
     {
@@ -60,6 +62,7 @@ export default defineLesson({
       file: "index.html",
       pattern: "<meta[^>]*name\\s*=\\s*[\"']description[\"']",
       flags: "i",
+      ignoreComments: true,
       message: 'ページの説明のための <meta name="description" ...> を書きましょう',
     },
     {
@@ -68,7 +71,15 @@ export default defineLesson({
       file: "index.html",
       pattern: "<meta(?=[^>]*name\\s*=\\s*[\"']description[\"'])[^>]*content\\s*=\\s*[\"'][^\"']",
       flags: "i",
+      ignoreComments: true,
       message: "description の meta タグに、content 属性でページの説明文を書きましょう",
+    },
+    // DOM レベルの裏付け(挙動検証): viewport の meta が実際にパースされて存在すること
+    {
+      id: "viewport-in-dom",
+      type: "element",
+      selector: 'meta[name="viewport"]',
+      message: 'スマホ対応のための <meta name="viewport" ...> を head の中に書きましょう',
     },
   ],
   hints: [

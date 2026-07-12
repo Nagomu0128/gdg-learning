@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { lintCss, lintHtml } from "@codesteps/lesson-kit/markup-lint";
 import { courseSchema, lessonSchema } from "@codesteps/lesson-kit/schemas";
+import { stripCommentsForFile } from "@codesteps/lesson-kit/strip-comments";
 import type { ZodError, z } from "zod";
 
 // 注意: scripts は tsconfig.node(DOM lib なし)でコンパイルされるため、
@@ -42,7 +43,12 @@ export type DiscoveredCourse = {
   lessons: DiscoveredLesson[];
 };
 
-export type DiscoveryResult = { courses: DiscoveredCourse[]; errors: string[] };
+export type DiscoveryResult = {
+  courses: DiscoveredCourse[];
+  errors: string[];
+  /** 教材リント警告(J-judge-hardening)。ビルドは止めない — 著者の早期気づき用 */
+  warnings: string[];
+};
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 
@@ -92,6 +98,66 @@ function rel(contentRoot: string, p: string): string {
 
 const LESSON_DIR_RE = /^(\d{2})-.+$/;
 
+/** 挙動を検証する check 型(source は原文マッチのみで挙動を保証しない) */
+const BEHAVIORAL_CHECK_TYPES: ReadonlySet<string> = new Set([
+  "element",
+  "text",
+  "attribute",
+  "style",
+  "console",
+  "fn",
+  "custom",
+]);
+
+const BARE_TAG_SELECTOR_RE = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+/**
+ * 教材リント(ステージ1 — J-judge-hardening)。「弱い check」の兆候を著者に早期警告する。
+ * 文字列レベルの検査のみ(DOM は使えない)。決定的な穴の検出は E2E の initial-must-fail 検証が担う。
+ * 警告であってエラーではない(keep-check 等の正当なケースがあるため、ビルドは止めない)。
+ */
+export function lintLessonChecks(def: LessonDefParsed, label: string): string[] {
+  const warnings: string[] = [];
+
+  if (!def.checks.some((c) => BEHAVIORAL_CHECK_TYPES.has(c.type))) {
+    warnings.push(
+      `${label} [${def.slug}]: source check しかありません(挙動の検証がない)。element / fn / console 等の check を検討してください`,
+    );
+  }
+
+  for (const check of def.checks) {
+    if (check.type === "source") {
+      const initial = def.files[check.file]?.initial;
+      if (initial === undefined) continue; // file 不在は zod エラー側で報告済み
+      const re = new RegExp(check.pattern, check.flags);
+      const stripped = stripCommentsForFile(check.file, initial);
+      const effective = check.ignoreComments === true ? stripped : initial;
+      if (!re.test(effective)) continue;
+      if (check.ignoreComments !== true && !re.test(stripped)) {
+        warnings.push(
+          `${label} [${def.slug}]: source check "${check.id}" の pattern が initial のコメント内にだけマッチしています(手つかずで合格します)。ignoreComments: true を検討してください`,
+        );
+      } else {
+        warnings.push(
+          `${label} [${def.slug}]: source check "${check.id}" の pattern が initial に既にマッチしています(意図した keep-check なら無視可)`,
+        );
+      }
+    }
+    if (check.type === "element" && check.count === undefined && BARE_TAG_SELECTOR_RE.test(check.selector)) {
+      const tagRe = new RegExp(`<${check.selector}[\\s>/]`, "i");
+      const inInitial = Object.entries(def.files).some(
+        ([name, file]) => name.toLowerCase().endsWith(".html") && tagRe.test(file.initial),
+      );
+      if (inInitial) {
+        warnings.push(
+          `${label} [${def.slug}]: element check "${check.id}" は count 未指定で、<${check.selector}> は initial に既に存在します(手つかずで合格します)。count 指定を検討してください`,
+        );
+      }
+    }
+  }
+  return warnings;
+}
+
 /**
  * content/courses/ を走査して全教材を発見・検証する。
  * エラーは「ファイル + slug + issue」の人間可読な文字列で全件収集する(fail fast しない)。
@@ -99,6 +165,7 @@ const LESSON_DIR_RE = /^(\d{2})-.+$/;
  */
 export async function discoverContent(contentRoot: string): Promise<DiscoveryResult> {
   const errors: string[] = [];
+  const warnings: string[] = [];
   const courses: DiscoveredCourse[] = [];
   const coursesRoot = path.join(contentRoot, "courses");
   const courseDirs = await listDirs(coursesRoot);
@@ -167,6 +234,9 @@ export async function discoverContent(contentRoot: string): Promise<DiscoveryRes
       }
       // codegen は checks の中身(run 関数)を必要としない(判定バンドルは lesson.ts を直接 import する)
       const def = parsedLesson.data;
+
+      // 教材リント(J-judge-hardening): 弱い check の兆候を警告(ビルドは止めない)
+      warnings.push(...lintLessonChecks(def, lessonLabel));
 
       // 構造リント(ADR #18): initial / solution が提出時ガードに引っかからないことを著者側で保証する。
       // initial は「未完成」でよいが「構造が壊れている」状態(タグの > 抜け等)は教材バグとして拒否する
@@ -251,7 +321,7 @@ export async function discoverContent(contentRoot: string): Promise<DiscoveryRes
       a.def.slug.localeCompare(b.def.slug),
   );
 
-  return { courses, errors };
+  return { courses, errors, warnings };
 }
 
 /**
@@ -259,7 +329,13 @@ export async function discoverContent(contentRoot: string): Promise<DiscoveryRes
  * エラーは人間可読で列挙し、Error を throw する(index.ts の catch が exit 1 にする)。
  */
 export async function runValidation(contentRoot: string = defaultContentRoot()): Promise<void> {
-  const { courses, errors } = await discoverContent(contentRoot);
+  const { courses, errors, warnings } = await discoverContent(contentRoot);
+  if (warnings.length > 0) {
+    console.warn(`[codegen] 教材リント警告(${warnings.length} 件 — ビルドは継続):`);
+    for (const warning of warnings) {
+      console.warn(`  - ${warning}`);
+    }
+  }
   if (errors.length > 0) {
     console.error(`[codegen] 教材検証エラー(${errors.length} 件):`);
     for (const error of errors) {

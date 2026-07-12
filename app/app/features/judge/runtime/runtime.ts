@@ -11,10 +11,13 @@ import type {
   Verdict,
 } from "@codesteps/lesson-kit";
 import {
+  CHECK_TIMEOUT_MS,
   consoleLinesMatch,
   deepEqualWithNaN,
   defaultMessageFor,
   diagnoseMarkupZenkaku,
+  diagnoseTextZenkaku,
+  stripCommentsForFile,
   suggestCssProperty,
   textMatches,
 } from "@codesteps/lesson-kit";
@@ -64,8 +67,8 @@ function buildCustomContext(cfg: JudgeConfig): CustomCheckContext {
   };
 }
 
-/** check 評価(CONTRACTS §3.4)。throw は呼び出し側の try/catch で不合格に落ちる */
-async function evaluateCheck(check: Check, cfg: JudgeConfig): Promise<boolean> {
+/** check 評価(CONTRACTS §3.4)。throw / reject は evaluateWithTimeout が不合格に落とす。export はテスト用 */
+export async function evaluateCheck(check: Check, cfg: JudgeConfig): Promise<boolean> {
   switch (check.type) {
     case "element": {
       if (!hasDom()) return false;
@@ -115,7 +118,9 @@ async function evaluateCheck(check: Check, cfg: JudgeConfig): Promise<boolean> {
     case "source": {
       const content = cfg.files[check.file];
       if (content === undefined) return false;
-      return new RegExp(check.pattern, check.flags).test(content);
+      // ignoreComments: コメント内のサンプルコードへの誤マッチを防ぐ(J-judge-hardening)
+      const subject = check.ignoreComments === true ? stripCommentsForFile(check.file, content) : content;
+      return new RegExp(check.pattern, check.flags).test(subject);
     }
     case "console": {
       const lines = capturedConsole()
@@ -188,22 +193,55 @@ function cssTypoSwappedMessage(check: Check, files: FileMap): string | null {
   return null;
 }
 
-/** 全 check を上から評価(失敗後も全件継続 — §5.1)。表示は最初の失敗 1 件 */
-async function runChecks(def: LessonDef, cfg: JudgeConfig): Promise<Verdict> {
+/**
+ * text check 失敗時のみ: 表示テキストの全角英数字・記号が原因なら指摘する(§5.4 と同じ症状駆動)。
+ * 半角化すると check が合格するときだけ発火するため偽陽性がない。
+ */
+function textZenkakuSwappedMessage(check: Check): string | null {
+  if (check.type !== "text" || !hasDom()) return null;
+  try {
+    const el = document.querySelector(check.selector);
+    if (el === null) return null;
+    return diagnoseTextZenkaku(el.textContent ?? "", check);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * 1 check あたりの評価上限(J-judge-hardening)。解決しない Promise を返す fn / custom check が
+ * 判定全体タイムアウト(dom 5000ms / worker 2000ms)まで巻き込むのを防ぎ、
+ * タイムアウトした check は不合格として後続の評価を続行する(Verdict.details の完全性)。
+ */
+function evaluateWithTimeout(check: Check, cfg: JudgeConfig): Promise<boolean> {
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(false), CHECK_TIMEOUT_MS);
+    evaluateCheck(check, cfg).then(
+      (passed) => {
+        clearTimeout(timer);
+        resolve(passed);
+      },
+      () => {
+        // throw は不合格(CONTRACTS §3.4)。タイムアウト後に遅れて reject しても未処理拒否にしない
+        clearTimeout(timer);
+        resolve(false);
+      },
+    );
+  });
+}
+
+/** 全 check を上から評価(失敗後も全件継続 — §5.1)。表示は最初の失敗 1 件。export はテスト用 */
+export async function runChecks(def: LessonDef, cfg: JudgeConfig): Promise<Verdict> {
   const details: { checkId: string; passed: boolean }[] = [];
   let display: { checkId: string; message: string } | null = null;
   for (const check of def.checks) {
-    let passed = false;
-    try {
-      passed = await evaluateCheck(check, cfg);
-    } catch {
-      passed = false;
-    }
+    const passed = await evaluateWithTimeout(check, cfg);
     details.push({ checkId: check.id, passed });
     if (!passed && display === null) {
       const message =
         zenkakuSwappedMessage(check, cfg.files) ??
         cssTypoSwappedMessage(check, cfg.files) ??
+        textZenkakuSwappedMessage(check) ??
         check.message ??
         defaultMessageFor(check);
       display = { checkId: check.id, message };

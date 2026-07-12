@@ -242,7 +242,7 @@ export function defineCourse(def: {
 ### 4.4 教材のCI検証(2段構え)
 
 1. **構造検証**: 全教材を zod で parse。slug重複・存在しないレッスン参照も検出
-2. **自己整合性検証**: 各レッスンの **solution を判定エンジンにかけ、全checksに合格することを保証**する。solutionはchecksの生きたテストフィクスチャであり、「お手本が自分の合格条件を満たさない」教材バグを構造的に根絶する `[シフトレフト]`。実行はheadlessブラウザ(Playwright)上で本物の判定パイプラインを通す
+2. **自己整合性検証**: 各レッスンの **solution を判定エンジンにかけ、全checksに合格することを保証**する。solutionはchecksの生きたテストフィクスチャであり、「お手本が自分の合格条件を満たさない」教材バグを構造的に根絶する `[シフトレフト]`。実行はheadlessブラウザ(Playwright)上で本物の判定パイプラインを通す。加えて各レッスンの **initial(手つかずの初期コード)は判定が不合格になることも検証**する(何も書かずにクリアできる = checkの穴を検出する。詳細は docs/specs/J-judge-hardening.md §1)
 
 ---
 
@@ -320,9 +320,10 @@ judge(lesson: ClientLesson, files: FileMap): Promise<Verdict>
 |---|---|---|
 | 判定全体タイムアウト | 5000ms | `timedOut: true` で不合格。「無限ループになっていませんか?」 |
 | Worker関数テスト | 2000ms | `terminate()` して同上 |
+| per-checkタイムアウト(`CHECK_TIMEOUT_MS`) | 各check 1500ms | 当該checkのみ不合格として記録し、後続checkの評価を続行(details の完全性。J-judge-hardening §2) |
 | ループ保護カウンタ | 各ループ10万回 | 専用エラー→同上のメッセージ |
 
-タイムアウトを最外殻に置くのは `[フェイルセーフ]`: ループ保護をすり抜ける未知のフリーズ手段があっても、最悪「タイムアウト不合格」で着地する。
+タイムアウトを最外殻に置くのは `[フェイルセーフ]`: ループ保護をすり抜ける未知のフリーズ手段があっても、最悪「タイムアウト不合格」で着地する。per-checkタイムアウトはその内側の砦で、解決しないPromiseを返す1つのfn/custom checkが判定全体を巻き込み `Verdict.details` を空にするのを防ぐ(§4.4のinitial-must-fail検証と併せ、判定の記録完全性を担保)。
 
 ### 5.6 カスタムチェック
 
@@ -636,6 +637,7 @@ E2Eの認証はGoogle実ログインを通さず、**テスト用セッション
 | 20 | エディタの Tab は**インデント操作**(Tab=行インデント / Shift-Tab=解除。`indentWithTab`)とし、§10.5 の「エディタ以外の」除外を撤廃。脱出経路は CodeMirror 組み込みの tabFocusMode(Escape 直後の Tab はフォーカス移動)で担保し、非標準の脱出手段のため**エディタ直下の常時ヒント + `aria-describedby` で利用者に周知**する(2026-07-12) | インデント入力はコード編集の基本操作であり、Tab がフォーカス移動では演習にならない。WCAG 2.1.2 は脱出手段の提供と周知を条件に Tab の奪取を許容 | ブラウザ標準のまま: エディタでインデントが打てない / 独自 Escape ハンドラ: @codemirror/view 組み込み挙動(公式 tab-handling example)で足りる / tabFocusMode の恒久トグル UI: MVP スコープ外(将来課題) |
 | 21 | TS/TSX/JSX の**クライアントサイドトランスパイル**(sucrase を dynamic import で code-split。変換 → ループ保護 → インライン化の順)+ **vendor スクリプト基盤**(react@18 UMD / dayjs / lodash / zod / git-sim を `app/public/vendor/` に codegen 時生成し自オリジン配信)+ §6.5 の CSP を `script-src 'unsafe-inline' {origin}` に拡張。source check・エディタは常に元 TS ソースに当たる(2026-07-12。詳細は docs/specs/L-runtime.md) | ADR #1(全面クライアント実行)の延長で TS/React 教材を成立させる。sucrase は行番号保存で既存の全角・構文診断がそのまま生きる。自オリジン限定なので外部オリジン遮断 = 判定の決定性は不変 | サーバーサイド変換: 提出のたびに往復しライブプレビュー(300ms)が成立しない / esbuild-wasm: 初期化 ~数MB のロードが重い / CDN 参照(unpkg 等): 外部依存で決定性・可用性が揺れ §6.5 に反する / React 19: UMD 配布がなく classic runtime と両立しない |
 | 22 | Git 教材は実 git ではなく**決定的シミュレータ(lesson-kit の git-sim)+ commands.sh 再生方式**: 学習者は commands.sh にコマンド列を書き、プレビューは vendor の GitSim がターミナル風に再生、判定は同一エンジンを判定バンドルに同梱して custom check の述語(`isMerged` / `isClean` 等)で状態を検査する。ハッシュは FNV-1a + 論理クロックで完全決定的(2026-07-12。対応コマンド一覧は docs/specs/content-common-2.md §5) | ブラウザ内サンドボックス(ADR #1)で実 git は動かせない。判定・再生・シードが同一エンジンなので期待状態の二重管理がない [SSOT]。同一入力 → 同一ハッシュで check が安定 [決定性] | wasm-git 等の実 git 移植: バンドル数MB・出力が英語で初学者向け整形が別途必要・時刻依存でハッシュが毎回変わり判定が書けない / サーバー実行: ADR #1 に反する / transcript の文字列比較のみの判定: 別解(コマンド順の入れ替え等)を不当に弾く |
+| 23 | 判定の堅牢化第2弾: **per-check タイムアウト**(`CHECK_TIMEOUT_MS` = 1500ms)を導入し、解決しない Promise を返す fn/custom check が判定全体を巻き込んで `Verdict.details` を空にするのを防ぐ・教材 CI(§4.4)に **initial-must-fail 検証**を必須化(initial のまま合格する = check の穴を構造的に検出)・source check に **`ignoreComments`** を追加(initial コメント内のサンプルコードへの誤マッチ防止)(2026-07。詳細は docs/specs/J-judge-hardening.md) | 弱い check が誤って合格を出す/異常系で details が空になる穴を塞ぎ、§5「振る舞いをテスト」を自己整合性と記録完全性の両面で補強する | 外殻タイムアウトのみ(details 欠落を許容): 記録の完全性を欠く / solution 検証のみで initial 未検証: 何も書かずにクリアできる穴を見逃す / コメント除去なしで pattern を厳密化: 著者に過度な負担 |
 
 ## 14. ロードマップ(スコープ外・方針決定済み)
 

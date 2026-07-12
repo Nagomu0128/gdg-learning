@@ -1,5 +1,8 @@
 // 全角診断(DesignDoc §5.4)— 症状駆動。無条件プリチェックはしない(偽陽性の非対称コスト)。
 // 検出ロジックと文言は判定・エディタの両方から共有される [ポカヨケ]。
+// 注意: このモジュールは import を持たないこと(markup-lint 経由で tsconfig.node の
+// スクリプトからも型検査される — DOM 型に触れる types.ts へ辿らせない)。
+// text check の全角診断(textMatches に依存)は text-diagnosis.ts にある。
 
 export type ZenkakuHit = {
   index: number;

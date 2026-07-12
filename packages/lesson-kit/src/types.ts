@@ -74,6 +74,12 @@ export type SourceCheck = CheckBase & {
   /** RegExp ソース文字列 */
   pattern: string;
   flags?: string;
+  /**
+   * true でコメント(JS: \/\/・\/* *\/、CSS: \/* *\/、HTML: <!-- -->)を除去してからマッチする。
+   * initial のコメント内ヒント(例:「ここに console.log と書こう」のサンプルコード)に
+   * pattern が誤マッチして合格してしまう事故を防ぐ(後方互換の追加 — 既定 false)
+   */
+  ignoreComments?: boolean;
 };
 
 export type ConsoleCheck = CheckBase & {

@@ -44,6 +44,8 @@ const greeting = document.getElementById("greeting");
       id: "use-textcontent",
       file: "script.js",
       pattern: "\\.textContent",
+      // initial のコメント誘導(「ここで greeting.textContent を…」)への誤マッチを防ぐ
+      ignoreComments: true,
       message: "取得した要素の textContent に新しい文字を代入しましょう",
     },
     {

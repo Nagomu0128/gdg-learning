@@ -91,8 +91,17 @@ export function defaultMessageFor(check: Check): string;
 export function normalizeText(s: string, opts?: { exact?: boolean }): string; // 既定: trim + 連続空白1つ化(改行含む)
 export function textMatches(actual: string, check: TextCheck): boolean;       // equals/contains/pattern + exact/ignoreCase
 export function deepEqualWithNaN(a: unknown, b: unknown): boolean;            // NaN===NaN は真
+// deepEqualWithNaN 追補(J-judge-hardening・後方互換): +0/-0 は等しい。循環参照を渡されても落ちない
 export function consoleLinesMatch(actual: string[], expected: string[], ordered: boolean): boolean;
 // consoleLinesMatch: 各期待行が normalizeText 後の完全一致で存在。ordered=true は部分列(subsequence)判定
+
+// strip-comments.ts(J-judge-hardening で追加。純粋 — 判定バンドル可。deep import: "@codesteps/lesson-kit/strip-comments")
+export type CommentLang = "js" | "css" | "html";
+export function commentLangForFile(fileName: string): CommentLang | null;     // 拡張子から推定(不明は null)
+export function stripComments(source: string, lang: CommentLang): string;     // コメント→空白置換(改行保持)。throw しない
+export function stripCommentsForFile(fileName: string, source: string): string;
+// source check の `ignoreComments?: boolean`(後方互換の追加)が true のとき、
+// runtime は stripCommentsForFile 後のソースへ pattern を適用する(コメント内サンプルコードへの誤マッチ防止)
 
 // zenkaku.ts(§5.4)
 export type ZenkakuHit = { index: number; line: number; column: number; char: string; suggestion: string };
@@ -102,6 +111,11 @@ export type ZenkakuDiagnosis = { line: number; message: string };            // 
 export function diagnoseJsParseError(source: string, errorPos: { line: number; column: number }): ZenkakuDiagnosis | null;
 export function diagnoseMarkupZenkaku(source: string): ZenkakuDiagnosis | null; // タグ/宣言構文を模した全角列(＜ｈ１＞等)の検出。check失敗時のみ呼ぶ
 export function generalSyntaxErrorMessage(line: number): string;              // 「N行目に文法エラーがあります」
+// J-judge-hardening で追加(後方互換):
+export function toHalfWidth(s: string): string;                               // 全角英数字・記号・全角スペース→半角
+export function diagnoseTextZenkaku(actual: string, check: TextCheck): string | null;
+// text check 失敗時のみ呼ぶ。「actual を半角化すると合格する」ときだけ発火(偽陽性ゼロ)。
+// 例:「「３」が全角で入力されています。半角の「3」に直しましょう」
 
 // loop-protect.ts(§6.6。acorn 使用。app のメインスレッドでのみ実行 — バンドルには入らない)
 export type SyntaxDiag = { line: number; message: string }; // message は zenkaku 診断 or 一般診断を適用済み
@@ -116,6 +130,8 @@ export const JUDGE_TIMEOUT_MS = 5000;
 export const WORKER_TIMEOUT_MS = 2000;
 export const LOOP_MAX_ITERATIONS = 100000;
 export const TIMEOUT_MESSAGE_JP = "時間内に判定が終わりませんでした。無限ループになっていませんか?";
+// J-judge-hardening で追加(後方互換): 1 check あたりの評価上限。超過 check は不合格として後続を続行
+export const CHECK_TIMEOUT_MS = 1500;
 ```
 
 ## 3. 判定パイプライン契約(app/app/features/judge/)
@@ -208,6 +224,8 @@ export const JUDGE_RESULT_KIND = "judge:result";       // { kind, nonce, verdict
 | console | `__CONSOLE__` の level "log"/"info" の text 配列に対し `consoleLinesMatch` |
 | fn | `globalThis[name]` が関数であり、`await fn(...args)` の戻り値が `deepEqualWithNaN(result, returns)` |
 | custom | `await run(ctx)` が truthy。throw は不合格 |
+
+**per-check タイムアウト(`CHECK_TIMEOUT_MS` = 1500ms)の著者向け注記(J-judge-hardening §2)**: 各 check は個別に 1500ms で打ち切られ、超過した check は不合格として記録され後続の評価は続行する。ただしタイムアウトは `evaluateCheck` の Promise を放置する(worker の `terminate()` のような強制停止とは非対称)ため、**打ち切り後も custom check の副作用(`ctx.fire` 後の DOM 変化、`ctx.wait` 明けの処理)はバックグラウンドで継続しうる**。判定 iframe は毎回使い捨てなので残留はしないが、custom check の `ctx.wait` の合計は **1000ms 以内**に収めること(長い待ちが必要な演出は教材側で分割する)。
 
 ## 4. DB / 認証契約
 
@@ -335,7 +353,7 @@ FormData: `intent: "submit" | "view-solution"`。submit 時は `verdict`(Verdict
 - 検証ステージ1(§4.4): zod parse(lessonSchema/courseSchema)+ slug 重複 + course.lessons と実ディレクトリの 1:1 + スライド 1 枚以上
 - 出力: §3.1 の生成モジュール群 + `content/**/assets/*` を `app/public/lesson-assets/{lessonSlug}/` へコピー
 - 判定バンドル: esbuild(bundle, iife, minify, target es2020)。エントリは stdin で `lesson.ts` と runtime を import(§3.3 契約)
-- 自己整合性検証ステージ2(§4.4): ルート `dev.validate.tsx` が全レッスンを順に `judge(lesson, {...files.initial, ...solution})` し、結果を `data-testid="validate-summary"`(`PASS n/n` or `FAIL ...`)で表示。Playwright(K)がこれを開いて assert
+- 自己整合性検証ステージ2(§4.4 + J-judge-hardening): ルート `dev.validate.tsx` が全レッスンを(並行度 2 で)2 回 judge する — ① `judge(lesson, {...files.initial, ...solution})` は合格すること、② `judge(lesson, {...files.initial})`(手つかずの initial)は**不合格になること**(initial のまま合格 = check の穴)。結果は `data-testid="validate-summary"`(`PASS n/n` or `FAIL ...`)で表示。`?variant=solution|initial` で片側のみ実行可(ローカルデバッグ用)。Playwright(K)がこれを開いて assert
 
 ## 9. ファイル所有権マトリクス
 

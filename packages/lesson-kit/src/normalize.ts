@@ -28,28 +28,49 @@ export function textMatches(actual: string, check: TextCheck): boolean {
   return true;
 }
 
-/** deepEqual。NaN === NaN は真(§5.3)。プレーンなデータ(structured clone 範囲)前提 */
+/**
+ * deepEqual。NaN === NaN は真(§5.3)。プレーンなデータ(structured clone 範囲)前提。
+ * 学習者向けの緩和: +0 と -0 は等しい(`Math.round(-0.4)` が -0 を返す等、
+ * JS の `===` と同じ直感に合わせる。厳密な -0 判別は教材の関心事ではない)。
+ * ユーザー関数が循環参照を返しても落ちない(訪問済みペアは等しいとみなして打ち切る)。
+ */
 export function deepEqualWithNaN(a: unknown, b: unknown): boolean {
+  return deepEqualImpl(a, b, new Map());
+}
+
+function deepEqualImpl(a: unknown, b: unknown, seen: Map<object, Set<object>>): boolean {
   if (Object.is(a, b)) return true;
   if (typeof a === "number" && typeof b === "number") {
-    return Number.isNaN(a) && Number.isNaN(b);
+    // a === b は +0/-0 を等しいとみなす(Object.is は区別するためここで補完)
+    return a === b || (Number.isNaN(a) && Number.isNaN(b));
   }
   if (a === null || b === null || typeof a !== "object" || typeof b !== "object") {
     return false;
   }
-  if (Array.isArray(a) !== Array.isArray(b)) return false;
-  if (Array.isArray(a) && Array.isArray(b)) {
-    if (a.length !== b.length) return false;
-    return a.every((v, i) => deepEqualWithNaN(v, b[i]));
+  // 循環参照ガード: 比較中のペアに再入したら「等しい」と仮定して打ち切る
+  // (矛盾があれば循環の外側の比較で必ず false になる)
+  const partners = seen.get(a as object);
+  if (partners?.has(b as object)) return true;
+  const set = partners ?? new Set<object>();
+  if (partners === undefined) seen.set(a as object, set);
+  set.add(b as object);
+  try {
+    if (Array.isArray(a) !== Array.isArray(b)) return false;
+    if (Array.isArray(a) && Array.isArray(b)) {
+      if (a.length !== b.length) return false;
+      return a.every((v, i) => deepEqualImpl(v, b[i], seen));
+    }
+    const ak = Object.keys(a as Record<string, unknown>);
+    const bk = Object.keys(b as Record<string, unknown>);
+    if (ak.length !== bk.length) return false;
+    return ak.every(
+      (k) =>
+        Object.hasOwn(b as object, k) &&
+        deepEqualImpl((a as Record<string, unknown>)[k], (b as Record<string, unknown>)[k], seen),
+    );
+  } finally {
+    set.delete(b as object);
   }
-  const ak = Object.keys(a as Record<string, unknown>);
-  const bk = Object.keys(b as Record<string, unknown>);
-  if (ak.length !== bk.length) return false;
-  return ak.every(
-    (k) =>
-      Object.hasOwn(b as object, k) &&
-      deepEqualWithNaN((a as Record<string, unknown>)[k], (b as Record<string, unknown>)[k]),
-  );
 }
 
 /**
