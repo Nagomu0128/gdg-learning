@@ -12,5 +12,6 @@ export default defineCourse({
     "react-01-first-component",
     "react-02-jsx",
     "react-03-fragment-list",
+    "react-04-props",
   ],
 });
