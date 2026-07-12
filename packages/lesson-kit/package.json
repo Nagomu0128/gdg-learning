@@ -7,7 +7,9 @@
   "exports": {
     ".": "./src/index.ts",
     "./schemas": "./src/schemas.ts",
-    "./markup-lint": "./src/markup-lint.ts"
+    "./markup-lint": "./src/markup-lint.ts",
+    "./git-sim": "./src/git-sim/index.ts",
+    "./git-sim/render": "./src/git-sim/render.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

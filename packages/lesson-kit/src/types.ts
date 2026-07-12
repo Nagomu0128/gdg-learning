@@ -25,6 +25,8 @@ export type CustomCheckContext = {
   fire: (selector: string, event: string) => void;
   wait: (ms: number) => Promise<void>;
   console: ConsoleEntry[];
+  /** 提出された全ファイル(hidden 含む)。git-sim 等、原文を要する check 用(L-runtime) */
+  files: FileMap;
 };
 
 type CheckBase = { id: string; message?: string };
