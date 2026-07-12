@@ -1,0 +1,15 @@
+# 2 つの作り方
+
+```
+git branch feature
+git switch -c release
+```
+
+- `git branch feature` … feature を作るだけ。今いるブランチ(main)から動きません
+- `git switch -c release` … release を作って、さらにそこへ移動します(`-c` は create の c)
+
+作ったあと `git branch`(名前なし)を実行すると、ブランチの一覧が出ます。今いるブランチには `*` が付きます。
+
+<Callout type="info">
+「作ってすぐそこで作業したい」なら switch -c が便利。「あとで移る枝だけ先に用意したい」なら branch を使います。
+</Callout>
