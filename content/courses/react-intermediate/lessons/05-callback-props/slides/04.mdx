@@ -1,0 +1,11 @@
+# やってみよう
+
+`AddButton` に `onAdd` という props で「`points` を1増やす関数」を渡しましょう。
+
+- `<AddButton onAdd={() => setPoints(points + 1)} />` の形で渡します
+- 子側の `props.onAdd` はすでに用意してあります
+- 子ボタンを押すと `#points` が 0・1・2 と増えれば成功です
+
+<Callout type="info">
+「データは親から子へ、出来事は子から親へ」。この流れが React のコンポーネント連携の基本です。
+</Callout>

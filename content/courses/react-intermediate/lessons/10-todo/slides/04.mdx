@@ -1,0 +1,26 @@
+# 「完了切替」と「削除」
+
+`id` を目印に、`map` と `filter` で更新します。
+
+```jsx
+const toggle = (id) => {
+  setTodos(todos.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
+};
+const remove = (id) => {
+  setTodos(todos.filter((t) => t.id !== id));
+};
+```
+
+そして一覧を描き、完了状態を `className` に反映します。
+
+```jsx
+<li key={t.id} className={t.done ? "done" : ""}>
+  <span className="title">{t.title}</span>
+  <button className="toggle" onClick={() => toggle(t.id)}>完了</button>
+  <button className="remove" onClick={() => remove(t.id)}>削除</button>
+</li>
+```
+
+<Callout type="info">
+まずは動くことを目標に。動いたら、完了タスクに打ち消し線を付けるなど、自由に育ててみましょう。
+</Callout>

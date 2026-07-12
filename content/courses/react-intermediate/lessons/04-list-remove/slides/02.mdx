@@ -1,0 +1,15 @@
+# 「残すもの」を集める
+
+削除は「消す」ではなく「残す要素だけを集める」と考えると簡単です。`filter` を使います。
+
+```jsx
+setItems(items.filter((item) => item !== target));
+```
+
+- `filter` は条件が `true` の要素だけを集めた新しい配列を返します
+- `item !== target` は「消したいもの以外は残す」という条件です
+- 結果を `setItems` に渡せば、その要素だけが消えます
+
+<Callout type="info">
+`filter` も新しい配列を返すので、元の配列を壊しません。イミュータブルな更新になっています。
+</Callout>

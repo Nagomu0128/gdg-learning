@@ -1,0 +1,17 @@
+# 子は「渡された関数」を呼ぶだけ
+
+子コンポーネントは、props で受け取った関数を呼ぶだけです。中身が何をするかは知りません。
+
+```jsx
+function AddButton(props) {
+  return (
+    <button id="child-btn" onClick={props.onAdd}>
+      ポイント追加
+    </button>
+  );
+}
+```
+
+- `props.onAdd` は親から渡された関数です
+- ボタンが押されると `props.onAdd` が呼ばれます
+- 子は「呼ぶ」だけで、実際の処理は親が決めます

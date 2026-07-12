@@ -1,0 +1,17 @@
+# なぜ state にしないの?
+
+`total` も state にすると、`count` を変えるたびに `total` も手で更新しなければならず、ズレの原因になります。
+
+```jsx
+// これは避けたい書き方
+const [count, setCount] = React.useState(1);
+const [total, setTotal] = React.useState(100);
+// count を変えるたびに setTotal も呼ぶ必要があり、忘れるとズレる
+```
+
+- 計算で出せる値を state にすると「二重管理」になります
+- 派生値は計算するだけにして、state は「元になる値」だけに絞ります
+
+<Callout type="warn">
+state は少ないほど安全です。「これは他の state から計算できないか?」と一度考える習慣をつけましょう。
+</Callout>

@@ -1,0 +1,19 @@
+# reducer は「次の状態」を返す関数
+
+reducer は「今の状態」と「アクション」を受け取り、「次の状態」を返す関数です。
+
+```jsx
+function reducer(state, action) {
+  if (action.type === "increment") {
+    return state + 1;
+  }
+  if (action.type === "decrement") {
+    return state - 1;
+  }
+  return state;
+}
+```
+
+- `state` は今の値、`action` は「何をするか」を表すオブジェクトです
+- `action.type` を見て、返す値を分岐します
+- 当てはまらないときは元の `state` をそのまま返します

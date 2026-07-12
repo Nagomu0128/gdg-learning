@@ -1,0 +1,17 @@
+# 配列を描画する(復習)
+
+配列の state は `map` で `li` に変換して表示します。
+
+```jsx
+const [items, setItems] = React.useState(["りんご", "みかん"]);
+
+<ul id="list">
+  {items.map((item, i) => (
+    <li key={i}>{item}</li>
+  ))}
+</ul>
+```
+
+- `items.map(...)` で各要素を `li` に変換します
+- `key` は React が要素を見分けるための目印です
+- `items` が変われば、画面のリストも自動で描き直されます
