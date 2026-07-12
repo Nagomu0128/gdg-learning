@@ -8,7 +8,7 @@ import { javascript } from "@codemirror/lang-javascript";
 import { bracketMatching, defaultHighlightStyle, indentUnit, syntaxHighlighting } from "@codemirror/language";
 import { EditorState, type Extension, Prec } from "@codemirror/state";
 import { EditorView, highlightActiveLine, keymap, lineNumbers } from "@codemirror/view";
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { markupLintExtension } from "./markup-extension";
 import { zenkakuExtension } from "./zenkaku-extension";
 
@@ -47,6 +47,9 @@ export function CodeEditor(props: {
   onRunRef.current = props.onRun;
   const valueRef = useRef(value);
   valueRef.current = value;
+  // Tab 脱出手段の周知(ADR #20 / WCAG 2.1.2): エディタ直下の常時ヒントを
+  // aria-describedby で本体にも紐づける。Tab を奪わない readOnly では出さない
+  const hintId = useId();
 
   useEffect(() => {
     const parent = containerRef.current;
@@ -84,7 +87,11 @@ export function CodeEditor(props: {
         keymap.of([...defaultKeymap, ...historyKeymap]),
         EditorState.readOnly.of(readOnly),
         EditorView.editable.of(!readOnly),
-        EditorView.contentAttributes.of({ "aria-label": `コードエディタ: ${fileName}` }),
+        EditorView.contentAttributes.of(
+          readOnly
+            ? { "aria-label": `コードエディタ: ${fileName}` }
+            : { "aria-label": `コードエディタ: ${fileName}`, "aria-describedby": hintId },
+        ),
         EditorView.updateListener.of((update) => {
           if (update.docChanged) onChangeRef.current(update.state.doc.toString());
         }),
@@ -97,7 +104,7 @@ export function CodeEditor(props: {
       viewRef.current = null;
       view.destroy();
     };
-  }, [fileName, readOnly]);
+  }, [fileName, readOnly, hintId]);
 
   // 外部からの value 変更(リセット・タブ復帰)をエディタへ反映する
   useEffect(() => {
@@ -109,5 +116,18 @@ export function CodeEditor(props: {
     }
   }, [value]);
 
-  return <div ref={containerRef} data-testid="editor" className="h-full min-h-0" />;
+  return (
+    <div className="flex h-full min-h-0 flex-col">
+      <div ref={containerRef} data-testid="editor" className="min-h-0 flex-1" />
+      {!readOnly && (
+        <p
+          id={hintId}
+          data-testid="editor-tab-hint"
+          className="border-slate-200 border-t bg-slate-50 px-3 py-1 text-slate-500 text-xs"
+        >
+          Tab: インデント / Esc のあと Tab: フォーカス移動
+        </p>
+      )}
+    </div>
+  );
 }
