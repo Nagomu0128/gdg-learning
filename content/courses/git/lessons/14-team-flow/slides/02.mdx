@@ -1,0 +1,18 @@
+# 開発サイクルの全体像
+
+チーム開発は、だいたいこの流れのくり返しです。
+
+```
+1. feature ブランチを作る    git switch -c feature
+2. 作業してコミット          git add / git commit
+3. 本流(main)に戻る        git switch main
+4. feature を取り込む        git merge feature
+5. リモートへ送る            git push
+```
+
+- **本流(main)を直接いじらず、枝(feature)で作業する**のがポイント
+- できあがったら本流に取り込み、みんなに共有(push)します
+
+<Callout type="info">
+枝で作業することで、途中の不安定な状態を本流に持ち込まずに済みます。完成したものだけを main に合流させる、という考え方です。
+</Callout>

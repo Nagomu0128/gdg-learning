@@ -22,5 +22,6 @@ export default defineCourse({
     "git-11-rebase-conflict",
     "git-12-push",
     "git-13-pull-fetch",
+    "git-14-team-flow",
   ],
 });
