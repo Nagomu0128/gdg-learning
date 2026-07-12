@@ -1,0 +1,21 @@
+# implements で形を約束する
+
+`interface` で「満たすべき形」を決め、`implements` でその形を約束します。
+
+```ts
+interface Counter {
+  increment(): void;
+  current(): number;
+}
+
+class SimpleCounter implements Counter {
+  // Counter が求めるメソッドを必ず用意する
+}
+```
+
+- `implements Counter` は「このクラスは `Counter` の形を満たす」という宣言です
+- `increment` や `current` を書き忘れると型エラーで気づけます
+
+<Callout type="info">
+`increment(): void` の `void` は「返す値がない」という意味です。
+</Callout>

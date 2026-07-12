@@ -1,0 +1,27 @@
+# やってみよう
+
+`SimpleCounter` を型付きで完成させます。判定は、それを使う `countUp` 関数の結果で行われます。
+
+```ts
+class SimpleCounter implements Counter {
+  private count: number;
+
+  constructor(start: number) {
+    this.count = start;
+  }
+
+  public increment(): void {
+    this.count = this.count + 1;
+  }
+
+  public current(): number {
+    return this.count;
+  }
+}
+```
+
+手順
+
+1. `class SimpleCounter implements Counter` にする
+2. `private count: number;` を宣言し、`constructor` で `this.count = start;`
+3. `public increment(): void` で 1 増やし、`public current(): number` で返す
