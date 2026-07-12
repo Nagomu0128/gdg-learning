@@ -11,16 +11,12 @@ export default defineLesson({
   runner: "dom",
   files: {
     "commands.sh": {
-      initial: `# main と feature が、同じ greeting.txt を別々に書き換えています。
-# merge すると衝突(コンフリクト)します。自分で解決して完了させましょう。
-
-# 1. git merge feature で取り込む(ここで衝突が起きます)
-
-# 2. echo "こんにちは、そしてこんばんは" > greeting.txt で解決後の内容を書く
-
-# 3. git add greeting.txt で解決済みとして印をつける
-
-# 4. git commit -m "あいさつを統合" でマージを完了する
+      initial: `# main と feature が同じ greeting.txt を別々に変更しています。
+# merge すると衝突します。自分で解決して完了させましょう:
+# 1. git merge feature(ここで衝突が起きます)
+# 2. echo "こんにちは、そしてこんばんは" > greeting.txt(解決後の内容を書く)
+# 3. git add greeting.txt(解決済みとして印をつける)
+# 4. git commit -m "あいさつを統合"(マージを完了する)
 `,
     },
     "setup.sh": {
@@ -83,20 +79,19 @@ GitSim.renderPlayback(
       file: "commands.sh",
       pattern: "^\\s*git\\s+merge\\s+[A-Za-z]",
       flags: "m",
-      message: "まず git merge feature でマージを始めましょう(ここで衝突します)",
+      message: "まず git merge feature でマージを始めます(ここで衝突します)",
     },
     {
       type: "source",
       id: "finalize",
       file: "commands.sh",
       pattern: "git\\s+commit",
-      message: "解決したら git commit でマージを完了しましょう",
+      message: "解決後 git commit でマージを完了しましょう",
     },
     {
       type: "custom",
       id: "conflict-resolved",
-      message:
-        "コンフリクトを解決し、マーカーを消してマージを完了しましょう(<<<<<<< が残っていると未完了です)",
+      message: "マーカーを消してコンフリクトを解決し、マージを完了しましょう(<<<<<<< が残ると未完了)",
       run: (ctx) => {
         const sim = GitSim.fromScripts(ctx.files["setup.sh"] ?? "", ctx.files["commands.sh"] ?? "");
         return sim.isMerged("feature", "main") && !sim.hasConflictMarkers("greeting.txt") && sim.isClean();
@@ -104,24 +99,15 @@ GitSim.renderPlayback(
     },
   ],
   hints: [
-    "merge でエラーが出るのは失敗ではありません。「自動で決められないので、あなたが決めてください」という合図です",
-    "コンフリクトしたファイルには <<<<<<< ======= >>>>>>> の印が入ります。この印ごと、正しい内容に書き直します",
+    "merge のエラーは失敗ではなく「自動で決められないので決めてください」の合図です",
+    "コンフリクトした所には <<<<<<< ======= >>>>>>> の印が入ります。印ごと正しい内容に書き直します",
     'この通りに書けば完成です:\ngit merge feature\necho "こんにちは、そしてこんばんは" > greeting.txt\ngit add greeting.txt\ngit commit -m "あいさつを統合"',
   ],
   solution: {
-    "commands.sh": `# main と feature が、同じ greeting.txt を別々に書き換えています。
-# merge すると衝突(コンフリクト)します。自分で解決して完了させましょう。
-
-# 1. git merge feature で取り込む(ここで衝突が起きます)
+    "commands.sh": `# 衝突を解決してマージを完了する
 git merge feature
-
-# 2. echo "こんにちは、そしてこんばんは" > greeting.txt で解決後の内容を書く
 echo "こんにちは、そしてこんばんは" > greeting.txt
-
-# 3. git add greeting.txt で解決済みとして印をつける
 git add greeting.txt
-
-# 4. git commit -m "あいさつを統合" でマージを完了する
 git commit -m "あいさつを統合"
 `,
   },

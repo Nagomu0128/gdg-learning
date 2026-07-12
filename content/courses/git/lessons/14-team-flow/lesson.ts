@@ -11,22 +11,15 @@ export default defineLesson({
   runner: "dom",
   files: {
     "commands.sh": {
-      initial: `# main に初期コミットがあり、リモート(origin/main)にも送信済みの状態です。
-# 「機能を1つ作って本流に取り込み、リモートへ送る」までを一巡させましょう。
-
-# 1. git switch -c feature で feature ブランチを作って移動
-
-# 2. echo "ログイン機能" > login.txt でファイルをつくる
-
-# 3. git add login.txt でステージに載せる
-
-# 4. git commit -m "ログイン機能を実装" で記録する
-
-# 5. git switch main で本流に戻る
-
-# 6. git merge feature で feature を main に取り込む
-
-# 7. git push で main をリモートへ送る
+      initial: `# 分岐 → コミット → マージ → push を一巡させましょう。
+# (main は初期コミット済み・origin/main へ送信済み)。手順:
+# 1. git switch -c feature
+# 2. echo "ログイン機能" > login.txt
+# 3. git add login.txt
+# 4. git commit -m "ログイン機能を実装"
+# 5. git switch main
+# 6. git merge feature
+# 7. git push
 `,
     },
     "setup.sh": {
@@ -81,34 +74,33 @@ GitSim.renderPlayback(
       id: "make-branch",
       file: "commands.sh",
       pattern: "git\\s+switch\\s+-c\\s+",
-      message: "git switch -c feature で feature ブランチを作りましょう",
+      message: "git switch -c feature でブランチを作りましょう",
     },
     {
       type: "source",
       id: "make-commit",
       file: "commands.sh",
       pattern: "git\\s+commit\\s+-m",
-      message: 'git commit -m "..." で作業を記録しましょう',
+      message: 'git commit -m "..." で記録しましょう',
     },
     {
       type: "source",
       id: "do-merge",
       file: "commands.sh",
       pattern: "git\\s+merge\\s+[A-Za-z]",
-      message: "git merge feature で feature を main に取り込みましょう",
+      message: "git merge feature で取り込みましょう",
     },
     {
       type: "source",
       id: "do-push",
       file: "commands.sh",
       pattern: "git\\s+push\\b",
-      message: "git push で main をリモートへ送りましょう",
+      message: "git push でリモートへ送りましょう",
     },
     {
       type: "custom",
       id: "flow-complete",
-      message:
-        "feature を作ってコミットし、main に取り込んで push するまでを一巡させましょう(main とリモートが同じ状態になればゴール)",
+      message: "分岐 → コミット → マージ → push を一巡させましょう(main とリモートが同じ状態になればゴール)",
       run: (ctx) => {
         const sim = GitSim.fromScripts(ctx.files["setup.sh"] ?? "", ctx.files["commands.sh"] ?? "");
         const local = sim.log("main");
@@ -126,33 +118,18 @@ GitSim.renderPlayback(
     },
   ],
   hints: [
-    "これまでのレッスンの総まとめです。ブランチを作る → コミット → 本流に戻ってマージ → push、の順に並べます",
-    "feature で作業したら git switch main で本流に戻り、そこで git merge feature を実行します。取り込む先にいることが大切です",
+    "総まとめです。ブランチ作成 → コミット → 本流に戻ってマージ → push の順に並べます",
+    "git switch main で本流に戻ってから git merge feature を実行します(取り込む先にいることが大切)",
     'この通りに書けば完成です:\ngit switch -c feature\necho "ログイン機能" > login.txt\ngit add login.txt\ngit commit -m "ログイン機能を実装"\ngit switch main\ngit merge feature\ngit push',
   ],
   solution: {
-    "commands.sh": `# main に初期コミットがあり、リモート(origin/main)にも送信済みの状態です。
-# 「機能を1つ作って本流に取り込み、リモートへ送る」までを一巡させましょう。
-
-# 1. git switch -c feature で feature ブランチを作って移動
+    "commands.sh": `# 分岐 → コミット → マージ → push の一巡
 git switch -c feature
-
-# 2. echo "ログイン機能" > login.txt でファイルをつくる
 echo "ログイン機能" > login.txt
-
-# 3. git add login.txt でステージに載せる
 git add login.txt
-
-# 4. git commit -m "ログイン機能を実装" で記録する
 git commit -m "ログイン機能を実装"
-
-# 5. git switch main で本流に戻る
 git switch main
-
-# 6. git merge feature で feature を main に取り込む
 git merge feature
-
-# 7. git push で main をリモートへ送る
 git push
 `,
   },

@@ -12,16 +12,12 @@ export default defineLesson({
   runner: "dom",
   files: {
     "commands.sh": {
-      initial: `# feature と main が、同じ config.txt を別々に書き換えています。
-# rebase すると衝突します。解決してから --continue で続けましょう。
-
-# 1. git rebase main で載せ替えを始める(ここで衝突します)
-
-# 2. echo "設定 = 本番と機能を両立" > config.txt で解決後の内容を書く
-
-# 3. git add config.txt で解決済みとして印をつける
-
-# 4. git rebase --continue で載せ替えを続行・完了する
+      initial: `# feature と main が同じ config.txt を別々に変更しています。
+# rebase すると衝突します。解決してから --continue で続けましょう:
+# 1. git rebase main(ここで衝突します)
+# 2. echo "設定 = 本番と機能を両立" > config.txt(解決後の内容を書く)
+# 3. git add config.txt(解決済みとして印をつける)
+# 4. git rebase --continue(載せ替えを続行・完了する)
 `,
     },
     "setup.sh": {
@@ -116,19 +112,10 @@ GitSim.renderPlayback(
     'この通りに書けば完成です:\ngit rebase main\necho "設定 = 本番と機能を両立" > config.txt\ngit add config.txt\ngit rebase --continue',
   ],
   solution: {
-    "commands.sh": `# feature と main が、同じ config.txt を別々に書き換えています。
-# rebase すると衝突します。解決してから --continue で続けましょう。
-
-# 1. git rebase main で載せ替えを始める(ここで衝突します)
+    "commands.sh": `# 衝突を解決して rebase を完了する
 git rebase main
-
-# 2. echo "設定 = 本番と機能を両立" > config.txt で解決後の内容を書く
 echo "設定 = 本番と機能を両立" > config.txt
-
-# 3. git add config.txt で解決済みとして印をつける
 git add config.txt
-
-# 4. git rebase --continue で載せ替えを続行・完了する
 git rebase --continue
 `,
   },
