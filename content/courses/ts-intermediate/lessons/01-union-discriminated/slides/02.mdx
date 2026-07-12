@@ -1,0 +1,17 @@
+# タグでまとめる
+
+それぞれの形に、種類を表す共通のタグ(ここでは `kind`)を持たせます。
+
+```ts
+type Circle = { kind: "circle"; radius: number };
+type Rectangle = { kind: "rectangle"; width: number; height: number };
+```
+
+- `kind` の型は `"circle"` や `"rectangle"` という「その文字列そのもの」です
+- この2つを `|` でまとめると、「円か長方形のどちらか」を表す型になります
+
+```ts
+type Shape = Circle | Rectangle;
+```
+
+`Shape` 型の値は、必ずどちらか一方の形になります。

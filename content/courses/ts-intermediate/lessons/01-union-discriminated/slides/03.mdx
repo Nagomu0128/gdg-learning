@@ -1,0 +1,21 @@
+# switch で絞り込む
+
+`switch` でタグ `kind` の値を調べると、その中では形が1つに定まります。
+
+```ts
+function area(shape: Shape): number {
+  switch (shape.kind) {
+    case "circle":
+      return Math.floor(Math.PI * shape.radius * shape.radius);
+    case "rectangle":
+      return shape.width * shape.height;
+  }
+}
+```
+
+- `case "circle"` の中では `shape` は円なので `radius` が使えます
+- `case "rectangle"` の中では `width` と `height` が使えます
+
+<Callout type="info">
+`Math.floor` は小数点以下を切り捨てて整数にします。円の面積の小数をここで整えています。
+</Callout>

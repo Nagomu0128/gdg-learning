@@ -1,0 +1,22 @@
+# やってみよう
+
+`Shape` 型を作り、`area` 関数を完成させます。
+
+```ts
+type Shape = Circle | Rectangle;
+
+function area(shape: Shape): number {
+  switch (shape.kind) {
+    case "circle":
+      return Math.floor(Math.PI * shape.radius * shape.radius);
+    case "rectangle":
+      return shape.width * shape.height;
+  }
+}
+```
+
+手順
+
+1. `Circle` と `Rectangle` を `|` でまとめた `Shape` を定義する
+2. `area` の引数を `shape: Shape`、戻り値を `: number` にする
+3. `switch (shape.kind)` で円と長方形に分け、それぞれの面積を返す
