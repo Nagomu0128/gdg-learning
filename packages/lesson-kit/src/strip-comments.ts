@@ -27,11 +27,14 @@
 // - HTML 内のインライン <script> / <style> の JS / CSS コメントは除去対象外(raw-text として逐語保持。
 //   HTML コメントのみ除去)。
 //
-// 残る制限(いずれも「コメントを消し残す」安全側の失敗で、コードは決して削らない):
+// 残る制限(意図的な割り切り。いずれも「コメントを消し残す」安全側の失敗で、コードは決して削らない):
 // - 曖昧位置(`}`・`)`・キーワード)直後に本物の除算があり、同一行に `//`・`/* */` コメントが続く場合
 //   (`f() / 2; /* c */ x`)、正規表現とみなした走査がそのコメントを取り込み、消し残すことがある。
-//   改行を挟めば scanJsRegex が null を返して除算に戻り、コメントは正しく除去される。
-//   明確な値(識別子/数値)直後は曖昧でなく常に除算なので、この限りではない。
+//   これは `{}/re/` や `if(x)/re/` のコード削除を防ぐために `}`/`)` を regex 側へ倒した副作用であり、
+//   「コードは絶対に削らない」を優先した意図的なトレードオフ(ignoreComments は元来 best-effort で、
+//   コメントが多少残っても pattern 一致には通常無害。安全側への劣化)。改行を挟めば scanJsRegex が
+//   null を返して除算に戻り、コメントは正しく除去される。明確な値(識別子/数値)直後は曖昧でなく
+//   常に除算なので、この限りではない。
 
 export type CommentLang = "js" | "css" | "html";
 
@@ -171,6 +174,24 @@ function stripCssComments(source: string): string {
 }
 
 // これらのキーワードの直後の `/` は除算ではなく正規表現リテラルの開始とみなす(式が続く位置)。
+//
+// 【この集合が閉じている根拠 — value→division 分岐がコード削除を起こさないことの証明】
+// コード削除が起きうる唯一の経路は「実 regex を除算と誤判定 → `/` を出力後、regex 本体を素の
+// モードで走査 → 本体内の `//`/`/*` を誤検出」。除算と誤判定するのは prevWasValue===true(=値の後)
+// のときだけ。そして JS では「値(非予約語の識別子・数値・文字列・テンプレート・`]`・正規表現)の
+// 直後に正規表現リテラルが合法に続くこと」は無い(必ず除算)。識別子の形をしていて式(= 正規表現)に
+// 先行しうるのは予約語だけなので、式に先行しうる予約語をここに網羅すれば value→division 分岐は
+// 原理的に実 regex を除算と誤判定しない = コード削除ゼロになる(閉じた集合。以後の後追い追加は不要)。
+//
+// 【ECMAScript 予約語との網羅監査】直後に式が来うる予約語:
+//   単項演算子系: typeof / void / delete / await / yield / new
+//   二項・for-of/in 系: in / instanceof / of
+//   文→式の導入: return / throw / case / default(export default /re/)/ do / else
+//   クラス継承: extends(class X extends /re/ {})
+// 不要な予約語(regex 位置に `/` が来ない): if / while / for / switch / with / catch / function /
+//   class / const / let / var / try / finally / import / export / break / continue / debugger / enum
+//   (直後は必ず `(` か 識別子 か `{`)。this / super / true / false / null は「値」なので除算側
+//   (集合に入れない)。判断に迷うものは安全側 = 集合に入れる(regex 側は最悪でもコメント消し残しのみ)。
 const JS_REGEX_PRECEDING_KEYWORDS = new Set([
   "return",
   "typeof",
@@ -186,6 +207,7 @@ const JS_REGEX_PRECEDING_KEYWORDS = new Set([
   "await",
   "case",
   "default", // export default /re/ ・ switch の default: /re/
+  "extends", // class X extends /re/ {}
   "throw",
 ]);
 

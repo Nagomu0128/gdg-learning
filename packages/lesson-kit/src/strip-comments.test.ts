@@ -236,6 +236,43 @@ describe("stripComments — js", () => {
   it("値の直後の本物の行コメント(除算を挟む)も除去する", () => {
     expect(stripComments("const r = a / b; // c", "js")).toBe("const r = a / b;  ");
   });
+
+  // 3巡目 must-fix: extends 漏れによる同種のコード削除(class Foo extends /[a//z]/ {} で z]/ {} が消える)。
+  // キーワード集合を ECMAScript 予約語と網羅監査し、value→division 分岐を閉じたクラスにする。
+  it("class extends 直後の正規表現(文字クラス内 //)で後続コードが消えない", () => {
+    const src = "class Foo extends /[a//z]/ {}\nmarkDone();";
+    const out = stripComments(src, "js");
+    expect(out).toContain("markDone()");
+    expect(out).toContain("/[a//z]/");
+    expect(out).toBe(src);
+  });
+
+  it("class extends 直後の正規表現(文字クラス内 /*)で未終端ブロックコメント誤検出が起きない", () => {
+    const src = "class Foo extends /[/*]/ {}\nmarkDone();";
+    const out = stripComments(src, "js");
+    expect(out).toContain("markDone()");
+    expect(out).toBe(src);
+  });
+
+  // 監査で網羅した他の式先行キーワードの regex-after ケース(文字クラス内 // /* を保持)
+  it("throw 直後の正規表現(文字クラス内 //)を保持する", () => {
+    const src = "throw /[a//z]/;\nmarkDone();";
+    const out = stripComments(src, "js");
+    expect(out).toContain("markDone()");
+    expect(out).toBe(src);
+  });
+
+  it("typeof 直後の正規表現(文字クラス内 /*)を保持する", () => {
+    const src = "const t = typeof /[/*]/;\nmarkDone();";
+    const out = stripComments(src, "js");
+    expect(out).toContain("markDone()");
+    expect(out).toBe(src);
+  });
+
+  it("void 直後の正規表現(文字クラス内 //)を保持する", () => {
+    const src = "void /[a//z]/;\nmarkDone();";
+    expect(stripComments(src, "js")).toBe(src);
+  });
 });
 
 describe("stripCommentsForFile", () => {
