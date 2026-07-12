@@ -34,10 +34,10 @@ const tasks = [
   { title: "公開", points: 5 },
 ];
 
-// (1) deadlineDate を "2026年04月01日" の形に整形して deadline に入れよう(dayjs の format)
+// (1) deadlineDate を "2026年04月01日" の形にして deadline に入れよう
 const deadline = "";
 
-// (2) tasks の points の合計を total に入れよう(lodash の _.sumBy)
+// (2) tasks の points の合計を total に入れよう
 const total = 0;
 
 document.getElementById("deadline").textContent = deadline;
