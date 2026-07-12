@@ -1,0 +1,19 @@
+# 使う道具を思い出そう
+
+今回は 2 つの道具を組み合わせます。どちらもこれまでのレッスンで登場しました。
+
+```js
+// dayjs: 日付を好きな書式に整える
+deadlineDate.format("YYYY年MM月DD日"); // → "2026年04月01日"
+
+// lodash: キーを指定して合計する
+_.sumBy(tasks, "points"); // → 各 task の points を合計
+```
+
+- `format` は書式トークン(YYYY / MM / DD)で見た目を決めます
+- `_.sumBy` は配列と「合計したいキー名」を受け取ります
+- どちらも元のデータは変えず、結果だけを返します
+
+<Callout type="info">
+`index.html` では dayjs と lodash の両方を読み込んであります。あなたが書くのは `main.js` の 2 か所だけです。
+</Callout>

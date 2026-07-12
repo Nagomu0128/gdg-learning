@@ -1,0 +1,18 @@
+# feature ブランチを切って作業する
+
+feature ブランチの名前は `feature/やること` のように付けると分かりやすいです。
+
+```
+git switch -c feature/greeting
+echo "console.log('hello team');" > app.js
+git add app.js
+git commit -m "feat: あいさつを追加"
+```
+
+1. `git switch -c feature/greeting` — main から新しいブランチを作り、そこへ移動する
+2. ファイルを書きかえる(ここでは `echo` で 1 行上書き)
+3. `git add` でステージし、`git commit` で記録する
+
+<Callout type="info">
+`-c` は create(作成)の意味です。`git switch -c 名前` で「作って移動」を一度に行えます。
+</Callout>

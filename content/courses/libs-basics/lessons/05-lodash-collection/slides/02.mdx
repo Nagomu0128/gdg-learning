@@ -1,0 +1,21 @@
+# _.groupBy で分類する
+
+`_.groupBy` は、指定したキーが同じもの同士をまとめたオブジェクトを返します。
+
+```js
+const items = [
+  { name: "りんご", type: "fruit", price: 120 },
+  { name: "にんじん", type: "veg", price: 80 },
+  { name: "みかん", type: "fruit", price: 100 },
+];
+_.groupBy(items, "type");
+// → { fruit: [りんご, みかん], veg: [にんじん] }
+```
+
+- 第 2 引数にまとめたいキー名(ここでは `"type"`)を渡します
+- 結果は「キーの値ごとの配列」を持つオブジェクトです
+- `grouped.fruit` のように書くと、そのグループの配列が取り出せます
+
+<Callout type="info">
+`grouped.fruit.length` でフルーツの件数、`grouped.veg.length` で野菜の件数がわかります。
+</Callout>
