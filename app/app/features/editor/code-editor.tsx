@@ -77,9 +77,9 @@ export function CodeEditor(props: {
             },
           ]),
         ),
-        // Tab=インデント挿入 / Shift-Tab=インデント解除(defaultKeymap より先に処理)。
-        // キーボードトラップ回避: Escape の後の Tab は @codemirror/view 組み込みの
-        // tabFocusMode でフォーカスが外へ移る(readOnly 時は indentMore/Less が no-op)。
+        // Tab=行インデント / Shift-Tab=解除(ADR #20。defaultKeymap より先に処理)。
+        // キーボードトラップ回避: Escape 直後の Tab は @codemirror/view 組み込みの
+        // tabFocusMode でフォーカス移動になる(readOnly 時は indentMore/Less が no-op)。
         keymap.of([indentWithTab]),
         keymap.of([...defaultKeymap, ...historyKeymap]),
         EditorState.readOnly.of(readOnly),
