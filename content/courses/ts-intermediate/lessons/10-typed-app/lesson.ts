@@ -59,8 +59,9 @@ console.log(totalScore([{ id: 1, title: "買い物", priority: "low" }, { id: 2,
       type: "source",
       id: "define-task",
       file: "script.ts",
-      pattern: "interface\\s+Task\\s*\\{[^}]*priority\\s*:\\s*Priority\\b",
-      message: "interface Task を定義しましょう(id: number, title: string, priority: Priority を持たせます)",
+      pattern:
+        "interface\\s+Task\\s*\\{(?=[^}]*\\bid\\s*:\\s*number\\b)(?=[^}]*\\btitle\\s*:\\s*string\\b)(?=[^}]*\\bpriority\\s*:\\s*Priority\\b)",
+      message: "interface Task に id: number、title: string、priority: Priority の3つを定義しましょう",
     },
     {
       type: "source",
