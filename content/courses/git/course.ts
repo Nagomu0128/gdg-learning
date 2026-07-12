@@ -8,5 +8,5 @@ export default defineCourse({
     "コードの歴史を記録し、安心して変更できるように。init・add・commit の基本から、ブランチ・マージ・リモートまで、チーム開発の土台を学びます。",
   order: 17,
   level: "intermediate",
-  lessons: ["git-01-init"],
+  lessons: ["git-01-init", "git-02-add-commit"],
 });
