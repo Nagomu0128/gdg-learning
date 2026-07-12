@@ -1,0 +1,18 @@
+# success で分岐する
+
+`result.success` を見て、表示するメッセージを切り替えます。
+
+```js
+function checkName(value) {
+  const result = nameSchema.safeParse(value);
+  return result.success ? "OK" : "エラー";
+}
+```
+
+- `success` が `true` なら `"OK"`、`false` なら `"エラー"` を返します
+- `条件 ? A : B` は「条件が true なら A、false なら B」という書き方です
+- 関数にしておくと、いろいろな入力に同じチェックを使い回せます
+
+<Callout type="info">
+このレッスンでは固定の入力(「たろう」と空文字)でチェックするので、結果はいつも同じになります。
+</Callout>

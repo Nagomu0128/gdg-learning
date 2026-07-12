@@ -1,0 +1,15 @@
+# やってみよう
+
+`main.js` の `checkName` の `return` を書き換えましょう。
+
+```js
+return result.success ? "OK" : "エラー";
+```
+
+- 「たろう」は 1 文字以上なので OK
+- 空文字は条件を満たさないので エラー
+- 「▶ 実行」でそれぞれ OK と エラー が表示されれば成功です
+
+<Callout type="warn">
+`safeParse` はエラーを投げないので、`result.success` を自分で確認するのを忘れないようにしましょう。確認しないと、不正な入力も通ってしまいます。
+</Callout>
