@@ -1,0 +1,17 @@
+# 解決の 4 ステップ
+
+```
+git merge feature
+echo "こんにちは、そしてこんばんは" > greeting.txt
+git add greeting.txt
+git commit -m "あいさつを統合"
+```
+
+1. `git merge feature` … 取り込む。ここでコンフリクトが起きて止まる
+2. `echo "..." > greeting.txt` … 印を消し、最終的な内容に書き直す(今回は両方を活かした 1 文に)
+3. `git add greeting.txt` … 「解決したよ」と Git に伝える
+4. `git commit` … マージを完了する
+
+<Callout type="info">
+実際のエディタでは、印を見ながら手で消して直します。このシミュレータでは `echo "..." > ファイル` で「解決後の内容」に丸ごと書き換えます。
+</Callout>
