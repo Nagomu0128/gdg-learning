@@ -161,7 +161,7 @@ git commit -m "main側の変更"
 
 学習者の解決フロー(そのまま教える): `git merge feature`(conflict 発生)→ `echo "解決後の内容" > greeting.txt` → `git add greeting.txt` → `git commit -m "解決"`。rebase は `git rebase main` → 編集 → `git add` → `git rebase --continue`。
 
-> **既知の制限(3way マージ)**: git-sim の 3way マージがコンフリクトにするのは **両側で同一ファイルを「変更」した**シナリオのみ。**片側が削除・もう片側が変更**した種類のコンフリクトは(実 git と違い)コンフリクト扱いにせず、変更側 or 削除を自動採用する。教材の conflict シナリオは上記の「両側変更」で設計すること(削除/変更コンフリクトは将来対応)。
+> **3way マージのシナリオ設計**: 現状の shell コマンド集合(`git` / `echo` / `cat` / `ls` / `touch`。ファイル削除コマンドは無い)では、教材から作れる 3way コンフリクトは **両側で同一ファイルを「変更」した**種類のみ。conflict シナリオはこの「両側変更」で設計すること。(git-sim の `threeWayMerge` は片側削除・片側変更も実 git 同様コンフリクトにするが、削除を作る手段が無いため教材からは到達しない。将来 `rm` 相当を実装したら削除/変更コンフリクトも扱える。)
 
 ### 5.3 判定(custom check + GitSim)
 

@@ -30,9 +30,11 @@ describe("loadTranspiler の dynamic import 失敗からの回復", () => {
     await expect(loadTranspiler()).rejects.toThrow(/Failed to fetch/);
     expect(attempt).toBe(1);
 
-    // .catch で loading が null に戻っているため再試行できる。
-    // 失敗したモジュール評価のキャッシュを消してから再度呼ぶ(バグ = catch 無しなら
-    // loading が rejected のまま保持され、この行が reject して attempt も 1 のまま)。
+    // 2回目の loadTranspiler() は .catch で loading が null に戻っているため
+    // import("sucrase") を再実行できる(バグ = catch 無しなら loading が rejected のまま
+    // 保持され、この呼び出しも reject して attempt が 1 のまま)。
+    // vi.resetModules() は sucrase モックのモジュールキャッシュを落として再評価させるため
+    // (transpile.ts 側の loading リセット自体は .catch が担う。本テストの検証対象)。
     vi.resetModules();
     const transpile = await loadTranspiler();
     expect(attempt).toBe(2);
