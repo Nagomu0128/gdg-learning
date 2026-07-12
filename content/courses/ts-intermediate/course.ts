@@ -8,5 +8,5 @@ export default defineCourse({
     "入門で身につけた型注釈の先へ。判別可能なユニオン型・ジェネリクスの制約・ユーティリティ型など、実践で型を設計するための道具を一歩ずつ学びます。",
   order: 12,
   level: "advanced",
-  lessons: ["ts-int-01-union-discriminated"],
+  lessons: ["ts-int-01-union-discriminated", "ts-int-02-optional-params"],
 });

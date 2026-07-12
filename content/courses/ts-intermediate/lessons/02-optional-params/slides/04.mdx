@@ -1,0 +1,22 @@
+# やってみよう
+
+2つの関数を完成させます。
+
+```ts
+function makeLabel(text: string, count?: number): string {
+  if (count === undefined) {
+    return text;
+  }
+  return text + " (" + count + ")";
+}
+
+function repeat(text: string, times: number = 2): string {
+  return text.repeat(times);
+}
+```
+
+手順
+
+1. `makeLabel` の `count` に `?` を付けて省略可能にする
+2. `count === undefined` で「あるかないか」を分ける
+3. `repeat` の `times` に `= 2` を付けて初期値にする

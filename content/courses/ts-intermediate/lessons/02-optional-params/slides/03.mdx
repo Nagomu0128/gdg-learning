@@ -1,0 +1,21 @@
+# 初期値を決める(= 値)
+
+引数名のうしろに `= 値` を付けると、省略されたときにその値が使われます。
+
+```ts
+function repeat(text: string, times: number = 2): string {
+  return text.repeat(times);
+}
+```
+
+- `times: number = 2` は「省略されたら `times` は `2` になる」という意味です
+- `undefined` かどうかを自分で調べなくても、初期値が入ります
+
+```ts
+repeat("ア");     // "アア"    (times は 2)
+repeat("ア", 3);  // "アアア"  (times は 3)
+```
+
+<Callout type="info">
+`?`(省略可能)と `= 値`(初期値)は似ていますが、初期値があると `undefined` の代わりにその値が入る点がちがいます。
+</Callout>

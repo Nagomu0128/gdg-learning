@@ -1,0 +1,21 @@
+# 省略できる引数(?)
+
+引数名のうしろに `?` を付けると、その引数は省略できるようになります。
+
+```ts
+function makeLabel(text: string, count?: number): string {
+  if (count === undefined) {
+    return text;
+  }
+  return text + " (" + count + ")";
+}
+```
+
+- `count?: number` は「`count` は数値、ただし省略してもよい」という意味です
+- 省略して呼ばれると `count` は `undefined` になります
+- そのため `if (count === undefined)` で「あるかないか」を確かめて分岐します
+
+```ts
+makeLabel("箱");     // "箱"
+makeLabel("箱", 3);  // "箱 (3)"
+```
