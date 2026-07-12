@@ -145,6 +145,49 @@ describe("deepEqualWithNaN(§5.3)", () => {
   });
 });
 
+describe("deepEqualWithNaN — 堅牢化(J-judge-hardening)", () => {
+  it("+0 と -0 は等しい(=== と同じ直感。Math.round(-0.4) 対策)", () => {
+    expect(deepEqualWithNaN(0, -0)).toBe(true);
+    expect(deepEqualWithNaN(-0, 0)).toBe(true);
+    expect(deepEqualWithNaN([Math.round(-0.4)], [0])).toBe(true);
+    expect(deepEqualWithNaN({ a: -0 }, { a: 0 })).toBe(true);
+  });
+
+  it("循環参照を返されてもスタックオーバーフローしない(片側循環)", () => {
+    const a: Record<string, unknown> = { name: "x" };
+    a.self = a;
+    expect(deepEqualWithNaN(a, { name: "x", self: { name: "x", self: null } })).toBe(false);
+    expect(deepEqualWithNaN(a, { name: "x" })).toBe(false);
+  });
+
+  it("両側循環: 同型の循環は等しい・異なる値を含む循環は等しくない", () => {
+    const a: Record<string, unknown> = { v: 1 };
+    a.self = a;
+    const b: Record<string, unknown> = { v: 1 };
+    b.self = b;
+    expect(deepEqualWithNaN(a, b)).toBe(true);
+    const c: Record<string, unknown> = { v: 2 };
+    c.self = c;
+    expect(deepEqualWithNaN(a, c)).toBe(false);
+  });
+
+  it("循環配列も落ちない", () => {
+    const a: unknown[] = [1];
+    a.push(a);
+    const b: unknown[] = [1];
+    b.push(b);
+    expect(deepEqualWithNaN(a, b)).toBe(true);
+    expect(deepEqualWithNaN(a, [1, [1, null]])).toBe(false);
+  });
+
+  it("深い入れ子は浅い側の深さで打ち切られる(期待値が浅ければ安全)", () => {
+    // 学習者が異常に深い構造を返しても、authored な期待値(浅い)との比較は早期に false
+    let deep: unknown = 1;
+    for (let i = 0; i < 200000; i++) deep = [deep];
+    expect(deepEqualWithNaN(deep, [[1]])).toBe(false);
+  });
+});
+
 describe("consoleLinesMatch(CONTRACTS §2)", () => {
   it("非 ordered: 順不同で全期待行が存在すれば真", () => {
     expect(consoleLinesMatch(["b", "a"], ["a", "b"], false)).toBe(true);
@@ -185,5 +228,16 @@ describe("consoleLinesMatch(CONTRACTS §2)", () => {
   it("出力が空で期待行があれば偽", () => {
     expect(consoleLinesMatch([], ["a"], false)).toBe(false);
     expect(consoleLinesMatch([], ["a"], true)).toBe(false);
+  });
+
+  it("ordered: 交互に重複する期待行(a,b,a)も消費順に正しく照合する", () => {
+    expect(consoleLinesMatch(["a", "b", "a"], ["a", "b", "a"], true)).toBe(true);
+    expect(consoleLinesMatch(["a", "a", "b"], ["a", "b", "a"], true)).toBe(false);
+    expect(consoleLinesMatch(["x", "a", "b", "y", "a"], ["a", "b", "a"], true)).toBe(true);
+  });
+
+  it("trim の一貫性: 実出力・期待行の両方が正規化される(全角スペース含む)", () => {
+    expect(consoleLinesMatch(["合計　10"], ["合計 10"], false)).toBe(true);
+    expect(consoleLinesMatch(["合計 10"], [" 合計　10 "], true)).toBe(true);
   });
 });

@@ -118,6 +118,7 @@ const sourceCheckSchema = z
     file: z.string().min(1),
     pattern: z.string().min(1),
     flags: z.string().optional(),
+    ignoreComments: z.boolean().optional(),
   })
   .superRefine((v, ctx) => {
     if (!validRegex(v.pattern, v.flags)) {
