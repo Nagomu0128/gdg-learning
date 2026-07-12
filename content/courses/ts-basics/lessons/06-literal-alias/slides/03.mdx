@@ -1,0 +1,18 @@
+# 型エイリアス
+
+`type 名前 = 型;` で、型に名前をつけて再利用できます。
+
+```ts
+type Dir = "up" | "down";
+
+function move(dir: Dir): string {
+  if (dir === "up") {
+    return "上に移動";
+  }
+  return "下に移動";
+}
+```
+
+- `type Dir = "up" | "down";` で Dir という型を定義します
+- あとは `dir: Dir` のように、名前で呼び出せます
+- 同じ型を何度も書かずにすみます

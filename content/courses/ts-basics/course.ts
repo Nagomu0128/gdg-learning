@@ -14,5 +14,6 @@ export default defineCourse({
     "ts-03-arrays-objects",
     "ts-04-function-types",
     "ts-05-union-narrowing",
+    "ts-06-literal-alias",
   ],
 });

@@ -1,0 +1,20 @@
+# やってみよう
+
+型エイリアス `Dir` を定義し、`move` に型をつけます。
+
+```ts
+type Dir = "up" | "down";
+
+function move(dir: Dir): string {
+  if (dir === "up") {
+    return "上に移動";
+  }
+  return "下に移動";
+}
+```
+
+手順
+
+1. `type Dir = "up" | "down";` を書く
+2. `move` の引数に `: Dir`、戻り値に `: string` をつける
+3. `dir === "up"` で分岐し、それぞれの文字列を `return` する
