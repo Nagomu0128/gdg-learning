@@ -12,7 +12,7 @@ import {
 } from "react-router";
 import { getOptionalUser } from "~/features/auth/auth.server";
 import { LoginButton } from "~/features/auth/login-button";
-import { SITE_NAME } from "~/lib/site";
+import { SITE_NAME, SITE_ORIGIN, SITE_TAGLINE } from "~/lib/site";
 import type { Route } from "./+types/root";
 import "./app.css";
 
@@ -38,6 +38,15 @@ export function Layout({ children }: { children: ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <title>{SITE_NAME}</title>
+        {/* OGP / Twitter カード(画像は favicon から生成した public/ogp.png。og:image は絶対 URL 必須) */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={SITE_NAME} />
+        <meta property="og:title" content={SITE_NAME} />
+        <meta property="og:description" content={SITE_TAGLINE} />
+        <meta property="og:image" content={`${SITE_ORIGIN}/ogp.png`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
         <Meta />
         <Links />
       </head>
