@@ -352,7 +352,7 @@ FormData: `intent: "submit" | "view-solution"`。submit 時は `verdict`(Verdict
 - 発見: `content/courses/*/course.ts` を import → `lessons` 配列(slug 順序)→ 各 slug に対応する `lessons/{NN}-*/lesson.ts`(ディレクトリ接頭辞 NN は order。slug との対応は lesson.ts 内の slug が SSOT)
 - 検証ステージ1(§4.4): zod parse(lessonSchema/courseSchema)+ slug 重複 + course.lessons と実ディレクトリの 1:1 + スライド 1 枚以上
 - 出力: §3.1 の生成モジュール群 + `content/**/assets/*` を `app/public/lesson-assets/{lessonSlug}/` へコピー
-- 公開フィルタ(ADR #24): `published: false` のレッスンは検証ステージ1の対象のまま、全生成物(レッスンモジュール・content-meta.json・スライド・assets)から除外。全レッスン非公開のコースは content-meta の courses からも除外
+- 公開フィルタ(ADR #24): `published: false` のレッスンは検証ステージ1の対象のまま、全生成物(レッスンモジュール・content-meta.json・スライド・assets)から除外。全レッスン非公開のコースは content-meta の courses からも除外。生成物の `order` は公開レッスンのみで 1 から振り直す(ディレクトリ接頭辞 NN との一致検証は discovery 段階=フィルタ前の値で行う)
 - 判定バンドル: esbuild(bundle, iife, minify, target es2020)。エントリは stdin で `lesson.ts` と runtime を import(§3.3 契約)
 - 自己整合性検証ステージ2(§4.4 + J-judge-hardening): ルート `dev.validate.tsx` が全レッスンを(並行度 2 で)2 回 judge する — ① `judge(lesson, {...files.initial, ...solution})` は合格すること、② `judge(lesson, {...files.initial})`(手つかずの initial)は**不合格になること**(initial のまま合格 = check の穴)。結果は `data-testid="validate-summary"`(`PASS n/n` or `FAIL ...`)で表示。`?variant=solution|initial` で片側のみ実行可(ローカルデバッグ用)。Playwright(K)がこれを開いて assert
 
