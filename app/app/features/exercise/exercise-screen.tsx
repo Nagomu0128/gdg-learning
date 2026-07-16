@@ -16,7 +16,14 @@ import type { ExerciseState, SubmitResult } from "~/features/progress/types";
 import type { LoadedLesson } from "~/generated/lessons.client";
 import { ClearScreen } from "./clear-screen";
 import { GuidePanel } from "./guide-panel";
-import { clampGuideWidth, clampPreviewWidth, GUIDE_DEFAULT_WIDTH, KEYBOARD_RESIZE_STEP } from "./pane-resize";
+import {
+  clampGuideWidth,
+  clampPreviewWidth,
+  GUIDE_DEFAULT_WIDTH,
+  KEYBOARD_RESIZE_STEP,
+  type PaneWidths,
+  reclampPaneWidths,
+} from "./pane-resize";
 import { PreviewPane } from "./preview-pane";
 import { SolutionModal } from "./solution-modal";
 import type { ExerciseActionData, PreviewState, PreviewTab, WorkerView } from "./types";
@@ -379,6 +386,8 @@ export default function ExerciseScreen(props: ExerciseScreenProps) {
 
   const beginResize = useCallback(
     (pane: "guide" | "preview") => (e: React.PointerEvent<HTMLDivElement>) => {
+      // 主ボタン以外(右・中クリック)や、別ポインタでのドラッグ中は開始しない
+      if (e.button !== 0 || dragRef.current !== null) return;
       const measured = measurePanes();
       if (measured === null) return;
       e.preventDefault();
@@ -388,8 +397,8 @@ export default function ExerciseScreen(props: ExerciseScreenProps) {
       } catch {
         // pointerdown 直後に離された等で capture できなくても、ドラッグ自体は継続できる
       }
-      // 初ドラッグ時に flex 追従から px 固定へ切り替える(実測幅から開始するので見た目は変わらない)
-      if (pane === "preview") setPreviewWidth(measured.previewWidth);
+      // 注意: この時点では state を変えない。プレビューの flex → px 固定への切替は
+      // 実際に pointermove が発生した moveResize 側で行う(クリックだけで固定化しない)
       dragRef.current = {
         pane,
         startX: e.clientX,
@@ -404,6 +413,11 @@ export default function ExerciseScreen(props: ExerciseScreenProps) {
   const moveResize = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     const drag = dragRef.current;
     if (drag === null) return;
+    // pointerup を取り逃した(alt-tab 等)まま戻ってきた場合の幽霊ドラッグ防止
+    if (e.buttons === 0) {
+      dragRef.current = null;
+      return;
+    }
     const delta = e.clientX - drag.startX;
     if (drag.pane === "guide") {
       setGuideWidth(clampGuideWidth(drag.startWidth + delta, drag.rowWidth, drag.otherWidth));
@@ -414,6 +428,22 @@ export default function ExerciseScreen(props: ExerciseScreenProps) {
 
   const endResize = useCallback(() => {
     dragRef.current = null;
+  }, []);
+
+  // px 固定後にウィンドウ幅が縮んでもエディタ最低幅を侵さないよう、行幅の変化で丸め直す
+  const widthsRef = useRef<PaneWidths>({ guide: guideWidth, preview: previewWidth });
+  widthsRef.current = { guide: guideWidth, preview: previewWidth };
+  useEffect(() => {
+    const onWindowResize = () => {
+      const row = rowRef.current;
+      if (row === null) return;
+      const current = widthsRef.current;
+      const next = reclampPaneWidths(current, row.getBoundingClientRect().width);
+      if (next.guide !== current.guide) setGuideWidth(next.guide);
+      if (next.preview !== current.preview) setPreviewWidth(next.preview);
+    };
+    window.addEventListener("resize", onWindowResize);
+    return () => window.removeEventListener("resize", onWindowResize);
   }, []);
 
   const adjustGuideWidth = useCallback(

@@ -28,3 +28,20 @@ export function clampPreviewWidth(desired: number, rowWidth: number, guideWidth:
   const max = rowWidth - guideWidth - EDITOR_MIN_WIDTH - HANDLES_TOTAL_WIDTH;
   return clamp(desired, PREVIEW_MIN_WIDTH, max);
 }
+
+export type PaneWidths = {
+  guide: number;
+  /** null = flex-1 追従(未ドラッグ)。ドラッグ後は px 固定 */
+  preview: number | null;
+};
+
+/**
+ * ウィンドウリサイズ後の再クランプ。px 固定になったペインが新しい行幅でも
+ * エディタ最低幅を侵さないよう、手順 → プレビューの順に丸め直す。
+ * preview が flex 追従中(null)は最小幅ぶんを確保している前提で手順だけ丸める。
+ */
+export function reclampPaneWidths(widths: PaneWidths, rowWidth: number): PaneWidths {
+  const guide = clampGuideWidth(widths.guide, rowWidth, widths.preview ?? PREVIEW_MIN_WIDTH);
+  const preview = widths.preview === null ? null : clampPreviewWidth(widths.preview, rowWidth, guide);
+  return { guide, preview };
+}
