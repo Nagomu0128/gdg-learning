@@ -40,11 +40,13 @@ export function Layout({ children }: { children: ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <title>{SITE_NAME}</title>
-        <meta name="description" content={SITE_TAGLINE} />
-        {/* OGP / Twitter カード(画像は favicon から生成した public/ogp.png — 生成: app/scripts/make-ogp.py。
+        {/* description / OGP / Twitter カード(画像は favicon から生成した public/ogp.png — 生成: app/scripts/make-ogp.py。
             og:image / og:url は絶対 URL 必須。MVP では title / description は全ページ共通固定とする割り切り。
-            per-page のカードが必要になったらここの静的タグを route の meta() へ移すこと(head 内で
-            <Meta /> より前に出るため、route 側で og: タグを返しても多くのクローラーはこちらを先勝ちで拾う) */}
+            per-page のカードが必要になったらこれらの静的タグを route の meta() へ移すこと(head 内で
+            <Meta /> より前に出るため、route 側で同名タグを返しても多くのクローラーはこちらを先勝ちで拾う)。
+            なお /courses 以下はログイン必須(ADR #17)で匿名クローラーには 302 → / となるため、
+            OGP カードが実質機能するのはトップページのみ。MVP はこれを許容する(共有対象はサイト自体の想定) */}
+        <meta name="description" content={SITE_TAGLINE} />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={SITE_NAME} />
         <meta property="og:title" content={SITE_NAME} />
